@@ -462,14 +462,27 @@ print(best[2])
       </li>
     </ul>
 
-    <h4>3.7 Example: turning Access results into HTML</h4>
-    <p>
-      If you want the numeric summary (from Access) displayed on the webpage, copy the query results and paste them as an HTML table inside the content card (example shown above). This is the recommended approach for static GitHub Pages.
-    </p>
+    
+    <section class="cipher-tool">
+      <h3>Caesar Cipher</h3>
+    
+      <label for="cipherInput">Text to encrypt/decrypt</label>
+      <textarea id="cipherInput" placeholder="Type or paste your text…"></textarea>
+    
+      <label for="shift">Shift (0–25):</label>
+      <input type="number" id="shift" min="0" max="25" value="7" />
+    
+      <button class="btn primary" onclick="caesarEncrypt()">Encrypt</button>
+    
+      <label for="cipherOutput">Result</label>
+      <textarea id="cipherOutput" readonly placeholder="The result will appear here…"></textarea>
+    
+      <button class="btn secondary" onclick="bruteForce()">Brute force (show all 26)</button>
+      <button class="btn secondary" onclick="autoDecode()">Auto-decode (by frequency)</button>
+    
+      <p id="statusMsg">Please enter some encrypted text first.</p>
+    </section>
 
-    <p>
-      The assignment includes several example tables (univariate summary, min/max table, skewness mapping table), all of which have been embedded in this page as HTML tables in the preceding sections.
-    </p>
 
     <h3>Summary and final remarks</h3>
 
