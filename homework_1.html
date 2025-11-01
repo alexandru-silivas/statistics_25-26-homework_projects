@@ -1,96 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Homework 1 — Statistics and Cybersecurity</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <nav>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="homework_1.html" class="active">HMWK 1</a></li>
-      <li><a href="#">HMWK 2</a></li>
-      <li><a href="#">HMWK 3</a></li>
-      <li><a href="#">HMWK 4</a></li>
-    </ul>
-  </nav>
 
-  <main class="content-container">
-    <section class="content-card">
+  <!-- top nav (must match style.css selectors) -->
+  <header class="navbar">
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="homework_1.html" class="active">HMWK 1</a></li>
+        <li><a href="homework_2.html">HMWK 2</a></li>
+        <li><a href="homework_3.html">HMWK 3</a></li>
+        <li><a href="homework_4.html">HMWK 4</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <article class="main-content">
       <h1>Homework 1</h1>
       <h2>What is Statistics, and Why Is It Important for Cybersecurity?</h2>
 
       <h3>1. Introduction</h3>
       <p>
-        In today’s data-driven world, information has become one of the most powerful resources available. 
-        The ability to analyze large volumes of raw data and extract valuable insights underpins progress in nearly every field, 
-        including technology, science, and digital security. 
-        Statistics serves as the foundation of this process—it allows us to interpret data systematically and transform it into knowledge. 
-        In this paper, we explore what statistics is, how it supports scientific reasoning, and why it plays a crucial role in modern cybersecurity.
+        In today’s data-driven world, information has become one of the most powerful resources available.
+        The ability to analyze large volumes of raw data and extract valuable insights underpins progress in nearly every field,
+        including technology, science, and digital security. Statistics provides the tools to interpret data systematically
+        and turn it into usable knowledge. This paper explains the foundations of statistics and why it is essential for cybersecurity.
       </p>
 
       <h3>2. What Is Statistics?</h3>
       <p>
-        Statistics is the branch of mathematics that focuses on collecting, organizing, analyzing, and interpreting data to support better decision-making. 
-        It helps us make sense of complex information by finding patterns, identifying relationships, and quantifying uncertainty. 
-        There are two main categories of statistics:
+        Statistics is the branch of mathematics focused on collecting, organizing, analyzing, and interpreting data to inform decisions.
+        It helps identify patterns, relationships, and uncertainty. The two main branches are:
       </p>
       <ul>
-        <li><strong>Descriptive Statistics:</strong> Summarizes data through measures such as averages, ranges, and variability, 
-          offering a clear picture of what the data shows.</li>
-        <li><strong>Inferential Statistics:</strong> Uses sample data to draw conclusions or make predictions about a larger population through methods like hypothesis testing, 
-          regression, and confidence intervals.</li>
+        <li><strong>Descriptive statistics</strong> — summarizes data (means, medians, ranges, dispersion).</li>
+        <li><strong>Inferential statistics</strong> — draws conclusions about populations from samples (hypothesis testing, regression, intervals).</li>
       </ul>
-      <p>
-        Though statistical thinking dates back to early civilizations, it was formalized in the 18th and 19th centuries with the rise of probability theory. 
-        Today, it is essential in nearly every scientific and professional field—from economics to engineering, and particularly in cybersecurity.
-      </p>
 
       <h3>3. The Scientific Method and the Role of Statistics</h3>
       <p>
-        The scientific method provides a structured way to explore and understand the world through observation, experimentation, and analysis. 
-        Statistics enhances this process by ensuring that conclusions are based on evidence rather than assumptions. 
-        It allows researchers to measure uncertainty, test hypotheses, and assess the reliability of their results.
-      </p>
-      <ul>
-        <li><strong>Observation:</strong> Gathering and measuring data from experiments or monitoring systems.</li>
-        <li><strong>Hypothesis:</strong> Proposing a testable explanation or relationship between observed variables.</li>
-        <li><strong>Experimentation:</strong> Conducting controlled studies to evaluate the hypothesis.</li>
-        <li><strong>Analysis:</strong> Applying statistical tools to determine whether results are significant or due to random chance.</li>
-      </ul>
-      <p>
-        Without statistical reasoning, scientific progress would lack reliability and consistency. 
-        Statistics ensures that findings are reproducible, significant, and based on measurable evidence rather than coincidence.
+        The scientific method (observation → hypothesis → experiment → analysis) relies on statistics to measure uncertainty, test hypotheses,
+        and ensure results are reproducible. Statistics separates genuine effects from random noise and provides the quantitative basis for reliable conclusions.
       </p>
 
       <h3>4. Why Statistics Matters in Cybersecurity</h3>
       <p>
-        In cybersecurity, data analysis is at the heart of detecting, understanding, and preventing attacks. 
-        Every digital system produces enormous amounts of information—such as network activity, access logs, and user behavior—that can be studied using statistical techniques. 
-        Statistics turns this raw data into insights that help identify risks, predict threats, and strengthen defense mechanisms.
+        Cybersecurity depends on data: network logs, access records, user behavior and more. Statistics converts these raw streams into insights that detect,
+        predict, and mitigate threats.
       </p>
       <ul>
-        <li><strong>Data Analysis:</strong> Allows experts to process large volumes of network and system data to uncover trends and anomalies.</li>
-        <li><strong>Anomaly Detection:</strong> Uses statistical models to recognize unusual patterns that may signal malicious activity or intrusions.</li>
-        <li><strong>Threat Intelligence:</strong> Correlation and regression techniques link seemingly unrelated indicators of compromise to form a clearer threat picture.</li>
-        <li><strong>Predictive Analytics:</strong> Employs time-series modeling and probabilistic forecasting to anticipate potential future attacks.</li>
-        <li><strong>Risk Assessment:</strong> Quantifies and prioritizes potential threats based on their likelihood and impact, guiding proactive defense planning.</li>
-        <li><strong>Incident Response:</strong> Provides quantitative methods to assess and verify ongoing attacks, improving response time and accuracy.</li>
+        <li><strong>Data analysis:</strong> reveals trends and abnormal patterns in large datasets.</li>
+        <li><strong>Anomaly detection:</strong> models “normal” behavior and flags deviations suggesting attacks.</li>
+        <li><strong>Threat intelligence:</strong> links indicators to build a fuller picture of risks.</li>
+        <li><strong>Predictive analytics:</strong> forecasts likely attack patterns from historical data.</li>
+        <li><strong>Risk assessment:</strong> quantifies likelihood and impact to prioritize defenses.</li>
+        <li><strong>Incident response:</strong> helps verify and classify breaches with statistical evidence.</li>
       </ul>
+
       <p>
-        In essence, statistics transforms data into actionable intelligence. 
-        By applying statistical reasoning to cybersecurity, professionals can develop smarter, data-driven defense strategies, 
-        detect emerging risks earlier, and continuously enhance digital resilience in an evolving cyber landscape.
+        In short, statistics transforms noisy security data into actionable intelligence — enabling smarter, data-driven defenses and continuous improvement as threats evolve.
       </p>
 
       <a href="index.html" class="back-button">← Back to Home</a>
-    </section>
+    </article>
   </main>
 
-  <footer>
-    <p>Created by <strong>Alexandru Silivas</strong> | ID: 2252622 | Email: <a href="mailto:silivas.2252622@studenti.uniroma1.it">silivas.2252622@studenti.uniroma1.it</a></p>
+  <footer class="site-footer">
+    © 2025 Alexandru Silivas — Student ID: 2252622 — silivas.2252622@studenti.uniroma1.it
   </footer>
+
 </body>
 </html>
