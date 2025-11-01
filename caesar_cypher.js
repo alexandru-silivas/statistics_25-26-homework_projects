@@ -150,3 +150,31 @@ function updateFreqChart(text) {
     },
   });
 }
+
+
+function caesarDecrypt() {
+  const text = document.getElementById("cipherInput").value;
+  const shift = parseInt(document.getElementById("shift").value) || 0;
+  const resultBox = document.getElementById("cipherOutput");
+  const status = document.getElementById("statusMsg");
+
+  if (!text.trim()) {
+    status.textContent = "Please enter encrypted text first.";
+    return;
+  }
+
+  const decrypted = text
+    .split("")
+    .map(ch => {
+      if (/[a-z]/.test(ch)) {
+        return String.fromCharCode(((ch.charCodeAt(0) - 97 - shift + 26) % 26) + 97);
+      } else if (/[A-Z]/.test(ch)) {
+        return String.fromCharCode(((ch.charCodeAt(0) - 65 - shift + 26) % 26) + 65);
+      }
+      return ch;
+    })
+    .join("");
+
+  resultBox.value = decrypted;
+  status.textContent = `Decrypted using shift = ${shift}`;
+}
