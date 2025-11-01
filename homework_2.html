@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Homework 2 — Datasets, distributions and the Caesar Cipher</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- top nav (must match style.css selectors) -->
+  <header class="navbar">
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="homework_1.html" class="active">HMWK 1</a></li>
+        <li><a href="homework_2.html">HMWK 2</a></li>
+        <li><a href="homework_3.html">HMWK 3</a></li>
+        <li><a href="homework_4.html">HMWK 4</a></li>
+      </ul>
+    </nav>
+  </header>
+
+   <main>
+    <article class="main-content">
+      <h1>Homework 2</h1>
+      <h2>Dataset Distributions and the Caesar Cipher</h2>
+
+      <p>
+        This assignment explores the concept of statistical distributions through both univariate and bivariate analysis,
+        integrating database operations in Microsoft Access and applying letter frequency analysis for simple cryptographic decoding.
+      </p>
+
+      <h3>1. Dataset and Distribution Concepts</h3>
+      <p>
+        In statistics, a <strong>dataset</strong> is a structured collection of data, usually represented in tabular form with
+        variables (columns) and observations (rows). Each variable can exhibit different types of <strong>distributions</strong>,
+        such as uniform, normal, or skewed, depending on how its values are spread.
+      </p>
+      <p>
+        A <strong>univariate distribution</strong> involves a single variable, focusing on characteristics such as its central
+        tendency (mean, median) and dispersion (variance, standard deviation). A <strong>bivariate distribution</strong>, on
+        the other hand, examines two variables simultaneously, often revealing correlations or dependencies between them.
+      </p>
+      <p>
+        For example, in an academic dataset of students, one might analyze the distribution of <em>Math Scores</em> as
+        a univariate case and the relationship between <em>Math Scores</em> and <em>Study Hours</em> as a bivariate case.
+      </p>
+
+      <h3>2. Univariate Distributions in Microsoft Access</h3>
+      <p>
+        To compute measures such as <strong>mean</strong> and <strong>standard deviation</strong> directly from a dataset in
+        Microsoft Access, we can use built-in aggregate functions (<code>Avg()</code> and <code>StDev()</code>) in SQL queries.
+      </p>
+      <pre><code class="sql">
+<span class="kw">SELECT</span> 'Math Score' <span class="kw">AS</span> Variable,
+       <span class="fn">Round</span>(<span class="fn">Avg</span>([MathScore]), 1) <span class="kw">AS</span> Mean,
+       <span class="fn">Round</span>(<span class="fn">StDev</span>([MathScore]), 1) <span class="kw">AS</span> StdDev
+<span class="kw">FROM</span> Students
+<span class="kw">UNION ALL</span>
+<span class="kw">SELECT</span> 'Study Hours', 
+       <span class="fn">Round</span>(<span class="fn">Avg</span>([StudyHours]), 1),
+       <span class="fn">Round</span>(<span class="fn">StDev</span>([StudyHours]), 1)
+<span class="kw">FROM</span> Students;
+      </code></pre>
+      <p>
+        This query returns a concise table showing the mean and standard deviation for each variable in the dataset.
+        In our example, <em>Math Score</em> might have an average of 82.4 and a standard deviation of 8.6, while
+        <em>Study Hours</em> might average around 4.6 with a deviation of 1.5.
+      </p>
+
+      <h3>3. Letter Distribution and the Caesar Cipher</h3>
+      <p>
+        The Caesar cipher is one of the simplest forms of encryption, named after Julius Caesar, who used it to encode military
+        messages. It shifts each letter of the alphabet by a fixed number of positions. For example, with a shift of 3, 
+        <em>A → D</em>, <em>B → E</em>, and so on.
+      </p>
+      <p>
+        Decoding can be achieved either by trying all 25 possible shifts (brute force) or by using <strong>letter frequency analysis</strong>.
+        Since different languages have characteristic letter distributions (for English, <em>E</em> is most frequent), comparing the
+        ciphertext’s frequency distribution against English norms can reveal the correct shift.
+      </p>
+
+      <pre><code class="python">
+<span class="com"># Simple Python example: automatic Caesar cipher decoding using frequency analysis</span>
+<span class="kw">from</span> collections <span class="kw">import</span> Counter
+
+cipher = <span class="str">"Lw zdv d uhohqwohvv vdydjh rqvodxjkw ri guxgjhub dqg reolylrq"</span>
+
+<span class="kw">def</span> decrypt_caesar(s, k):
+    out = []
+    <span class="kw">for</span> ch <span class="kw">in</span> s:
+        <span class="kw">if</span> ch.isalpha():
+            base = <span class="str">'a'</span> <span class="kw">if</span> ch.islower() <span class="kw">else</span> <span class="str">'A'</span>
+            out.append(chr((ord(ch) - ord(base) - k) % 26 + ord(base)))
+        <span class="kw">else</span>:
+            out.append(ch)
+    <span class="kw">return</span> <span class="str">''</span>.join(out)
+
+<span class="com"># Try all shifts and print those resembling English</span>
+<span class="kw">for</span> k <span class="kw">in</span> <span class="fn">range</span>(26):
+    print(k, decrypt_caesar(cipher, k))
+      </code></pre>
+
+      <p>
+        Running this script prints every possible decryption (shift 0–25). The version that forms coherent English text corresponds
+        to the correct shift—here, a shift of 3, yielding:
+      </p>
+
+      <blockquote>
+        “It was a relentless savage onslaught of drudgery and oblivion.”
+      </blockquote>
+
+      <a href="index.html" class="back-button">← Back to Home</a>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    © 2025 Alexandru Silivas — Student ID: 2252622 — silivas.2252622@studenti.uniroma1.it
+  </footer>
+
+</body>
+</html>
