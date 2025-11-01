@@ -225,3 +225,23 @@ code.python .com {
   color: #8fa3b9;
   font-style: italic;
 }
+
+
+/* --- Fine-tuned indentation for inline numbered lists --- */
+.main-content ol {
+  margin: 0.2em 0 1.2em 2.6em;   /* tighter top, deeper left indent */
+  padding-left: 0.8em;           /* smaller padding, moves numbers inward */
+  line-height: 1.65;
+  color: #cfd9e6;
+}
+
+.main-content ol li {
+  margin-bottom: 0.45em;
+  text-align: justify;
+}
+
+/* Optional – align bullet lists visually with numbered ones */
+.main-content ul {
+  margin: 0.4em 0 1.2em 2.4em;
+  padding-left: 0.8em;
+}
