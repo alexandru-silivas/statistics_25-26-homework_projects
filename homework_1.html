@@ -1,66 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Homework 1 – What is Statistics and Why Is It Useful for Cybersecurity?</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homework 1 — What is Statistics and Why It’s Useful for Cybersecurity</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>Homework 1: What is Statistics, and Why Can It Be Useful for Cybersecurity?</h1>
-    <p>Alexandru Silivas — Statistics Course 2025/26</p>
+    <div class="logo">STATISTICS</div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="homework_1.html" class="active">HMWK 1</a></li>
+        <li><a href="#">HMWK 2</a></li>
+        <li><a href="#">HMWK 3</a></li>
+        <li><a href="#">HMWK 4</a></li>
+      </ul>
+    </nav>
   </header>
 
-  <main>
-    <h2>1. Introduction</h2>
-    <p><strong>Statistics</strong> is the branch of mathematics concerned with collecting, analyzing, interpreting, and presenting data. It provides tools to understand uncertainty, identify patterns, and make informed decisions based on evidence rather than assumptions.</p>
+  <main class="content">
+    <section class="intro">
+      <h1>Homework 1</h1>
+      <h2>What is Statistics, and Why Can It Be Useful for Cybersecurity?</h2>
+      <p class="meta">Course: Statistics — Sapienza University of Rome | Alexandru Silivas | 2025/2026</p>
+      <hr style="border: 1px solid #3a3f45; margin: 30px auto; width: 60%;">
+    </section>
 
-    <p>In the modern digital world, vast amounts of information are generated every second — from system logs and network packets to user behavior data. <strong>Cybersecurity</strong>, which focuses on protecting information systems from attacks, heavily relies on statistical methods to detect and respond to threats hidden within this data.</p>
+    <section class="article">
+      <p>
+        <strong>Statistics</strong> is the branch of mathematics concerned with collecting, organizing, analyzing,
+        interpreting, and presenting data. It provides the tools necessary to understand variability in data,
+        draw conclusions, and make informed decisions based on evidence rather than assumptions.
+      </p>
 
-    <h2>2. The Role of Statistics</h2>
-    <p>At its core, statistics helps to <em>transform raw data into insight</em>. Key statistical tasks include:</p>
-    <ul>
-      <li><strong>Descriptive analysis</strong> — summarizing data using averages, distributions, and trends.</li>
-      <li><strong>Inferential analysis</strong> — drawing conclusions from limited samples.</li>
-      <li><strong>Predictive modeling</strong> — estimating future events based on historical patterns.</li>
-    </ul>
-    <p>These tasks are directly applicable to cybersecurity, where analysts must understand what “normal” activity looks like and recognize when anomalies may indicate attacks or system breaches.</p>
+      <p>
+        In the context of <strong>cybersecurity</strong>, statistics plays a vital role in detecting patterns,
+        identifying anomalies, and modeling threats. By applying statistical methods, security analysts can
+        quantify risk, measure the likelihood of cyberattacks, and recognize deviations in network traffic that
+        could indicate malicious activity.
+      </p>
 
-    <h2>3. Applications in Cybersecurity</h2>
+      <p>
+        For example, statistical anomaly detection can help identify unusual login patterns, data transfer spikes,
+        or access attempts from unexpected geographical locations. These models often rely on understanding the
+        <em>distribution</em> of normal behavior — when a new data point falls far outside that distribution,
+        it may signal a security issue.
+      </p>
 
-    <h3>a. Anomaly Detection</h3>
-    <p>Statistical models can define baseline network behavior (e.g., average login times, data transfer rates) and flag deviations.  
-    <em>Example:</em> If a user typically downloads 50 MB per day but suddenly downloads 5 GB, statistical thresholds can trigger an alert.</p>
+      <p>
+        Furthermore, data-driven cybersecurity benefits from predictive modeling: using statistical regression or
+        probabilistic inference, analysts can estimate the likelihood of future attacks based on past incidents.
+        As cyber threats evolve, statistical thinking enables continuous learning and model updating.
+      </p>
 
-    <h3>b. Malware Analysis</h3>
-    <p>Statistics are used to profile and classify malicious code based on features such as instruction frequency or file size distributions.</p>
+      <p>
+        In summary, statistics provides the mathematical foundation for modern cybersecurity analytics — helping
+        professionals transform raw security data into actionable insights and proactive defenses.
+      </p>
 
-    <h3>c. Incident Response & Forensics</h3>
-    <p>Analysts use statistical summaries to reconstruct timelines and quantify the scale of an incident — for example, identifying which systems were most frequently targeted.</p>
-
-    <h3>d. Risk Assessment</h3>
-    <p>Probabilistic models help organizations estimate the likelihood and potential impact of specific attack types, guiding investment in security measures.</p>
-
-    <h3>e. User Behavior Analytics (UBA)</h3>
-    <p>By applying statistical clustering and regression, systems can distinguish between normal and suspicious user activity — improving insider-threat detection.</p>
-
-    <h2>4. Advantages of Using Statistics in Cybersecurity</h2>
-    <ul>
-      <li>Early detection of attacks through data-driven anomaly monitoring.</li>
-      <li>Reduction of false positives by refining alert thresholds.</li>
-      <li>Better decision-making through quantifiable risk assessments.</li>
-      <li>Scalability, since statistical techniques can handle massive datasets produced by large networks.</li>
-    </ul>
-
-    <h2>5. Conclusion</h2>
-    <p>Statistics provides cybersecurity professionals with a <strong>quantitative foundation for decision-making</strong>. It enables them to uncover hidden patterns, predict threats, and respond efficiently. In a field where attackers constantly adapt, <strong>statistical thinking turns raw data into actionable defense</strong> — making it one of the most powerful tools in modern digital security.</p>
-
-    <p style="margin-top: 2rem;"><a href="index.html">← Back to Home</a></p>
+      <div style="text-align: center; margin-top: 40px;">
+        <a href="index.html" class="button">← Back to Home</a>
+      </div>
+    </section>
   </main>
 
   <footer>
-    <p>© 2025 Alexandru Silivas | Homework 1 — Statistics and Cybersecurity</p>
+    <p>© 2025 Alexandru Silivas — Student ID: 2252622 —
+      <a href="mailto:silivas.2252622@studenti.uniroma1.it">silivas.2252622@studenti.uniroma1.it</a>
+    </p>
   </footer>
 </body>
 </html>
