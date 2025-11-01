@@ -463,32 +463,35 @@ print(best[2])
     </ul>
 
     
-    <section class="cipher-tool">
-      <h3>Caesar Cipher</h3>
+    <hr>
+    <section id="caesar-cipher">
+      <h2>Caesar Cipher</h2>
+      <p>Use this interactive tool to encrypt, decrypt, and analyze letter frequencies for the Caesar cipher.</p>
     
       <label for="cipherInput">Text to encrypt/decrypt</label>
       <textarea id="cipherInput" placeholder="Type or paste your text…"></textarea>
     
       <label for="shift">Shift (0–25):</label>
-      <input type="number" id="shift" min="0" max="25" value="7" />
+      <input type="number" id="shift" min="0" max="25" value="7">
     
-      <button class="btn primary" onclick="caesarEncrypt()">Encrypt</button>
+      <button onclick="caesarEncrypt()">Encrypt</button>
     
       <label for="cipherOutput">Result</label>
       <textarea id="cipherOutput" readonly placeholder="The result will appear here…"></textarea>
     
-      <button class="btn secondary" onclick="bruteForce()">Brute force (show all 26)</button>
-      <button class="btn secondary" onclick="autoDecode()">Auto-decode (by frequency)</button>
+      <div class="cipher-buttons">
+        <button onclick="bruteForce()">Brute force (show all 26)</button>
+        <button onclick="autoDecode()">Auto-decode (by frequency)</button>
+      </div>
     
-      <p id="statusMsg">Please enter some encrypted text first.</p>
+      <p id="statusMsg" class="status"></p>
     
-      <!-- Visualization area -->
       <div id="freqChartContainer">
         <canvas id="freqChart"></canvas>
       </div>
     </section>
 
-
+    
     <h3>Summary and final remarks</h3>
 
     <p>
@@ -505,5 +508,12 @@ print(best[2])
     © 2025 Alexandru Silivas — Student ID: 2252622 — silivas.2252622@studenti.uniroma1.it
   </footer>
 
+
+  <!-- Chart.js library (for frequency histogram) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+<!-- Caesar Cipher script -->
+<script src="caesar_cipher.js"></script>
+  
 </body>
 </html>
