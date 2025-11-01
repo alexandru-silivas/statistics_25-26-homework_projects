@@ -152,30 +152,71 @@ function updateFreqChart(text) {
 }
 
 
+
+// Encrypt (shifts forward)
 function caesarEncrypt() {
-  const text = document.getElementById("cipherInput").value;
-  const shift = parseInt(document.getElementById("shift").value) || 0;
-  const resultBox = document.getElementById("cipherOutput");
+  const inEl = document.getElementById("cipherInput");
+  const outEl = document.getElementById("cipherOutput");
   const status = document.getElementById("statusMsg");
+  const shift = parseInt(document.getElementById("shift").value) || 0;
+  const text = inEl.value || "";
 
   if (!text.trim()) {
-    status.textContent = "Please enter some text to encrypt.";
+    status.textContent = "Please enter text to encrypt.";
     return;
   }
 
-  const encrypted = text
-    .split("")
-    .map(ch => {
-      if (/[a-z]/.test(ch)) {
-        return String.fromCharCode(((ch.charCodeAt(0) - 97 + shift) % 26) + 97);
-      } else if (/[A-Z]/.test(ch)) {
-        return String.fromCharCode(((ch.charCodeAt(0) - 65 + shift) % 26) + 65);
-      }
-      return ch;
-    })
-    .join("");
+  const encrypted = text.split("").map(ch => {
+    if (/[a-z]/.test(ch)) {
+      return String.fromCharCode(((ch.charCodeAt(0) - 97 + shift) % 26) + 97);
+    } else if (/[A-Z]/.test(ch)) {
+      return String.fromCharCode(((ch.charCodeAt(0) - 65 + shift) % 26) + 65);
+    }
+    return ch;
+  }).join("");
 
-  resultBox.value = encrypted;
-  document.getElementById("cipherInput").value = encrypted;  // ✅ Automatically transfer result
-  status.textContent = `Encrypted using shift = ${shift}`;
+  outEl.value = encrypted;
+  status.textContent = `Encrypted (shift +${shift}).`;
+  updateFreqChart(encrypted); // optional, updates chart for encrypted text
+}
+
+// Decrypt (shifts backward)
+function caesarDecrypt() {
+  const inEl = document.getElementById("cipherInput");
+  const outEl = document.getElementById("cipherOutput");
+  const status = document.getElementById("statusMsg");
+  const shift = parseInt(document.getElementById("shift").value) || 0;
+  const text = inEl.value || "";
+
+  if (!text.trim()) {
+    status.textContent = "Please enter encrypted text to decrypt.";
+    return;
+  }
+
+  const decrypted = text.split("").map(ch => {
+    if (/[a-z]/.test(ch)) {
+      return String.fromCharCode(((ch.charCodeAt(0) - 97 - shift + 26) % 26) + 97);
+    } else if (/[A-Z]/.test(ch)) {
+      return String.fromCharCode(((ch.charCodeAt(0) - 65 - shift + 26) % 26) + 65);
+    }
+    return ch;
+  }).join("");
+
+  outEl.value = decrypted;
+  status.textContent = `Decrypted (shift -${shift}).`;
+  updateFreqChart(decrypted); // optional, updates chart for decrypted text
+}
+
+// explicit action: copy the output into the input field (user-controlled)
+function useResultAsInput() {
+  const inEl = document.getElementById("cipherInput");
+  const outEl = document.getElementById("cipherOutput");
+  const status = document.getElementById("statusMsg");
+
+  if (!outEl.value.trim()) {
+    status.textContent = "No result to use as input.";
+    return;
+  }
+  inEl.value = outEl.value;
+  status.textContent = "Result copied into input. You can now Encrypt/Decrypt further.";
 }
