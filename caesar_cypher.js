@@ -152,29 +152,30 @@ function updateFreqChart(text) {
 }
 
 
-function caesarDecrypt() {
+function caesarEncrypt() {
   const text = document.getElementById("cipherInput").value;
   const shift = parseInt(document.getElementById("shift").value) || 0;
   const resultBox = document.getElementById("cipherOutput");
   const status = document.getElementById("statusMsg");
 
   if (!text.trim()) {
-    status.textContent = "Please enter encrypted text first.";
+    status.textContent = "Please enter some text to encrypt.";
     return;
   }
 
-  const decrypted = text
+  const encrypted = text
     .split("")
     .map(ch => {
       if (/[a-z]/.test(ch)) {
-        return String.fromCharCode(((ch.charCodeAt(0) - 97 - shift + 26) % 26) + 97);
+        return String.fromCharCode(((ch.charCodeAt(0) - 97 + shift) % 26) + 97);
       } else if (/[A-Z]/.test(ch)) {
-        return String.fromCharCode(((ch.charCodeAt(0) - 65 - shift + 26) % 26) + 65);
+        return String.fromCharCode(((ch.charCodeAt(0) - 65 + shift) % 26) + 65);
       }
       return ch;
     })
     .join("");
 
-  resultBox.value = decrypted;
-  status.textContent = `Decrypted using shift = ${shift}`;
+  resultBox.value = encrypted;
+  document.getElementById("cipherInput").value = encrypted;  // ✅ Automatically transfer result
+  status.textContent = `Encrypted using shift = ${shift}`;
 }
