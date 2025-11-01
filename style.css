@@ -1,97 +1,149 @@
-/* ====== Global Styles ====== */
-body {
-  font-family: "Segoe UI", Arial, sans-serif;
+/* General Reset */
+* {
   margin: 0;
   padding: 0;
-  background-color: #f4f4f9;
-  color: #333;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", Arial, sans-serif;
+  background-color: #1e2227;
+  color: #d6d6d6;
   line-height: 1.6;
 }
 
-/* ====== Header ====== */
+/* Header */
 header {
-  background-color: #283593;
-  color: #fff;
-  text-align: center;
-  padding: 2.5rem 1rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 60px;
+  background-color: #2b3036;
+  border-bottom: 1px solid #3a3f45;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 2em;
+.logo {
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  color: #ffffff;
 }
 
-header p {
-  color: #e0e0e0;
-  margin-top: 0.5rem;
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 30px;
 }
 
-/* ====== Main Content ====== */
-main {
+nav a {
+  text-decoration: none;
+  color: #c7c7c7;
+  transition: color 0.3s;
+}
+
+nav a:hover,
+nav a.active {
+  color: #4fc3f7;
+}
+
+/* Intro Section */
+.intro {
   max-width: 900px;
-  margin: 2rem auto;
-  background: #fff;
-  padding: 2rem;
+  margin: 80px auto 60px;
+  text-align: center;
+}
+
+.intro h1 {
+  font-size: 3.5rem;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.intro h2 {
+  font-size: 1.5rem;
+  color: #aaaaaa;
+  margin-bottom: 5px;
+}
+
+.intro h3 {
+  font-size: 1rem;
+  color: #4fc3f7;
+  margin-bottom: 30px;
+}
+
+.intro p {
+  color: #c0c0c0;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+/* Projects Section */
+.projects {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.projects h2 {
+  font-size: 1.8rem;
+  color: #ffffff;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #3a3f45;
+  padding-bottom: 10px;
+}
+
+.project-card {
+  background-color: #2b3036;
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease;
 }
 
-/* ====== Headings ====== */
-h1, h2, h3 {
-  color: #283593;
+.project-card:hover {
+  transform: translateY(-5px);
 }
 
-/* ====== Links ====== */
-a {
-  color: #283593;
+.project-card.inactive {
+  opacity: 0.6;
+}
+
+.project-card h3 {
+  color: #4fc3f7;
+  margin-bottom: 10px;
+}
+
+.project-card p {
+  margin-bottom: 15px;
+}
+
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #4fc3f7;
+  color: #1e2227;
+  border-radius: 5px;
   text-decoration: none;
   font-weight: bold;
-  transition: color 0.2s ease;
 }
 
-a:hover {
-  color: #1a237e;
-  text-decoration: underline;
+.button:hover {
+  background-color: #81d4fa;
 }
 
-/* ====== Footer ====== */
+/* Footer */
 footer {
   text-align: center;
-  padding: 1rem;
-  color: #777;
-  font-size: 0.9em;
-  margin-top: 3rem;
+  padding: 20px;
+  font-size: 0.9rem;
+  color: #9c9c9c;
+  border-top: 1px solid #3a3f45;
+  background-color: #2b3036;
 }
 
-/* ====== Project Cards (for Home Page) ====== */
-.projects {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2rem;
+footer a {
+  color: #4fc3f7;
+  text-decoration: none;
 }
-
-.card {
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  padding: 1.5rem;
-  text-align: center;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-/* ====== Responsive Text ====== */
-@media (max-width: 600px) {
-  header h1 {
-    font-size: 1.6em;
-  }
-
-  main {
-    padding: 1.2rem;
-  }
