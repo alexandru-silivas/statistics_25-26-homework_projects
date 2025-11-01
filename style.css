@@ -1,98 +1,30 @@
-/* ====== GLOBAL STYLING ====== */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
-
-body {
-  margin: 0;
-  font-family: "Poppins", sans-serif;
-  color: #e0e0e0;
-  background: url("background.png") no-repeat center center fixed;
-  background-size: cover;
-  background-color: #0a0a0a; /* fallback color */
+.navbar {
+  background: rgba(0, 0, 0, 0.7);
+  padding: 1rem 0;
+  text-align: center;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+  backdrop-filter: blur(6px);
 }
 
-/* ====== NAVBAR ====== */
-nav {
-  background-color: rgba(0, 0, 0, 0.7);
+.navbar ul {
+  list-style: none;
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 1rem;
-  gap: 1.5rem;
-  font-size: 0.95rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
 }
 
-nav a {
+.navbar a {
   text-decoration: none;
-  color: #c0c0c0;
+  color: #fff;
+  font-weight: 500;
   transition: color 0.3s ease;
 }
 
-nav a:hover {
-  color: #ffffff;
-}
-
-/* ====== MAIN CONTENT ====== */
-.main-content {
-  background: rgba(20, 20, 20, 0.85);
-  border-radius: 12px;
-  padding: 2rem 2.5rem;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-  max-width: 800px;
-  margin: 4rem auto;
-}
-
-h1, h2 {
-  text-align: center;
-  color: #ffffff;
-  margin-bottom: 1rem;
-}
-
-p {
-  line-height: 1.7;
-  color: #d0d0d0;
-  margin-bottom: 1rem;
-}
-
-strong {
-  color: #ffffff;
-}
-
-/* ====== BUTTONS ====== */
-button, .back-button {
-  display: inline-block;
-  margin-top: 1.5rem;
-  padding: 0.6rem 1.2rem;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 6px;
-  background: transparent;
-  color: #ccc;
-  font-size: 0.9rem;
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
-
-button:hover, .back-button:hover {
-  color: #fff;
-  border-color: #fff;
-  background: rgba(255, 255, 255, 0.1);
-}
-
-/* ====== FOOTER ====== */
-footer {
-  text-align: center;
-  padding: 1rem 0;
-  font-size: 0.85rem;
-  color: #888;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-footer a {
-  color: #ccc;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-footer a:hover {
-  color: #fff;
+.navbar a:hover {
+  color: #00bcd4;
 }
