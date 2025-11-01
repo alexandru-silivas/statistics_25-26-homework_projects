@@ -1,0 +1,97 @@
+/* ====== Global Styles ====== */
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f9;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* ====== Header ====== */
+header {
+  background-color: #283593;
+  color: #fff;
+  text-align: center;
+  padding: 2.5rem 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2em;
+}
+
+header p {
+  color: #e0e0e0;
+  margin-top: 0.5rem;
+}
+
+/* ====== Main Content ====== */
+main {
+  max-width: 900px;
+  margin: 2rem auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* ====== Headings ====== */
+h1, h2, h3 {
+  color: #283593;
+}
+
+/* ====== Links ====== */
+a {
+  color: #283593;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #1a237e;
+  text-decoration: underline;
+}
+
+/* ====== Footer ====== */
+footer {
+  text-align: center;
+  padding: 1rem;
+  color: #777;
+  font-size: 0.9em;
+  margin-top: 3rem;
+}
+
+/* ====== Project Cards (for Home Page) ====== */
+.projects {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* ====== Responsive Text ====== */
+@media (max-width: 600px) {
+  header h1 {
+    font-size: 1.6em;
+  }
+
+  main {
+    padding: 1.2rem;
+  }
