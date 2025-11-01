@@ -271,95 +271,66 @@ code.python .com {
 }
 
 
-/* Caesar Cipher tool layout */
-.cipher-tool {
-  margin-top: 2rem;
-  padding: 1.8rem;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.03);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+/* --- Caesar Cipher Tool Styling --- */
+#caesar-cipher {
+  margin-top: 3em;
+  padding-top: 2em;
 }
 
-.cipher-tool h3 {
-  color: #e6eef8;
-  margin-bottom: 1rem;
-  font-size: 1.3rem;
-}
-
-.cipher-tool label {
+#caesar-cipher label {
   display: block;
-  font-weight: 500;
-  margin-top: 1rem;
-  margin-bottom: 0.3rem;
-  color: #bfc8d4;
-}
-
-.cipher-tool textarea,
-.cipher-tool input {
-  width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.08);
-  background-color: rgba(18,22,26,0.7);
-  color: #e6eef8;
-  font-size: 1rem;
-  resize: none;
-  margin-bottom: 0.8rem;
-}
-
-.cipher-tool textarea:focus,
-.cipher-tool input:focus {
-  outline: none;
-  border-color: var(--accent);
-}
-
-.btn {
-  width: 100%;
-  padding: 10px 0;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
+  margin-top: 1em;
   font-weight: 600;
-  cursor: pointer;
-  margin-top: 0.6rem;
-  transition: all 0.2s ease;
+  color: var(--accent);
 }
 
-.btn.primary {
-  background-color: #2ecc71;
-  color: #fff;
-}
-
-.btn.primary:hover {
-  background-color: #27ae60;
-}
-
-.btn.secondary {
-  background-color: #27ae60;
-  color: #fff;
-}
-
-.btn.secondary:hover {
-  background-color: #1f8a4d;
-}
-
-#statusMsg {
-  color: #9aa6b1;
-  text-align: center;
-  font-size: 0.9rem;
-  margin-top: 0.8rem;
-}
-
-/* Caesar Cipher frequency chart */
-#freqChartContainer {
-  margin-top: 2rem;
-  background: rgba(255,255,255,0.03);
-  border-radius: 12px;
-  padding: 1rem;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.35);
-}
-
-#freqChart {
+#caesar-cipher textarea,
+#caesar-cipher input[type="number"] {
   width: 100%;
-  max-height: 300px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--text);
+  font-size: 1rem;
+  padding: 0.8em;
+  border-radius: 8px;
+  margin-top: 0.5em;
+  resize: vertical;
+}
+
+#caesar-cipher button {
+  display: block;
+  width: 100%;
+  margin-top: 1em;
+  background: #2ecc71;
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  padding: 0.8em;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+#caesar-cipher button:hover {
+  background: #27ae60;
+  transform: translateY(-2px);
+}
+
+#caesar-cipher .cipher-buttons button {
+  background: #2ecc71;
+  margin-top: 0.6em;
+}
+
+#caesar-cipher .status {
+  margin-top: 1em;
+  color: #bfc8d4;
+  font-size: 0.95rem;
+  font-style: italic;
+}
+
+#freqChartContainer {
+  margin-top: 2em;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1em;
+  border-radius: 10px;
 }
