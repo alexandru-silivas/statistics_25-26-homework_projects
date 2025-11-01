@@ -5,137 +5,55 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Alexandru Silivas's 25/26 Statistics Homework Projects</title>
   <style>
-    /* === Base === */
-    * {
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
+      background-color: #f4f4f9;
+      color: #333;
     }
-    body {
-      font-family: 'Segoe UI', Roboto, sans-serif;
-      background-color: #0d1117;
-      color: #c9d1d9;
-      line-height: 1.6;
-      padding: 2rem 1rem;
-    }
-
-    /* === Header === */
     header {
+      background-color: #283593;
+      color: #fff;
       text-align: center;
-      margin-bottom: 3rem;
+      padding: 2rem 0;
     }
-    header img {
-      width: 100px;
-      filter: drop-shadow(0 0 10px #58a6ff60);
-      margin-bottom: 1rem;
-    }
-    header h1 {
-      font-size: 2rem;
-      color: #58a6ff;
-      margin-bottom: 0.5rem;
-    }
-    header p {
-      color: #8b949e;
-      font-size: 1.1rem;
-    }
-
-    /* === Homework Sections === */
-    section {
-      background-color: #161b22;
-      border-radius: 1rem;
-      box-shadow: 0 0 15px rgba(88, 166, 255, 0.1);
-      margin: 2rem auto;
+    main {
       max-width: 900px;
-      overflow: hidden;
-      transition: all 0.3s ease;
+      margin: 2rem auto;
+      padding: 1rem;
     }
-    section:hover {
-      box-shadow: 0 0 25px rgba(88, 166, 255, 0.3);
-      transform: translateY(-3px);
+    h1 {
+      margin: 0;
+      font-size: 2em;
     }
-    section img {
-      width: 100%;
-      height: 250px;
-      object-fit: cover;
-      filter: brightness(0.85);
+    p {
+      text-align: center;
+      color: #555;
     }
-    .content {
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       padding: 1.5rem;
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-    .content h2 {
-      color: #58a6ff;
-      margin-bottom: 0.5rem;
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
-    .content p {
-      color: #8b949e;
-      margin-bottom: 1rem;
-    }
-    .btn {
-      display: inline-block;
-      background: linear-gradient(90deg, #238636, #2ea043);
-      color: white;
+    .card a {
       text-decoration: none;
-      padding: 0.6rem 1.2rem;
-      border-radius: 0.5rem;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 10px rgba(46,160,67,0.4);
+      color: #283593;
+      font-weight: bold;
     }
-    .btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px rgba(46,160,67,0.8);
-    }
-
-    /* === Footer === */
     footer {
       text-align: center;
-      color: #484f58;
-      font-size: 0.9rem;
-      margin-top: 4rem;
-    }
-  </style>
-</head>
-<body>
-
-  <header>
-    <img src="https://cdn-icons-png.flaticon.com/512/1055/1055646.png" alt="Statistics Icon">
-    <h1>Alexandru Silivas's 25/26 Statistics Homework Projects</h1>
-    <p>A showcase of completed homework assignments from the 2025/2026 Statistics course.</p>
-  </header>
-
-  <!-- Homework 1 -->
-  <section>
-    <img src="https://cdn.pixabay.com/photo/2016/02/19/11/19/analytics-1209470_1280.jpg" alt="Statistics Graph">
-    <div class="content">
-      <h2>📊 Homework 1</h2>
-      <p>This assignment ...</p>
-      <a href="homework1.pdf" class="btn" download>⬇️ Download Homework 1</a>
-    </div>
-  </section>
-
-  <!-- Homework 2 -->
-  <section>
-    <img src="https://cdn.pixabay.com/photo/2018/03/23/08/58/security-3256048_1280.jpg" alt="Cybersecurity">
-    <div class="content">
-      <h2>🔐 Homework 2</h2>
-      <p>This assignment ...</p>
-      <a href="homework2.pdf" class="btn" download>⬇️ Download Homework 2</a>
-    </div>
-  </section>
-
-  <!-- Homework 3 -->
-  <section>
-    <img src="https://cdn.pixabay.com/photo/2015/01/08/18/26/programming-593312_1280.jpg" alt="Programming">
-    <div class="content">
-      <h2>💻 Homework 3</h2>
-      <p>This assignment ...</p>
-      <a href="homework3.pdf" class="btn" download>⬇️ Download Homework 3</a>
-    </div>
-  </section>
-
-  <footer>
-    © 2025 Alexandru Silivas — All Rights Reserved
-  </footer>
-
-</body>
-</html>
+      paddin
