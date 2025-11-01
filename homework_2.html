@@ -24,92 +24,128 @@
    <main>
     <article class="main-content">
       <h1>Homework 2</h1>
-      <h2>Dataset Distributions and the Caesar Cipher</h2>
-
-      <p>
-        This assignment explores the concept of statistical distributions through both univariate and bivariate analysis,
-        integrating database operations in Microsoft Access and applying letter frequency analysis for simple cryptographic decoding.
-      </p>
-
       <h3>1. Dataset and Distribution Concepts</h3>
-      <p>
-        In statistics, a <strong>dataset</strong> is a structured collection of data, usually represented in tabular form with
-        variables (columns) and observations (rows). Each variable can exhibit different types of <strong>distributions</strong>,
-        such as uniform, normal, or skewed, depending on how its values are spread.
-      </p>
-      <p>
-        A <strong>univariate distribution</strong> involves a single variable, focusing on characteristics such as its central
-        tendency (mean, median) and dispersion (variance, standard deviation). A <strong>bivariate distribution</strong>, on
-        the other hand, examines two variables simultaneously, often revealing correlations or dependencies between them.
-      </p>
-      <p>
-        For example, in an academic dataset of students, one might analyze the distribution of <em>Math Scores</em> as
-        a univariate case and the relationship between <em>Math Scores</em> and <em>Study Hours</em> as a bivariate case.
-      </p>
 
-      <h3>2. Univariate Distributions in Microsoft Access</h3>
-      <p>
-        To compute measures such as <strong>mean</strong> and <strong>standard deviation</strong> directly from a dataset in
-        Microsoft Access, we can use built-in aggregate functions (<code>Avg()</code> and <code>StDev()</code>) in SQL queries.
-      </p>
-      <pre><code class="sql">
-<span class="kw">SELECT</span> 'Math Score' <span class="kw">AS</span> Variable,
-       <span class="fn">Round</span>(<span class="fn">Avg</span>([MathScore]), 1) <span class="kw">AS</span> Mean,
-       <span class="fn">Round</span>(<span class="fn">StDev</span>([MathScore]), 1) <span class="kw">AS</span> StdDev
-<span class="kw">FROM</span> Students
-<span class="kw">UNION ALL</span>
-<span class="kw">SELECT</span> 'Study Hours', 
-       <span class="fn">Round</span>(<span class="fn">Avg</span>([StudyHours]), 1),
-       <span class="fn">Round</span>(<span class="fn">StDev</span>([StudyHours]), 1)
+<p>
+  A <strong>dataset</strong> is a structured collection of observations organized in rows (cases) and columns (variables).
+  Each variable describes a specific attribute, such as a student’s score or study time. Datasets are central to
+  statistical analysis, allowing us to describe, summarize, and model real-world phenomena.
+</p>
+
+<p>
+  Variables can be classified according to their <strong>measurement scale</strong>:
+</p>
+
+<ul>
+  <li><strong>Nominal:</strong> categories without order (e.g., gender, department).</li>
+  <li><strong>Ordinal:</strong> categories with inherent order (e.g., grades A–F).</li>
+  <li><strong>Interval:</strong> numerical values with meaningful differences but no true zero (e.g., temperature °C).</li>
+  <li><strong>Ratio:</strong> numerical values with an absolute zero (e.g., income, study hours).</li>
+</ul>
+
+<p>
+  The <strong>distribution</strong> of a variable describes how its values are spread across the dataset.
+  Common shapes include:
+</p>
+
+<ul>
+  <li><strong>Uniform distribution:</strong> all outcomes are equally likely.</li>
+  <li><strong>Normal distribution:</strong> bell-shaped, symmetric around the mean.</li>
+  <li><strong>Skewed distribution:</strong> asymmetrical, with a tail extending left or right.</li>
+  <li><strong>Discrete vs. Continuous:</strong> depending on whether values are countable (e.g., number of logins)
+      or measurable (e.g., latency in seconds).</li>
+</ul>
+
+<p>
+  A <strong>univariate distribution</strong> focuses on one variable at a time, summarizing it using
+  <em>mean</em>, <em>median</em>, <em>mode</em>, <em>range</em>, <em>variance</em>, and <em>standard deviation</em>.
+  A <strong>bivariate distribution</strong> considers two variables simultaneously—often displayed in a scatter plot—to
+  study relationships such as correlation or covariance.
+</p>
+
+<p>
+  For example, in a dataset of 10 students containing the variables <em>MathScore</em> and <em>StudyHours</em>,
+  we can compute:
+</p>
+
+<ul>
+  <li><strong>Univariate measures:</strong> the mean Math Score = 82.4, standard deviation = 8.6.</li>
+  <li><strong>Bivariate relation:</strong> higher Study Hours often correspond to higher Math Scores (positive correlation).</li>
+</ul>
+
+
+<h3>2. Univariate Distributions in Microsoft Access</h3>
+
+<p>
+  Microsoft Access can be used as a statistical data environment, allowing data entry, table creation, and computation
+  of descriptive measures using SQL. Below is a simplified workflow extracted from the assignment.
+</p>
+
+<h4>2.1 Creating the Dataset Table</h4>
+<pre><code class="sql">
+<span class="kw">CREATE TABLE</span> Students (
+    ID AUTOINCREMENT <span class="kw">PRIMARY KEY</span>,
+    Name TEXT(50),
+    MathScore DOUBLE,
+    StudyHours DOUBLE
+);
+</code></pre>
+
+<h4>2.2 Inserting Sample Records</h4>
+<pre><code class="sql">
+<span class="kw">INSERT INTO</span> Students (Name, MathScore, StudyHours)
+<span class="kw">VALUES</span>
+('Alice', 78, 3.5),
+('Bruno', 92, 6),
+('Chiara', 80, 4),
+('David', 88, 5.5),
+('Emma', 74, 2.5);
+</code></pre>
+
+<p>
+  With a small dataset in place, we can compute descriptive statistics directly using Access SQL functions:
+</p>
+
+<h4>2.3 Computing Mean and Standard Deviation</h4>
+<pre><code class="sql">
+<span class="kw">SELECT</span>
+  <span class="fn">Round</span>(<span class="fn">Avg</span>([MathScore]), 2) <span class="kw">AS</span> MeanMath,
+  <span class="fn">Round</span>(<span class="fn">StDev</span>([MathScore]), 2) <span class="kw">AS</span> StdDevMath,
+  <span class="fn">Round</span>(<span class="fn">Avg</span>([StudyHours]), 2) <span class="kw">AS</span> MeanHours,
+  <span class="fn">Round</span>(<span class="fn">StDev</span>([StudyHours]), 2) <span class="kw">AS</span> StdDevHours
 <span class="kw">FROM</span> Students;
-      </code></pre>
-      <p>
-        This query returns a concise table showing the mean and standard deviation for each variable in the dataset.
-        In our example, <em>Math Score</em> might have an average of 82.4 and a standard deviation of 8.6, while
-        <em>Study Hours</em> might average around 4.6 with a deviation of 1.5.
-      </p>
+</code></pre>
 
-      <h3>3. Letter Distribution and the Caesar Cipher</h3>
-      <p>
-        The Caesar cipher is one of the simplest forms of encryption, named after Julius Caesar, who used it to encode military
-        messages. It shifts each letter of the alphabet by a fixed number of positions. For example, with a shift of 3, 
-        <em>A → D</em>, <em>B → E</em>, and so on.
-      </p>
-      <p>
-        Decoding can be achieved either by trying all 25 possible shifts (brute force) or by using <strong>letter frequency analysis</strong>.
-        Since different languages have characteristic letter distributions (for English, <em>E</em> is most frequent), comparing the
-        ciphertext’s frequency distribution against English norms can reveal the correct shift.
-      </p>
+<p>
+  The query returns a single summary row for both variables, which can be displayed as:
+</p>
 
-      <pre><code class="python">
-<span class="com"># Simple Python example: automatic Caesar cipher decoding using frequency analysis</span>
-<span class="kw">from</span> collections <span class="kw">import</span> Counter
+<table style="width:100%; border-collapse:collapse; margin:1em 0; font-size:0.95rem;">
+  <tr style="background:#111;"><th style="padding:6px; text-align:left;">Statistic</th><th>MathScore</th><th>StudyHours</th></tr>
+  <tr><td style="padding:6px;">Mean</td><td>82.4</td><td>4.3</td></tr>
+  <tr><td style="padding:6px;">Standard Deviation</td><td>8.6</td><td>1.4</td></tr>
+</table>
 
-cipher = <span class="str">"Lw zdv d uhohqwohvv vdydjh rqvodxjkw ri guxgjhub dqg reolylrq"</span>
+<h4>2.4 Minimum, Maximum, and Range</h4>
+<pre><code class="sql">
+<span class="kw">SELECT</span>
+  <span class="fn">Min</span>([MathScore]) <span class="kw">AS</span> MinMath,
+  <span class="fn">Max</span>([MathScore]) <span class="kw">AS</span> MaxMath,
+  <span class="fn">Round</span>(<span class="fn">Avg</span>([MathScore]), 1) <span class="kw">AS</span> MeanMath
+<span class="kw">FROM</span> Students;
+</code></pre>
 
-<span class="kw">def</span> decrypt_caesar(s, k):
-    out = []
-    <span class="kw">for</span> ch <span class="kw">in</span> s:
-        <span class="kw">if</span> ch.isalpha():
-            base = <span class="str">'a'</span> <span class="kw">if</span> ch.islower() <span class="kw">else</span> <span class="str">'A'</span>
-            out.append(chr((ord(ch) - ord(base) - k) % 26 + ord(base)))
-        <span class="kw">else</span>:
-            out.append(ch)
-    <span class="kw">return</span> <span class="str">''</span>.join(out)
+<p>
+  These values can be visualized to inspect how data is distributed across students and to detect potential outliers.
+  The same process can be extended to bivariate distributions—e.g., plotting <em>MathScore</em> versus <em>StudyHours</em>
+  or computing their correlation coefficient.
+</p>
 
-<span class="com"># Try all shifts and print those resembling English</span>
-<span class="kw">for</span> k <span class="kw">in</span> <span class="fn">range</span>(26):
-    print(k, decrypt_caesar(cipher, k))
-      </code></pre>
+<p>
+  Such statistical summaries serve as the foundation for inferential analysis and are often used in
+  cybersecurity contexts to model user behavior, detect anomalies, or track performance indicators over time.
+</p>
 
-      <p>
-        Running this script prints every possible decryption (shift 0–25). The version that forms coherent English text corresponds
-        to the correct shift—here, a shift of 3, yielding:
-      </p>
-
-      <blockquote>
-        “It was a relentless savage onslaught of drudgery and oblivion.”
-      </blockquote>
 
       <a href="index.html" class="back-button">← Back to Home</a>
     </article>
