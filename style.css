@@ -245,3 +245,27 @@ code.python .com {
   margin: 0.4em 0 1.2em 2.4em;
   padding-left: 0.8em;
 }
+
+
+/* --- Improved vertical spacing for main sections vs subsections --- */
+
+/* Subsection titles (like 2.6) */
+.main-content h3 {
+  margin-top: 1.6em;
+  margin-bottom: 0.6em;
+}
+
+/* Main numbered sections (like 3., 4., etc.) */
+.main-content h2 {
+  margin-top: 2.8em;         /* extra breathing space above */
+  margin-bottom: 0.8em;      /* slightly below too */
+  border-top: 1px solid rgba(255,255,255,0.05); /* subtle visual break */
+  padding-top: 1.2em;        /* adds soft spacing after divider */
+}
+
+/* Optional: lighten the border to be more ambient than visible */
+@media (prefers-color-scheme: dark) {
+  .main-content h2 {
+    border-top-color: rgba(255,255,255,0.04);
+  }
+}
