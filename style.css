@@ -1,90 +1,34 @@
-/* ====== Global Styles ====== */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* ====== Universal Homework Layout ====== */
+.homework-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: rgba(30, 35, 45, 0.85);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
-body {
-  font-family: "Poppins", sans-serif;
-  background-color: #0f141a;
-  color: #d4d7dd;
-  line-height: 1.7;
-  letter-spacing: 0.3px;
-  background-image: 
-    radial-gradient(circle at top right, rgba(79, 195, 247, 0.05) 0%, transparent 70%),
-    url('https://www.transparenttextures.com/patterns/dark-mosaic.png');
-  background-repeat: no-repeat, repeat;
-  background-size: cover;
-  background-attachment: fixed;
+/* ====== Image Presentation ====== */
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
 }
 
-/* ====== Navigation Bar ====== */
-nav {
-  background-color: #1a1f24;
-  color: #fff;
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+.image-grid img {
+  width: 100%;
+  border-radius: 10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 2rem;
+.image-grid img:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 15px rgba(79, 195, 247, 0.5);
 }
 
-nav ul li a {
-  color: #b0c7f7;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s ease-in;
-}
-
-nav ul li a:hover {
-  color: #4fc3f7;
-}
-
-/* ====== Main Content ====== */
-main {
-  max-width: 850px;
-  margin: 5rem auto;
-  padding: 3rem;
-  background-color: rgba(37, 43, 51, 0.9);
-  border-radius: 14px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+/* ====== Light Accent Titles ====== */
+h1, h2 {
   text-align: center;
-}
-
-h1 {
-  font-size: 2.4rem;
-  font-weight: 700;
-  color: #ffffff;
-  margin-bottom: 0.5rem;
-}
-
-h2 {
-  font-size: 1.4rem;
-  color: #aab9e6;
-  margin-bottom: 1.2rem;
-}
-
-p {
-  font-size: 1rem;
-  margin-bottom: 1.2rem;
-  text-align: justify;
-}
-
-/* ====== Footer ====== */
-footer {
-  text-align: center;
-  padding: 1.5rem;
-  margin-top: 4rem;
-  font-size: 0.9rem;
-  color: #9aa0a6;
-  border-top: 1px solid #2e343b;
+  color: #e3f2fd;
 }
