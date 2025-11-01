@@ -62,33 +62,12 @@ header.navbar nav {
   transition: color 0.18s ease, transform 0.12s ease;
 }
 
-/* Navigation links hover and active state refinement */
-.nav-links a {
-  color: var(--muted);
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 0.95rem;
-  transition: color 0.18s ease, transform 0.12s ease;
-}
-
-/* Hover effect */
-.nav-links a:hover {
+.nav-links a:hover,
+.nav-links a.active {
   color: var(--accent);
   transform: translateY(-1px);
 }
 
-
-/* Active (current page) state */
-.nav-links a.active {
-  color: var(--accent);
-  transform: none;
-  pointer-events: none; /* prevents double-trigger on click */
-}
-
-/* Prevent temporary click color flicker */
-.nav-links a:active {
-  color: var(--accent);
-}
 
 /* MAIN area - centered card consistent with homework_1 */
 main {
