@@ -184,3 +184,42 @@ footer.site-footer a:hover { color: var(--accent); }
 .main-content h3 {
   margin-top: 1.8em;           /* more space above section titles */
 }
+
+/* --- Code block styling for readability (Homework 2 and onwards) --- */
+pre {
+  background: #141414;
+  color: #d0d0d0;
+  padding: 16px 20px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: "Fira Code", "Courier New", monospace;
+  font-size: 0.95rem;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.4);
+  margin: 1em 0;
+  line-height: 1.5;
+}
+
+/* SQL highlighting */
+code.sql .kw {
+  color: #4dd0e1;
+  font-weight: 500;
+}
+code.sql .fn {
+  color: #b3e5fc;
+}
+code.sql .str {
+  color: #f48fb1;
+}
+
+/* Python highlighting */
+code.python .kw {
+  color: #f4d03f;
+  font-weight: 500;
+}
+code.python .fn {
+  color: #85c1e9;
+}
+code.python .com {
+  color: #8fa3b9;
+  font-style: italic;
+}
