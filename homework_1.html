@@ -3,41 +3,163 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Homework 1 — Statistics and Cybersecurity</title>
+  <title>Homework 1 — What is Statistics and Why It’s Useful for Cybersecurity</title>
   <link rel="stylesheet" href="style.css" />
-</head>
-<body>
+  <style>
+    /* Layout */
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      color: #dce3ec;
+      background: radial-gradient(circle at top left, #0f141a 0%, #0a0d11 100%);
+      background-image: url('background.png');
+      background-size: cover;
+      background-attachment: fixed;
+      background-blend-mode: overlay;
+    }
 
-  <!-- Navigation Bar -->
+    /* Navbar */
+    nav {
+      background-color: #12171d;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: flex-end;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav ul li a {
+      color: #cfd8e3;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    nav ul li a:hover,
+    nav ul li a.active {
+      color: #61dafb;
+    }
+
+    /* Main content */
+    .content-box {
+      max-width: 800px;
+      margin: 4rem auto;
+      background: rgba(20, 25, 32, 0.9);
+      border-radius: 14px;
+      padding: 3rem;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      color: #f1f6fa;
+    }
+
+    h2 {
+      text-align: center;
+      color: #a6c8ff;
+      margin-top: 0.5rem;
+      font-weight: 500;
+    }
+
+    p {
+      line-height: 1.6;
+      color: #cfd8e3;
+    }
+
+    /* Back Button */
+    .back-btn {
+      display: inline-block;
+      margin-top: 2rem;
+      background: rgba(80, 150, 255, 0.1);
+      border: 1px solid rgba(80, 150, 255, 0.3);
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      color: #cfd8e3;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background: rgba(80, 150, 255, 0.2);
+      border-color: rgba(80, 150, 255, 0.5);
+      transform: translateY(-1px);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 1rem 0;
+      color: #8b9aaa;
+      font-size: 0.9rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      margin-top: 4rem;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
   <nav>
     <ul>
       <li><a href="index.html">Home</a></li>
-      <li><a href="homework_1.html">HMWK 1</a></li>
+      <li><a href="homework_1.html" class="active">HMWK 1</a></li>
       <li><a href="#">HMWK 2</a></li>
       <li><a href="#">HMWK 3</a></li>
       <li><a href="#">HMWK 4</a></li>
     </ul>
   </nav>
 
-  <!-- Main Content -->
-  <main>
+  <!-- Content -->
+  <div class="content-box">
     <h1>Homework 1</h1>
     <h2>What is Statistics, and Why Can It Be Useful for Cybersecurity?</h2>
-    <p><em>Course:</em> Statistics — <strong>Sapienza University of Rome</strong> | <strong>Alexandru Silivas</strong> | 2025/2026</p>
 
-    <hr style="border: none; border-top: 1px solid #2e343b; margin: 1.5rem 0;">
+    <p>
+      <strong>Statistics</strong> is the branch of mathematics concerned with collecting, organizing, analyzing,
+      interpreting, and presenting data. It provides the tools necessary to understand variability in data, draw
+      conclusions, and make informed decisions based on evidence rather than assumptions.
+    </p>
 
-    <section class="content">
-      <p>
-        <strong>Statistics</strong> is the branch of mathematics concerned with collecting, analyzing, and interpreting data.
-        It provides the tools necessary to understand variability in information, draw conclusions, and make informed decisions based on evidence rather than assumptions.
-      </p>
+    <p>
+      In the context of <strong>cybersecurity</strong>, statistics plays a vital role in detecting patterns, identifying
+      anomalies, and modeling threats. By applying statistical methods, security analysts can quantify risk, measure
+      the likelihood of cyberattacks, and recognize deviations in network traffic that could indicate malicious
+      activity.
+    </p>
 
-      <p>
-        In the context of <strong>cybersecurity</strong>, statistics plays a vital role in detecting patterns, identifying anomalies, and modeling threats.
-        By applying statistical techniques, analysts can measure the likelihood of cyberattacks, quantify risk, and recognize deviations in network activity that may indicate malicious behavior.
-      </p>
+    <p>
+      For example, statistical anomaly detection can help identify unusual login patterns, data transfer spikes, or
+      access attempts from unexpected geographical locations. These models often rely on understanding the
+      <em>distribution</em> of normal behavior — when a new data point falls far outside that distribution, it may
+      signal a security issue.
+    </p>
 
-      <p>
-        For example, statistical anomaly detection can identify unusual login frequencies, unexpected data transfer spikes, or irregular access patterns across digital infrastructures.
-        These models o
+    <p>
+      Furthermore, data-driven cybersecurity benefits from predictive modeling: using statistical regression or
+      probabilistic inference, analysts can estimate the likelihood of future attacks based on past incidents. As
+      cyber threats evolve, statistical thinking enables continuous learning and model updating.
+    </p>
+
+    <p>
+      In summary, statistics provides the mathematical foundation for modern cybersecurity analytics — helping
+      professionals transform raw security data into actionable insights and proactive defenses.
+    </p>
+
+    <a href="index.html" class="back-btn">← Back to Home</a>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    © 2025 Alexandru Silivas — Student ID: 2252622 — silivas.2252622@studenti.uniroma1.it
+  </footer>
+</body>
+</html>
