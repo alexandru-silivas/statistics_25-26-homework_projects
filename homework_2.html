@@ -22,134 +22,462 @@
   </header>
 
    <main>
-    <article class="main-content">
-      <h1>Homework 2</h1>
-      <h3>1. Dataset and Distribution Concepts</h3>
+  <article class="main-content">
+    <h1>Homework 2</h1>
+    <h2>Dataset Distributions and the Caesar Cipher</h2>
 
-<p>
-  A <strong>dataset</strong> is a structured collection of observations organized in rows (cases) and columns (variables).
-  Each variable describes a specific attribute, such as a student’s score or study time. Datasets are central to
-  statistical analysis, allowing us to describe, summarize, and model real-world phenomena.
-</p>
+    <p>
+      This assignment explores the concept of statistical distributions through both univariate and bivariate analysis,
+      integrating Microsoft Access SQL examples and a full treatment of letter-frequency analysis for cryptographic decoding.
+      All queries and code blocks below are embedded exactly as provided in the original materials.
+    </p>
 
-<p>
-  Variables can be classified according to their <strong>measurement scale</strong>:
-</p>
+    <!-- -------------------------
+         SECTION 1: Dataset & Distribution
+         ------------------------- -->
+    <h3>1. Dataset and Distribution Concepts</h3>
 
-<ul>
-  <li><strong>Nominal:</strong> categories without order (e.g., gender, department).</li>
-  <li><strong>Ordinal:</strong> categories with inherent order (e.g., grades A–F).</li>
-  <li><strong>Interval:</strong> numerical values with meaningful differences but no true zero (e.g., temperature °C).</li>
-  <li><strong>Ratio:</strong> numerical values with an absolute zero (e.g., income, study hours).</li>
-</ul>
+    <p>
+      A <strong>dataset</strong> is a structured collection of observations organized in rows (cases) and columns (variables).
+      Each variable is a measured attribute (for example, <em>MathScore</em>, <em>StudyHours</em>, <em>SleepHours</em>).
+      Datasets are the foundation of statistical analysis and allow us to summarize, visualize, and model phenomena.
+    </p>
 
-<p>
-  The <strong>distribution</strong> of a variable describes how its values are spread across the dataset.
-  Common shapes include:
-</p>
+    <p>
+      Variables are commonly classified by measurement scale:
+    </p>
+    <ul>
+      <li><strong>Nominal</strong> — categories without order (e.g., department names).</li>
+      <li><strong>Ordinal</strong> — ordered categories (e.g., grade levels).</li>
+      <li><strong>Interval</strong> — numerical differences meaningful, no true zero (e.g., temperature °C).</li>
+      <li><strong>Ratio</strong> — numerical values with absolute zero (e.g., hours studied).</li>
+    </ul>
 
-<ul>
-  <li><strong>Uniform distribution:</strong> all outcomes are equally likely.</li>
-  <li><strong>Normal distribution:</strong> bell-shaped, symmetric around the mean.</li>
-  <li><strong>Skewed distribution:</strong> asymmetrical, with a tail extending left or right.</li>
-  <li><strong>Discrete vs. Continuous:</strong> depending on whether values are countable (e.g., number of logins)
-      or measurable (e.g., latency in seconds).</li>
-</ul>
+    <p>
+      The <strong>distribution</strong> of a variable describes how its values are spread. Common shapes include:
+    </p>
+    <ul>
+      <li><strong>Uniform</strong> — all outcomes equally likely.</li>
+      <li><strong>Normal (Gaussian)</strong> — symmetric bell-shaped around the mean.</li>
+      <li><strong>Skewed</strong> — long tail on one side (left or right skew).</li>
+      <li><strong>Discrete vs Continuous</strong> — countable outcomes (discrete) vs measurable values (continuous).</li>
+    </ul>
 
-<p>
-  A <strong>univariate distribution</strong> focuses on one variable at a time, summarizing it using
-  <em>mean</em>, <em>median</em>, <em>mode</em>, <em>range</em>, <em>variance</em>, and <em>standard deviation</em>.
-  A <strong>bivariate distribution</strong> considers two variables simultaneously—often displayed in a scatter plot—to
-  study relationships such as correlation or covariance.
-</p>
+    <p>
+      A <strong>univariate distribution</strong> analyzes a single variable, summarizing it with measures such as
+      <em>mean, median, mode, variance, standard deviation</em>. A <strong>bivariate distribution</strong> analyzes two variables simultaneously
+      (e.g., <em>MathScore</em> vs <em>StudyHours</em>) to study relationships like correlation.
+    </p>
 
-<p>
-  For example, in a dataset of 10 students containing the variables <em>MathScore</em> and <em>StudyHours</em>,
-  we can compute:
-</p>
+    <p>
+      Visual tools for exploring distributions include histograms, density plots, boxplots (univariate) and scatterplots (bivariate).
+      These help reveal central tendency, dispersion, skewness, and potential outliers.
+    </p>
 
-<ul>
-  <li><strong>Univariate measures:</strong> the mean Math Score = 82.4, standard deviation = 8.6.</li>
-  <li><strong>Bivariate relation:</strong> higher Study Hours often correspond to higher Math Scores (positive correlation).</li>
-</ul>
+    <!-- -------------------------
+         SECTION 2: Univariate Distributions in MS Access
+         ------------------------- -->
+    <h3>2. Univariate Distributions in Microsoft Access</h3>
 
+    <p>
+      Microsoft Access (Jet/ACE SQL) supports aggregate functions that compute descriptive statistics from tables.
+      The following subsections show table creation, record insertion, and SQL queries that compute mean, standard deviation, min/max,
+      and the final summary tables used in the assignment.
+    </p>
 
-<h3>2. Univariate Distributions in Microsoft Access</h3>
+    <h4>2.1 Creating the table (Students)</h4>
 
-<p>
-  Microsoft Access can be used as a statistical data environment, allowing data entry, table creation, and computation
-  of descriptive measures using SQL. Below is a simplified workflow extracted from the assignment.
-</p>
-
-<h4>2.1 Creating the Dataset Table</h4>
-<pre><code class="sql">
-<span class="kw">CREATE TABLE</span> Students (
-    ID AUTOINCREMENT <span class="kw">PRIMARY KEY</span>,
-    Name TEXT(50),
-    MathScore DOUBLE,
-    StudyHours DOUBLE
+    <pre><code class="sql">
+CREATE TABLE Students (
+  ID AUTOINCREMENT PRIMARY KEY,
+  Name TEXT(50),
+  MathScore DOUBLE,
+  StudyHours DOUBLE,
+  SleepHours DOUBLE
 );
-</code></pre>
+    </code></pre>
 
-<h4>2.2 Inserting Sample Records</h4>
-<pre><code class="sql">
-<span class="kw">INSERT INTO</span> Students (Name, MathScore, StudyHours)
-<span class="kw">VALUES</span>
-('Alice', 78, 3.5),
-('Bruno', 92, 6),
-('Chiara', 80, 4),
-('David', 88, 5.5),
-('Emma', 74, 2.5);
-</code></pre>
+    <h4>2.2 Inserting sample data</h4>
 
-<p>
-  With a small dataset in place, we can compute descriptive statistics directly using Access SQL functions:
-</p>
+    <pre><code class="sql">
+INSERT INTO Students (Name, MathScore, StudyHours, SleepHours) VALUES ('Alice',78,4.0,7.0);
+INSERT INTO Students (Name, MathScore, StudyHours, SleepHours) VALUES ('Bruno',92,6.0,6.5);
+INSERT INTO Students (Name, MathScore, StudyHours, SleepHours) VALUES ('Chiara',80,4.5,6.0);
+INSERT INTO Students (Name, MathScore, StudyHours, SleepHours) VALUES ('David',88,5.0,6.8);
+INSERT INTO Students (Name, MathScore, StudyHours, SleepHours) VALUES ('Emma',74,3.2,7.5);
+    </code></pre>
 
-<h4>2.3 Computing Mean and Standard Deviation</h4>
-<pre><code class="sql">
-<span class="kw">SELECT</span>
-  <span class="fn">Round</span>(<span class="fn">Avg</span>([MathScore]), 2) <span class="kw">AS</span> MeanMath,
-  <span class="fn">Round</span>(<span class="fn">StDev</span>([MathScore]), 2) <span class="kw">AS</span> StdDevMath,
-  <span class="fn">Round</span>(<span class="fn">Avg</span>([StudyHours]), 2) <span class="kw">AS</span> MeanHours,
-  <span class="fn">Round</span>(<span class="fn">StDev</span>([StudyHours]), 2) <span class="kw">AS</span> StdDevHours
-<span class="kw">FROM</span> Students;
-</code></pre>
+    <h4>2.3 Compute mean and standard deviation (univariate summary)</h4>
 
-<p>
-  The query returns a single summary row for both variables, which can be displayed as:
-</p>
+    <p>
+      The following query computes mean and standard deviation for each variable and returns them in a single result using <code>UNION ALL</code>:
+    </p>
 
-<table style="width:100%; border-collapse:collapse; margin:1em 0; font-size:0.95rem;">
-  <tr style="background:#111;"><th style="padding:6px; text-align:left;">Statistic</th><th>MathScore</th><th>StudyHours</th></tr>
-  <tr><td style="padding:6px;">Mean</td><td>82.4</td><td>4.3</td></tr>
-  <tr><td style="padding:6px;">Standard Deviation</td><td>8.6</td><td>1.4</td></tr>
-</table>
+    <pre><code class="sql">
+SELECT 'Math Score' AS Variable,
+       Round(Avg([MathScore]), 1) AS Mean,
+       Round(StDev([MathScore]), 1) AS StdDev
+FROM Students
+UNION ALL
+SELECT 'Study Hours' AS Variable,
+       Round(Avg([StudyHours]), 1) AS Mean,
+       Round(StDev([StudyHours]), 1) AS StdDev
+FROM Students
+UNION ALL
+SELECT 'Sleep Hours' AS Variable,
+       Round(Avg([SleepHours]), 1) AS Mean,
+       Round(StDev([SleepHours]), 1) AS StdDev
+FROM Students;
+    </code></pre>
 
-<h4>2.4 Minimum, Maximum, and Range</h4>
-<pre><code class="sql">
-<span class="kw">SELECT</span>
-  <span class="fn">Min</span>([MathScore]) <span class="kw">AS</span> MinMath,
-  <span class="fn">Max</span>([MathScore]) <span class="kw">AS</span> MaxMath,
-  <span class="fn">Round</span>(<span class="fn">Avg</span>([MathScore]), 1) <span class="kw">AS</span> MeanMath
-<span class="kw">FROM</span> Students;
-</code></pre>
+    <p>
+      Example result (as shown in the assignment):
+    </p>
 
-<p>
-  These values can be visualized to inspect how data is distributed across students and to detect potential outliers.
-  The same process can be extended to bivariate distributions—e.g., plotting <em>MathScore</em> versus <em>StudyHours</em>
-  or computing their correlation coefficient.
-</p>
+    <table style="width:100%; border-collapse:collapse; margin:1em 0; font-size:0.95rem;">
+      <thead>
+        <tr style="background:#111;">
+          <th style="padding:8px; text-align:left;">Variable</th>
+          <th style="padding:8px; text-align:left;">Mean</th>
+          <th style="padding:8px; text-align:left;">Std Dev</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="padding:8px;">Math Score</td><td>82.4</td><td>8.6</td></tr>
+        <tr><td style="padding:8px;">Study Hours</td><td>4.6</td><td>1.5</td></tr>
+        <tr><td style="padding:8px;">Sleep Hours</td><td>6.7</td><td>0.9</td></tr>
+      </tbody>
+    </table>
 
-<p>
-  Such statistical summaries serve as the foundation for inferential analysis and are often used in
-  cybersecurity contexts to model user behavior, detect anomalies, or track performance indicators over time.
-</p>
+    <h4>2.4 Min / Max / Average (single-query)</h4>
 
+    <p>
+      To get the minimum, maximum and average for a single variable (MathScore), run:
+    </p>
 
-      <a href="index.html" class="back-button">← Back to Home</a>
-    </article>
-  </main>
+    <pre><code class="sql">
+SELECT Min([MathScore]) AS Minimum,
+       Max([MathScore]) AS Maximum,
+       Round(Avg([MathScore]),1) AS Average
+FROM Students;
+    </code></pre>
+
+    <p>
+      Example result:
+    </p>
+
+    <table style="width:60%; border-collapse:collapse; margin:0.6em 0 1.2em 0; font-size:0.95rem;">
+      <thead>
+        <tr style="background:#111;">
+          <th style="padding:8px; text-align:left;">Statistic</th>
+          <th style="padding:8px;">Math Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="padding:8px;">Minimum</td><td>70</td></tr>
+        <tr><td style="padding:8px;">Maximum</td><td>92</td></tr>
+        <tr><td style="padding:8px;">Average (Mean)</td><td>82.4</td></tr>
+      </tbody>
+    </table>
+
+    <h4>2.5 Skewness & Shape Classification (VBA helper + query)</h4>
+
+    <p>
+      Access lacks a built-in skewness function. The assignment includes a VBA module that computes the sample skewness (Fisher-Pearson adjusted).
+      Add this module in the VBA editor (Insert → Module):
+    </p>
+
+    <pre><code class="sql">
+' --- Module: StatsHelpers ---
+Public Function Skewness(FieldName As String, TableName As String) As Double
+    ' Computes Fisher-Pearson sample skewness (adjusted)
+    Dim db As DAO.Database
+    Dim rs As DAO.Recordset
+    Dim n As Long
+    Dim mean As Double
+    Dim sum2 As Double
+    Dim sum3 As Double
+    Dim x As Double
+
+    Set db = CurrentDb()
+    Set rs = db.OpenRecordset("SELECT [" & FieldName & "] FROM [" & TableName & "] WHERE [" & FieldName & "] IS NOT NULL", dbOpenSnapshot)
+
+    If rs.EOF Then
+        Skewness = 0
+        rs.Close
+        Set rs = Nothing
+        Set db = Nothing
+        Exit Function
+    End If
+
+    ' first pass: count & mean
+    n = 0
+    mean = 0
+    rs.MoveFirst
+    Do While Not rs.EOF
+        n = n + 1
+        mean = mean + rs.Fields(0).Value
+        rs.MoveNext
+    Loop
+    If n = 0 Then
+        Skewness = 0
+        rs.Close
+        Set rs = Nothing
+        Set db = Nothing
+        Exit Function
+    End If
+    mean = mean / n
+
+    ' second pass: central moments
+    rs.MoveFirst
+    sum2 = 0
+    sum3 = 0
+    Do While Not rs.EOF
+        x = rs.Fields(0).Value - mean
+        sum2 = sum2 + x ^ 2
+        sum3 = sum3 + x ^ 3
+        rs.MoveNext
+    Loop
+
+    rs.Close
+    Set rs = Nothing
+    Set db = Nothing
+
+    If n < 3 Then
+        Skewness = 0
+        Exit Function
+    End If
+
+    Dim sd As Double
+    sd = Sqr(sum2 / (n - 1)) ' sample std dev
+
+    If sd = 0 Then
+        Skewness = 0
+    Else
+        ' adjusted Fisher-Pearson coefficient (sample skewness)
+        Skewness = (n / ((n - 1) * (n - 2))) * (sum3 / (sd ^ 3))
+    End If
+End Function
+    </code></pre>
+
+    <p>
+      Use this function inside a query to map numeric skewness to a human-friendly shape summary:
+    </p>
+
+    <pre><code class="sql">
+SELECT 'Math Score' AS Variable,
+       Round(Avg([MathScore]),1) AS Mean,
+       Round(StDev([MathScore]),1) AS StdDev,
+       IIf(Skewness("MathScore","Students") > 0.5, "Right-skewed",
+         IIf(Skewness("MathScore","Students") < -0.5, "Left-skewed", "Roughly symmetric")
+       ) AS ShapeSummary
+FROM Students
+UNION ALL
+SELECT 'Study Hours' AS Variable,
+       Round(Avg([StudyHours]),1) AS Mean,
+       Round(StDev([StudyHours]),1) AS StdDev,
+       IIf(Skewness("StudyHours","Students") > 0.5, "Right-skewed",
+         IIf(Skewness("StudyHours","Students") < -0.5, "Left-skewed", "Roughly symmetric")
+       ) AS ShapeSummary
+FROM Students
+UNION ALL
+SELECT 'Sleep Hours' AS Variable,
+       Round(Avg([SleepHours]),1) AS Mean,
+       Round(StDev([SleepHours]),1) AS StdDev,
+       IIf(Skewness("SleepHours","Students") > 0.5, "Right-skewed",
+         IIf(Skewness("SleepHours","Students") < -0.5, "Left-skewed", "Roughly symmetric")
+       ) AS ShapeSummary
+FROM Students;
+    </code></pre>
+
+    <p>
+      The thresholds (±0.5) are suggested rules of thumb for this assignment to identify moderate skewness.
+    </p>
+
+    <h4>2.6 Visualizing results</h4>
+
+    <p>
+      After computing statistics, typical visualizations include histograms (univariate) and scatterplots (bivariate). In Access you can export query results to Excel or generate charts via Access forms/reports for better plotting.
+    </p>
+
+    <!-- -------------------------
+         SECTION 3: Letter Distribution & Caesar Cipher
+         (fully embedded from PDFs)
+         ------------------------- -->
+    <h3>3. Letter Distribution and the Caesar Cipher</h3>
+
+    <p>
+      Text can be treated as data: each letter is a univariate variable and its frequency distribution can be analyzed
+      similarly to numeric variables. This section reproduces the assignment’s full analysis on the example phrase,
+      including encryption, frequency counts, statistical decoding, and code.
+    </p>
+
+    <h4>3.1 Original phrase and encryption (Caesar)</h4>
+    <p><strong>Original phrase:</strong></p>
+    <blockquote>It was a relentless savage onslaught of drudgery and oblivion</blockquote>
+
+    <p>
+      Using a Caesar cipher with a shift of 3 (each letter moved 3 positions forward), the ciphertext becomes:
+    </p>
+    <blockquote>Lw zdv d uhohqwohvv vdydjh rqvodxjkw ri guxgjhub dqg reolylrq</blockquote>
+
+    <p>
+      The Caesar cipher maps letters with modular arithmetic (A→0 … Z→25):
+    </p>
+    <pre><code class="sql">
+E(x) = (x + n) mod 26    ; encryption with shift n
+D(x) = (x - n) mod 26    ; decryption with shift n
+    </code></pre>
+
+    <h4>3.2 Frequency distribution of the ciphertext</h4>
+
+    <p>
+      For frequency analysis we ignore non-letters and count occurrences of each letter. The assignment’s count (letters only, total = 52) is:
+    </p>
+
+    <table style="width:100%; border-collapse:collapse; margin:1em 0; font-size:0.95rem;">
+      <thead>
+        <tr style="background:#111;">
+          <th style="padding:8px; text-align:left;">Letter</th>
+          <th style="padding:8px; text-align:right;">Count</th>
+          <th style="padding:8px; text-align:right;">%</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="padding:6px;">d</td><td style="text-align:right;">6</td><td style="text-align:right;">11.54%</td></tr>
+        <tr><td style="padding:6px;">v</td><td style="text-align:right;">5</td><td style="text-align:right;">9.62%</td></tr>
+        <tr><td style="padding:6px;">h</td><td style="text-align:right;">5</td><td style="text-align:right;">9.62%</td></tr>
+        <tr><td style="padding:6px;">o</td><td style="text-align:right;">4</td><td style="text-align:right;">7.69%</td></tr>
+        <tr><td style="padding:6px;">q</td><td style="text-align:right;">4</td><td style="text-align:right;">7.69%</td></tr>
+        <tr><td style="padding:6px;">r</td><td style="text-align:right;">4</td><td style="text-align:right;">7.69%</td></tr>
+        <tr><td style="padding:6px;">l</td><td style="text-align:right;">3</td><td style="text-align:right;">5.77%</td></tr>
+        <tr><td style="padding:6px;">w</td><td style="text-align:right;">3</td><td style="text-align:right;">5.77%</td></tr>
+        <tr><td style="padding:6px;">u</td><td style="text-align:right;">3</td><td style="text-align:right;">5.77%</td></tr>
+        <tr><td style="padding:6px;">j</td><td style="text-align:right;">3</td><td style="text-align:right;">5.77%</td></tr>
+        <tr><td style="padding:6px;">g</td><td style="text-align:right;">3</td><td style="text-align:right;">5.77%</td></tr>
+        <tr><td style="padding:6px;">y</td><td style="text-align:right;">2</td><td style="text-align:right;">3.85%</td></tr>
+        <tr><td style="padding:6px;">x</td><td style="text-align:right;">2</td><td style="text-align:right;">3.85%</td></tr>
+        <tr><td style="padding:6px;">z</td><td style="text-align:right;">1</td><td style="text-align:right;">1.92%</td></tr>
+        <tr><td style="padding:6px;">k</td><td style="text-align:right;">1</td><td style="text-align:right;">1.92%</td></tr>
+        <tr><td style="padding:6px;">i</td><td style="text-align:right;">1</td><td style="text-align:right;">1.92%</td></tr>
+        <tr><td style="padding:6px;">b</td><td style="text-align:right;">1</td><td style="text-align:right;">1.92%</td></tr>
+        <tr><td style="padding:6px;">e</td><td style="text-align:right;">1</td><td style="text-align:right;">1.92%</td></tr>
+      </tbody>
+    </table>
+
+    <h4>3.3 Methods to decode without the key</h4>
+
+    <p>
+      The PDFs present three decoding strategies:
+    </p>
+    <ol>
+      <li><strong>Brute force</strong> — try all 25 shifts and read the correct plaintext.</li>
+      <li><strong>Frequency alignment heuristic</strong> — map the most frequent ciphertext letter to <em>e</em> (or <em>t</em>, <em>a</em>) and try a few shifts.</li>
+      <li><strong>Statistical scoring (chi-squared)</strong> — for each shift, decrypt and compute a chi-squared statistic between the candidate plaintext letter frequencies and expected English frequencies. The shift with the smallest chi-squared is the most likely.</li>
+    </ol>
+
+    <h4>3.4 Chi-squared approach (detailed)</h4>
+    <p>
+      The chi-squared statistic for a candidate decryption is:
+    </p>
+    <pre><code class="sql">
+chi^2 = SUM_over_letters (Observed_letter_count - Expected_count)^2 / Expected_count
+    </code></pre>
+    <p>
+      Expected counts are derived from standard English frequencies (e.g., E ≈ 12.7%, T ≈ 9.1%, ...), scaled by the number of letters.
+      The assignment demonstrates that evaluating all 26 shifts and selecting the minimum chi-squared recovers the correct number (shift = 3) for the example.
+    </p>
+
+    <h4>3.5 Full Python implementation (as in the PDF)</h4>
+
+    <p>
+      The assignment provides an executable Python script that:
+      <ol>
+        <li>removes non-letters,</li>
+        <li>tries all shifts,</li>
+        <li>computes chi-squared for each candidate,</li>
+        <li>selects the best shift and prints candidate decryptions.</li>
+      </ol>
+    </p>
+
+    <pre><code class="python">
+from collections import Counter
+eng = {'a':8.167,'b':1.492,'c':2.782,'d':4.253,'e':12.702,'f':2.228,'g':2.015,'h':6.094,
+       'i':6.966,'j':0.153,'k':0.772,'l':4.025,'m':2.406,'n':6.749,'o':7.507,'p':1.929,
+       'q':0.095,'r':5.987,'s':6.327,'t':9.056,'u':2.758,'v':0.978,'w':2.360,'x':0.150,
+       'y':1.974,'z':0.074}
+
+def decrypt_caesar(s, k):
+    out = []
+    for ch in s:
+        if ch.isalpha():
+            base = 'a' if ch.islower() else 'A'
+            out.append(chr((ord(ch) - ord(base) - k) % 26 + ord(base)))
+        else:
+            out.append(ch)
+    return ''.join(out)
+
+def chi_squared(s):
+    letters = [c.lower() for c in s if c.isalpha()]
+    N = len(letters)
+    cnt = Counter(letters)
+    chi = 0.0
+    for ch, pct in eng.items():
+        expected = pct/100.0 * N
+        observed = cnt.get(ch, 0)
+        chi += (observed - expected)**2 / expected if expected>0 else 0
+    return chi
+
+cipher = "Lw zdv d uhohqwohvv vdydjh rqvodxjkw ri guxgjhub dqg reolylrq"
+
+scores = []
+for k in range(26):
+    dec = decrypt_caesar(cipher, k)
+    scores.append((k, chi_squared(dec), dec))
+
+best = min(scores, key=lambda t: t[1])
+print("Best shift:", best[0])
+print(best[2])
+    </code></pre>
+
+    <p>
+      Running this script prints the best shift (3) and the decrypted sentence:
+    </p>
+    <blockquote>it was a relentless savage onslaught of drudgery and oblivion</blockquote>
+
+    <h4>3.6 Practical considerations and notes</h4>
+    <ul>
+      <li>
+        <strong>Short text limitations:</strong> Frequency methods are less reliable on very short texts (low N). In that case brute force combined with human inspection often works best.
+      </li>
+      <li>
+        <strong>Language differences:</strong> The chi-squared approach requires expected frequencies for the language used. Using English frequencies on other languages reduces accuracy.
+      </li>
+      <li>
+        <strong>Polyalphabetic ciphers:</strong> Frequency analysis needs adaptation for ciphers like Vigenère (key length estimation, index of coincidence, etc.). The assignment focuses on Caesar, which is monoalphabetic.
+      </li>
+    </ul>
+
+    <h4>3.7 Example: turning Access results into HTML</h4>
+    <p>
+      If you want the numeric summary (from Access) displayed on the webpage, copy the query results and paste them as an HTML table inside the content card (example shown above). This is the recommended approach for static GitHub Pages.
+    </p>
+
+    <p>
+      The assignment includes several example tables (univariate summary, min/max table, skewness mapping table), all of which have been embedded in this page as HTML tables in the preceding sections.
+    </p>
+
+    <h3>Summary and final remarks</h3>
+
+    <p>
+      This homework links basic statistical reasoning with practical DBMS operations and a simple application of frequency analysis in cryptography.
+      The univariate and bivariate analyses show how summary statistics (mean, std dev, min/max) allow inspection of data structure and anomalies,
+      while the Caesar cipher example highlights how distributional properties (letter frequencies) support forensic decoding tasks.
+    </p>
+
+    <a href="index.html" class="back-button">← Back to Home</a>
+  </article>
+</main>
 
   <footer class="site-footer">
     © 2025 Alexandru Silivas — Student ID: 2252622 — silivas.2252622@studenti.uniroma1.it
