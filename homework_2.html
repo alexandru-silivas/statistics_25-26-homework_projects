@@ -474,15 +474,20 @@ print(best[2])
       <label for="shift">Shift (0–25):</label>
       <input type="number" id="shift" min="0" max="25" value="7">
     
-      <button onclick="caesarEncrypt()">Encrypt</button>
-      <button class="btn" onclick="caesarDecrypt()">Decrypt</button>
+      <!-- Encrypt / Decrypt area -->
+      <button type="button" class="btn primary" onclick="caesarEncrypt()">Encrypt</button>
+      <button type="button" class="btn" onclick="caesarDecrypt()">Decrypt</button>
+      
+      <!-- Keep result visible; allow user to copy it into input explicitly -->
+      <button type="button" class="btn" onclick="useResultAsInput()">Use result as input</button>
     
       <label for="cipherOutput">Result</label>
       <textarea id="cipherOutput" readonly placeholder="The result will appear here…"></textarea>
     
       <div class="cipher-buttons">
-        <button onclick="bruteForce()">Brute force (show all 26)</button>
-        <button onclick="autoDecode()">Auto-decode (by frequency)</button>
+        <!-- Brute / Auto decode -->
+        <button type="button" class="btn secondary" onclick="bruteForce()">Brute force (show all 26)</button>
+        <button type="button" class="btn secondary" onclick="autoDecode()">Auto-decode (by frequency)</button>
       </div>
     
       <p id="statusMsg" class="status"></p>
