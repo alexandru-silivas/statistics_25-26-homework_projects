@@ -1,165 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Homework 1 — What is Statistics and Why It’s Useful for Cybersecurity</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    /* Layout */
-    body {
-      margin: 0;
-      font-family: "Poppins", sans-serif;
-      color: #dce3ec;
-      background: radial-gradient(circle at top left, #0f141a 0%, #0a0d11 100%);
-      background-image: url('background.png');
-      background-size: cover;
-      background-attachment: fixed;
-      background-blend-mode: overlay;
-    }
-
-    /* Navbar */
-    nav {
-      background-color: #12171d;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: flex-end;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 2rem;
-      margin: 0;
-      padding: 0;
-    }
-
-    nav ul li a {
-      color: #cfd8e3;
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.3s ease;
-    }
-
-    nav ul li a:hover,
-    nav ul li a.active {
-      color: #61dafb;
-    }
-
-    /* Main content */
-    .content-box {
-      max-width: 800px;
-      margin: 4rem auto;
-      background: rgba(20, 25, 32, 0.9);
-      border-radius: 14px;
-      padding: 3rem;
-      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
-    }
-
-    h1 {
-      text-align: center;
-      font-size: 2rem;
-      color: #f1f6fa;
-    }
-
-    h2 {
-      text-align: center;
-      color: #a6c8ff;
-      margin-top: 0.5rem;
-      font-weight: 500;
-    }
-
-    p {
-      line-height: 1.6;
-      color: #cfd8e3;
-    }
-
-    /* Back Button */
-    .back-btn {
-      display: inline-block;
-      margin-top: 2rem;
-      background: rgba(80, 150, 255, 0.1);
-      border: 1px solid rgba(80, 150, 255, 0.3);
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      color: #cfd8e3;
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
-
-    .back-btn:hover {
-      background: rgba(80, 150, 255, 0.2);
-      border-color: rgba(80, 150, 255, 0.5);
-      transform: translateY(-1px);
-    }
-
-    /* Footer */
-    footer {
-      text-align: center;
-      padding: 1rem 0;
-      color: #8b9aaa;
-      font-size: 0.9rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      margin-top: 4rem;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homework 1 — Statistics & Cybersecurity</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <!-- Navbar -->
+
+  <!-- Navigation Bar -->
   <nav>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="homework_1.html" class="active">HMWK 1</a></li>
-      <li><a href="#">HMWK 2</a></li>
-      <li><a href="#">HMWK 3</a></li>
-      <li><a href="#">HMWK 4</a></li>
-    </ul>
+    <a href="index.html">Home</a>
+    <a href="homework_1.html">Homework 1</a>
+    <a href="#">Homework 2</a>
+    <a href="#">Homework 3</a>
   </nav>
 
-  <!-- Content -->
-  <div class="content-box">
+  <!-- Main Content -->
+  <div class="main-content">
     <h1>Homework 1</h1>
     <h2>What is Statistics, and Why Can It Be Useful for Cybersecurity?</h2>
 
-    <p>
-      <strong>Statistics</strong> is the branch of mathematics concerned with collecting, organizing, analyzing,
-      interpreting, and presenting data. It provides the tools necessary to understand variability in data, draw
-      conclusions, and make informed decisions based on evidence rather than assumptions.
-    </p>
+    <p><strong>Statistics</strong> is the discipline that involves collecting, organizing, analyzing, and interpreting data to discover patterns and make informed decisions. It allows researchers and professionals to transform raw data into meaningful insights, often using probabilistic models and quantitative reasoning to describe uncertainty and trends.</p>
 
-    <p>
-      In the context of <strong>cybersecurity</strong>, statistics plays a vital role in detecting patterns, identifying
-      anomalies, and modeling threats. By applying statistical methods, security analysts can quantify risk, measure
-      the likelihood of cyberattacks, and recognize deviations in network traffic that could indicate malicious
-      activity.
-    </p>
+    <p>In the context of <strong>cybersecurity</strong>, statistics plays a vital role in both proactive and reactive defense strategies. By analyzing vast quantities of data — such as network logs, traffic patterns, and user behavior — statistical methods help identify anomalies that may indicate malicious activity or system vulnerabilities.</p>
 
-    <p>
-      For example, statistical anomaly detection can help identify unusual login patterns, data transfer spikes, or
-      access attempts from unexpected geographical locations. These models often rely on understanding the
-      <em>distribution</em> of normal behavior — when a new data point falls far outside that distribution, it may
-      signal a security issue.
-    </p>
+    <p>For instance, <em>anomaly detection</em> techniques rely heavily on statistical modeling to recognize deviations from normal network activity, while <em>predictive analytics</em> can estimate the likelihood of future attacks based on historical data. Moreover, statistical tools are essential in risk assessment, intrusion detection, and threat intelligence systems, helping cybersecurity experts make evidence-based decisions.</p>
 
-    <p>
-      Furthermore, data-driven cybersecurity benefits from predictive modeling: using statistical regression or
-      probabilistic inference, analysts can estimate the likelihood of future attacks based on past incidents. As
-      cyber threats evolve, statistical thinking enables continuous learning and model updating.
-    </p>
+    <p>Ultimately, statistics provides a quantitative foundation for cybersecurity — transforming scattered data points into actionable intelligence and enabling continuous improvement of defense mechanisms in an ever-evolving threat landscape.</p>
 
-    <p>
-      In summary, statistics provides the mathematical foundation for modern cybersecurity analytics — helping
-      professionals transform raw security data into actionable insights and proactive defenses.
-    </p>
-
-    <a href="index.html" class="back-btn">← Back to Home</a>
+    <a href="index.html" class="back-button">← Back to Home</a>
   </div>
 
   <!-- Footer -->
   <footer>
-    © 2025 Alexandru Silivas — Student ID: 2252622 — silivas.2252622@studenti.uniroma1.it
+    <p>Created by <strong>Alexandru Silivaș</strong> | ID: 2252622 | 
+    Email: <a href="mailto:silivas.2252622@studenti.uniroma1.it">silivas.2252622@studenti.uniroma1.it</a></p>
   </footer>
+
 </body>
 </html>
