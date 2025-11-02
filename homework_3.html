@@ -67,29 +67,30 @@
       <!-- RSA Interactive Tool -->
       <section id="rsa-tool">
         <div class="rsa-row">
-          <label for="rsaP">Prime p:</label>
-          <input id="rsaP" type="number" value="61">
-          <label for="rsaQ">Prime q:</label>
-          <input id="rsaQ" type="number" value="53">
-          <button type="button" onclick="rsaGenerateKeys()">Generate Keys</button>
+          <label for="p">Prime p:</label>
+          <input id="p" type="number" value="61">
+          <label for="q">Prime q:</label>
+          <input id="q" type="number" value="53">
+          <button type="button" onclick="generateKeys()">Generate Keys</button>
         </div>
       
         <div class="rsa-keys">
-          <p><strong>Public Key (n, e):</strong> <span id="rsaPublic">(none)</span></p>
-          <p><strong>Private Key (n, d):</strong> <span id="rsaPrivate">(none)</span></p>
+          <p><strong>Public Key (n, e):</strong> <span id="publicKey">(none)</span></p>
+          <p><strong>Private Key (n, d):</strong> <span id="privateKey">(none)</span></p>
         </div>
       
-        <label for="rsaInput">Plaintext</label>
-        <textarea id="rsaInput" placeholder="Type a short message (ASCII)"></textarea>
-      
+        <label for="plaintext">Plaintext</label>
+        <textarea id="plaintext" placeholder="Type a short message (ASCII)"></textarea>
+        
         <div>
           <button onclick="rsaEncrypt()">Encrypt</button>
           <button onclick="rsaDecrypt()">Decrypt</button>
-          <button onclick="rsaBruteExample()">Fill Example</button>
+          <button onclick="fillExample()">Fill Example</button>
         </div>
-      
-        <label for="rsaOutput">Ciphertext</label>
-        <textarea id="rsaOutput" readonly placeholder="Encrypted integers appear here..."></textarea>
+        
+        <label for="ciphertext">Ciphertext</label>
+        <textarea id="ciphertext" readonly placeholder="Encrypted integers appear here..."></textarea>
+
       
         <p id="rsaStatus" class="status">Status: Waiting for key generation.</p>
       
@@ -109,15 +110,12 @@
         
         <div class="rsa-buttons">
           <button type="button"
-                  onclick="rsaShowFrequencyComparison(
-                             document.getElementById('rsaInput').value,
-                             document.getElementById('rsaOutput').value)">
-            Compare Freq. (Plain vs Cipher)
+          onclick="rsaShowFrequencyComparison(
+                     document.getElementById('plaintext').value,
+                     document.getElementById('ciphertext').value)">
+              Compare Freq. (Plain vs Cipher)
           </button>
-        </div>
-        
-        <div id="rsaFreqChartContainer">
-          <canvas id="rsaFreqChart"></canvas>
+
         </div>
 
       </section>
