@@ -230,8 +230,9 @@ function rsaShowFrequencyComparison(plainText, cipherText) {
   }
   const chiPlain = chi2(plainFreqs).toFixed(2);
   const chiCipher = chi2(cipherFreqs).toFixed(2);
-  const status = document.getElementById("rsaStatus");
-  if (status) status.textContent = `Plain χ²=${chiPlain} | Cipher χ²=${chiCipher} (lower ≈ closer to English)`;
+  const chi2Status = document.getElementById("rsaChi2Status");
+  if (chi2Status)
+    chi2Status.textContent = `Plain χ²=${chiPlain} | Cipher χ²=${chiCipher} (lower ≈ closer to English)`;
 }
 
 
