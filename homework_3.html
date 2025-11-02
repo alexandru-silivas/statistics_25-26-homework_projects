@@ -36,7 +36,7 @@
         letter distributions—mirroring the statistical approach seen in the Caesar Cipher assignment.
       </p>
 
-      <h3>2. How RSA Works — Step by Step</h3>
+      <h3>1. How RSA Works — Step by Step</h3>
       <ol>
         <li>Choose two distinct prime numbers <em>p</em> and <em>q</em>.</li>
         <li>Compute <em>n = p × q</em>. This is the modulus used in both keys.</li>
@@ -47,7 +47,7 @@
         <li>Encryption: <em>c = m<sup>e</sup> mod n</em>. Decryption: <em>m = c<sup>d</sup> mod n</em>.</li>
       </ol>
 
-      <h3>3. Example with Small Primes</h3>
+      <h3>2. Example with Small Primes</h3>
       <p>Suppose we choose p = 61 and q = 53:</p>
       <ul>
         <li>n = 61 × 53 = 3233</li>
@@ -60,7 +60,7 @@
         Decrypting: 2790<sup>2753</sup> mod 3233 = 65 → "A".
       </p>
 
-      <h3>4. Interactive RSA Demonstration</h3>
+      <h3>3. Interactive RSA Demonstration</h3>
       <p>Use the tool below to experiment with key generation, encryption, and decryption. 
       Note that this version uses small primes and should not be used for real security purposes.</p>
 
@@ -117,7 +117,7 @@
       </section>
 
       <section class="rsa-discussion">
-        <h3>5. Results & Discussion</h3>
+        <h3>4. Results & Discussion</h3>
         <p>
           The RSA encryption algorithm transforms readable text into ciphertext that appears statistically random. 
           Unlike the Caesar cipher or other classical encryption methods, the frequency distribution of the ciphertext 
