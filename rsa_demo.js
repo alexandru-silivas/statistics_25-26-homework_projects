@@ -102,3 +102,104 @@ function rsaBruteExample() {
   document.getElementById("rsaInput").value = "Hi";
   rsaEncrypt();
 }
+
+
+// --- RSA Frequency Analysis Utilities ---
+
+// English reference distribution (%)
+const ENGLISH_FREQ = {
+  A: 8.167, B: 1.492, C: 2.782, D: 4.253, E: 12.702, F: 2.228, G: 2.015,
+  H: 6.094, I: 6.966, J: 0.153, K: 0.772, L: 4.025, M: 2.406, N: 6.749,
+  O: 7.507, P: 1.929, Q: 0.095, R: 5.987, S: 6.327, T: 9.056, U: 2.758,
+  V: 0.978, W: 2.360, X: 0.150, Y: 1.974, Z: 0.074
+};
+
+// Compute frequencies of letters in a text
+function letterFrequencies(text) {
+  const counts = {};
+  let total = 0;
+  for (const ch of text.toUpperCase()) {
+    if (/[A-Z]/.test(ch)) {
+      counts[ch] = (counts[ch] || 0) + 1;
+      total++;
+    }
+  }
+  const freqs = {};
+  for (let i = 0; i < 26; i++) {
+    const L = String.fromCharCode(65 + i);
+    freqs[L] = total ? ((counts[L] || 0) / total) * 100 : 0;
+  }
+  return freqs;
+}
+
+// Chi-squared test between observed frequencies and English reference
+function chiSquaredScore(observed) {
+  let chi2 = 0;
+  for (const L in ENGLISH_FREQ) {
+    const O = observed[L] || 0;
+    const E = ENGLISH_FREQ[L] || 0.0001;
+    chi2 += Math.pow(O - E, 2) / E;
+  }
+  return chi2;
+}
+
+// Chart.js global reference
+let rsaFreqChart = null;
+
+// Draw frequency comparison between plaintext and ciphertext
+function updateRSAFreqDualChart(plainFreqs, cipherFreqs) {
+  const labels = Array.from({ length: 26 }, (_, i) =>
+    String.fromCharCode(65 + i)
+  );
+  const plainData = labels.map(L => plainFreqs[L]);
+  const cipherData = labels.map(L => cipherFreqs[L]);
+
+  const ctx = document.getElementById("rsaFreqChart").getContext("2d");
+  if (rsaFreqChart) rsaFreqChart.destroy();
+
+  rsaFreqChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels,
+      datasets: [
+        {
+          label: "Plaintext (%)",
+          data: plainData,
+          backgroundColor: "rgba(78,163,255,0.85)",
+        },
+        {
+          label: "Ciphertext (%)",
+          data: cipherData,
+          backgroundColor: "rgba(160,160,160,0.6)",
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: { beginAtZero: true, ticks: { color: "#cfd9e6" } },
+        x: { ticks: { color: "#cfd9e6" } },
+      },
+      plugins: { legend: { labels: { color: "#e6eef8" } } },
+    },
+  });
+}
+
+// Compare plaintext and ciphertext distributions
+function rsaShowFrequencyComparison(plaintext, ciphertextString) {
+  if (!plaintext.trim() || !ciphertextString.trim()) {
+    document.getElementById("rsaStatus").textContent =
+      "Please generate ciphertext first.";
+    return;
+  }
+
+  const plainFreqs = letterFrequencies(plaintext);
+  const cipherFreqs = letterFrequencies(ciphertextString);
+  const chiPlain = chiSquaredScore(plainFreqs).toFixed(2);
+  const chiCipher = chiSquaredScore(cipherFreqs).toFixed(2);
+
+  document.getElementById("rsaStatus").textContent =
+    `Plain χ²=${chiPlain} | Cipher χ²=${chiCipher} ` +
+    `(lower = closer to natural English)`;
+
+  updateRSAFreqDualChart(plainFreqs, cipherFreqs);
+}
