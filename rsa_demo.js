@@ -146,7 +146,8 @@ function rsaDecrypt() {
   }
 
   plainBox.value = plain;
-  status.textContent = "✅ Decryption complete.";
+  status.textContent = "✅ Decryption complete — plaintext restored successfully.";
+  status.style.color = "#5eff8b";
   console.log("Decrypted text:", plain);
 
   rsaShowFrequencyComparison(plain, cipherText);
