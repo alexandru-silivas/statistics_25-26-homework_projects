@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Homework 4 – Frequency Convergence & Law of Large Numbers</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homework 4</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -24,128 +24,128 @@
   <main>
     <div class="main-content">
       <h1>Homework 4</h1>
-      <hr class="section-separator" />
+      <hr class="section-separator">
+      <h2>Assignment 1 — The Meaning of “Converge”</h2>
 
-      <!-- ───────────────────────────── -->
-      <!-- ASSIGNMENT 1 -->
-      <!-- ───────────────────────────── -->
-      <section id="assignment1">
-        <h2>Assignment 1 — Understanding “Converge” in  
-          <em>“The Frequency Converges to the Probability”</em>
-        </h2>
+      <p>
+        In probability theory, when we say that “the frequency converges to the probability,” 
+        we mean that as the number of trials of a random experiment increases, the <em>observed 
+        frequency</em> of an outcome approaches its <em>theoretical probability</em>.
+      </p>
+      <p>
+        For instance, if we repeatedly toss a fair coin, we expect that about half of the outcomes 
+        will be heads. In the short term, this ratio might fluctuate (e.g., 3 heads in 5 tosses, 
+        or 47 heads in 100 tosses), but as the number of tosses grows, the relative frequency of 
+        heads will get closer and closer to 0.5 — it <strong>converges</strong> to the true probability.
+      </p>
 
+      <section id="coin-section">
+        <h3>Coin Toss Simulation</h3>
         <p>
-          In probability theory, the word <strong>“converge”</strong> refers to the process
-          by which repeated experimental results become increasingly close to their expected
-          theoretical value. Specifically, in the phrase
-          <em>“the frequency converges to the probability”</em>, it means that as the number
-          of trials increases, the <strong>observed frequency</strong> (the fraction of times
-          an event occurs) approaches the <strong>true probability</strong> of that event.
+          The graph below simulates repeated coin tosses. Notice how the observed frequency 
+          (blue line) gradually stabilizes around 0.5 (the red dashed line) as the number of tosses increases.
         </p>
-
-        <h3>1. Conceptual Overview</h3>
-        <p>
-          Consider tossing a fair coin. The theoretical probability of getting heads is 0.5.
-          If you toss the coin only a few times, the observed frequency may differ from this
-          value—perhaps 3 heads in 5 tosses (0.6). But as the number of tosses increases, the
-          frequency will stabilize around 0.5.
-        </p>
-
-        <p>
-          This behavior illustrates the <strong>Law of Large Numbers</strong>:
-          as the number of trials grows, the sample frequency stabilizes and
-          <em>converges</em> to the true probability.
-        </p>
-
-        <pre><code>P(A) = lim<sub>n→∞</sub> (Number of times A occurs) / n</code></pre>
-
-        <h3>2. Visual Simulation — Coin Tosses</h3>
-        <p>
-          The following simulation shows this convergence effect.  
-          Each coin toss has a 50% chance of being heads. As we increase the number
-          of tosses, the <strong>observed frequency</strong> (blue line) approaches
-          the <strong>theoretical probability</strong> (red dashed line).
-        </p>
-
-        <div id="coinChartContainer">
-          <canvas id="coinChart"></canvas>
-        </div>
-
         <div class="rsa-buttons">
           <button type="button" onclick="simulateCoinTosses()">Simulate 100 Tosses</button>
           <button type="button" onclick="resetCoinChart()">Reset</button>
         </div>
-
-        <p id="coinStatus" class="status">Status: Waiting for simulation.</p>
-
-        <h3>3. Why It Matters</h3>
-        <p>
-          Convergence explains why randomness can lead to predictability in the long run.
-          It is the foundation of <strong>statistical inference</strong>, where we estimate
-          probabilities from observed data, and of <strong>machine learning</strong>, where
-          models learn stable patterns from repeated exposure to data.
-        </p>
-
-        <p>
-          Thus, when we say that “frequency converges to probability,” we mean that randomness
-          becomes predictable when averaged over many independent trials.
-        </p>
+        <p id="coinStatus" class="status">Status: Waiting to simulate.</p>
+        <div id="coinChartContainer">
+          <canvas id="coinChart"></canvas>
+        </div>
       </section>
 
-      <!-- VISUAL DIVIDER BETWEEN ASSIGNMENTS -->
-      <hr class="section-separator" style="margin: 50px 0;" />
+      <hr>
 
-      <!-- ───────────────────────────── -->
-      <!-- ASSIGNMENT 2 -->
-      <!-- ───────────────────────────── -->
-      <section id="assignment2">
-        <h2>Assignment 2 — Representation of the Law of Large Numbers</h2>
+      <h2>Assignment 2 — The Law of Large Numbers</h2>
+      <p>
+        The <strong>Law of Large Numbers (LLN)</strong> formalizes this concept mathematically. 
+        It states that as the number of independent trials increases, the sample mean of observed 
+        outcomes approaches the expected value. In other words, randomness “averages out” over 
+        time, and results become more stable and predictable.
+      </p>
+      <p>
+        There are two main forms:
+      </p>
+      <ul>
+        <li><strong>Weak Law:</strong> The probability that the sample mean deviates significantly 
+        from the expected value becomes smaller as the sample size increases.</li>
+        <li><strong>Strong Law:</strong> The sample mean actually converges to the expected value 
+        with probability 1 as the sample size approaches infinity.</li>
+      </ul>
 
+      <p>
+        This concept explains why empirical frequencies can be used to estimate true probabilities, 
+        and why statistical averages become more reliable with larger datasets — a cornerstone 
+        of data science, signal processing, and cybersecurity analytics.
+      </p>
+
+      <section id="lln-section">
+        <h3>Law of Large Numbers — Die Roll Simulation</h3>
         <p>
-          The <strong>Law of Large Numbers (LLN)</strong> states that as the number of
-          independent trials of a random experiment increases, the average of the results
-          approaches the expected value. It formalizes the intuition behind convergence:
-          large samples reduce randomness, leading to stable averages.
+          The chart below simulates rolling a fair six-sided die multiple times. 
+          The green line represents the running average of observed rolls, which 
+          converges toward the expected value of <strong>3.5</strong> as the number of trials increases.
         </p>
-
-        <p>
-          We can represent this principle visually by showing how the running average of random
-          results (like die rolls or coin tosses) gradually approaches the true expected value.
-        </p>
-
+        <div class="rsa-buttons">
+          <button type="button" onclick="simulateLLN()">Simulate 500 Rolls</button>
+          <button type="button" onclick="resetLLN()">Reset</button>
+        </div>
+        <p id="llnStatus" class="status">Status: Waiting to simulate.</p>
         <div id="llnChartContainer">
           <canvas id="llnChart"></canvas>
         </div>
-
-        <div class="rsa-buttons">
-          <button type="button" onclick="simulateLLN()">Simulate 500 Trials</button>
-          <button type="button" onclick="resetLLN()">Reset</button>
-        </div>
-
-        <p id="llnStatus" class="status">Status: Waiting for simulation.</p>
-
-        <p>
-          As the number of trials increases, the graph demonstrates that random variations
-          tend to cancel out, and the average result converges toward the true mean —
-          a core idea in both probability and data science.
-        </p>
       </section>
 
-      <hr />
+      <section id="avg-section">
+        <h3>Average of Random Numbers [0–1]</h3>
+        <p>
+          This simulation illustrates the same law, but using continuous random values between 0 and 1. 
+          As the number of samples increases, the running average approaches 0.5, showing that even in 
+          continuous probability spaces, empirical averages converge toward the expected mean.
+        </p>
+        <div class="rsa-buttons">
+          <button type="button" onclick="simulateAverage()">Simulate 1000 Samples</button>
+          <button type="button" onclick="resetAverage()">Reset</button>
+        </div>
+        <p id="avgStatus" class="status">Status: Waiting to simulate.</p>
+        <div id="avgChartContainer">
+          <canvas id="avgChart"></canvas>
+        </div>
+      </section>
+
+      <section id="lln-coin-section">
+        <h3>Coin Toss LLN Simulation</h3>
+        <p>
+          This simulation shows the Law of Large Numbers using coin tosses again. As the number of tosses grows, 
+          the estimated probability of “heads” stabilizes around 0.5 — an empirical demonstration that frequencies 
+          <strong>converge to the true probability</strong>.
+        </p>
+        <div class="rsa-buttons">
+          <button type="button" onclick="simulateLLNCoin()">Simulate 1000 Tosses</button>
+          <button type="button" onclick="resetLLNCoin()">Reset</button>
+        </div>
+        <p id="llnCoinStatus" class="status">Status: Waiting to simulate.</p>
+        <div id="llnCoinChartContainer">
+          <canvas id="llnCoinChart"></canvas>
+        </div>
+      </section>
+
+      <hr>
+
       <a href="index.html" class="back-button">← Back to Home</a>
     </div>
   </main>
 
   <footer class="site-footer">
-    © 2025 Alexandru Silivas — ID 2252622 —
+    © 2025 Alexandru Silivas — ID 2252622 — 
     <a href="mailto:silivas.2252622@studenti.uniroma1.it">silivas.2252622@studenti.uniroma1.it</a>
   </footer>
 
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  
-  <!-- Homework 4 Simulations -->
+
+  <!-- Homework 4 Simulation Script -->
   <script src="convergence_and_lln.js"></script>
-  
 </body>
 </html>
