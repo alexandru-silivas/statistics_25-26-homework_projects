@@ -232,3 +232,11 @@ function rsaShowFrequencyComparison(plainText, cipherText) {
   const status = document.getElementById("rsaStatus");
   if (status) status.textContent = `Plain χ²=${chiPlain} | Cipher χ²=${chiCipher} (lower ≈ closer to English)`;
 }
+
+
+// Make key functions accessible to HTML buttons
+window.generateKeys = generateKeys;
+window.fillExample = fillExample;
+window.rsaEncrypt = rsaEncrypt;
+window.rsaDecrypt = rsaDecrypt;
+window.rsaShowFrequencyComparison = rsaShowFrequencyComparison;
