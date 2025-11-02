@@ -128,7 +128,6 @@ function rsaDecrypt() {
     return;
   }
 
-  // Parse comma-separated ciphertext values
   const parts = cipherText.split(",").map(x => x.trim()).filter(Boolean);
   let plain = "";
 
@@ -153,25 +152,6 @@ function rsaDecrypt() {
   rsaShowFrequencyComparison(plain, cipherText);
 }
 
-
-  // parse csv bigints
-  const parts = cipherText.split(",").map(s => s.trim()).filter(Boolean);
-  let plain = "";
-  try {
-    for (const p of parts) {
-      const big = BigInt(p);
-      const m = modPow(big, d, n);
-      plain += String.fromCharCode(Number(m));
-    }
-  } catch (err) {
-    status.textContent = "Ciphertext format error. Ensure comma-separated integers.";
-    return;
-  }
-
-  document.getElementById("plaintext").value = plain;
-  status.textContent = "Decrypted successfully.";
-  rsaShowFrequencyComparison(plain, cipherText);
-}
 
 // ---------- Fill example ----------
 function fillExample() {
