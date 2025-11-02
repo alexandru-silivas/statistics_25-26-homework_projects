@@ -474,3 +474,16 @@ code.python .com {
   margin-bottom: 1rem;
   text-align: center;
 }
+
+
+/* --- Fix double separator in Homework 3 header --- */
+
+/* Hide any extra hr in the top section of Homework 3 */
+.assignment-header hr:nth-of-type(2) {
+  display: none !important;
+}
+
+/* (Optional) tighten up spacing */
+.assignment-header {
+  margin-bottom: 2rem;
+}
