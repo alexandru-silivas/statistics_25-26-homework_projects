@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homework 3</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="homework_1.html">HMWK 1</a></li>
+        <li><a href="homework_2.html">HMWK 2</a></li>
+        <li><a href="homework_3.html" class="active">HMWK 3</a></li>
+        <li><a href="mailto:silivas.2252622@studenti.uniroma1.it">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="main-content">
+      <h1>RSA Algorithm</h1>
+
+      <p><strong>Objective:</strong> This homework explores <em>RSA encryption</em> — a cornerstone of modern cybersecurity — through both theoretical explanation and a practical interactive demonstration.</p>
+
+      <hr>
+
+      <h3>1. Introduction to RSA</h3>
+      <p>
+        RSA (Rivest–Shamir–Adleman) is one of the first and most widely used public-key cryptosystems. 
+        It enables secure data transmission and digital signatures through a mathematical relationship between two keys: 
+        a <strong>public key</strong> for encryption and a <strong>private key</strong> for decryption.
+      </p>
+
+      <h3>2. How RSA Works — Step by Step</h3>
+      <ol>
+        <li>Choose two distinct prime numbers <em>p</em> and <em>q</em>.</li>
+        <li>Compute <em>n = p × q</em>. This is the modulus used in both keys.</li>
+        <li>Compute Euler’s totient function: <em>φ(n) = (p - 1)(q - 1)</em>.</li>
+        <li>Select an integer <em>e</em> (1 &lt; e &lt; φ(n)) such that <em>gcd(e, φ(n)) = 1</em>. This is the public exponent.</li>
+        <li>Find <em>d</em> such that <em>d × e ≡ 1 (mod φ(n))</em>. This is the private exponent.</li>
+        <li>Public key: <em>(n, e)</em> — Private key: <em>(n, d)</em>.</li>
+        <li>Encryption: <em>c = m<sup>e</sup> mod n</em>. Decryption: <em>m = c<sup>d</sup> mod n</em>.</li>
+      </ol>
+
+      <h3>3. Example with Small Primes</h3>
+      <p>Suppose we choose p = 61 and q = 53:</p>
+      <ul>
+        <li>n = 61 × 53 = 3233</li>
+        <li>φ(n) = 3120</li>
+        <li>Choose e = 17 → gcd(17, 3120) = 1</li>
+        <li>d = 2753 (because 2753 × 17 ≡ 1 mod 3120)</li>
+      </ul>
+      <p>
+        If we encrypt the message "A" (ASCII = 65), we get c = 65<sup>17</sup> mod 3233 = 2790.
+        Decrypting: 2790<sup>2753</sup> mod 3233 = 65 → "A".
+      </p>
+
+      <h3>4. Interactive RSA Demonstration</h3>
+      <p>Use the tool below to experiment with key generation, encryption, and decryption. 
+      Note that this version uses small primes and should not be used for real security purposes.</p>
+
+      <!-- RSA Interactive Tool -->
+      <section id="rsa-demo" class="cipher-tool">
+        <h3>RSA Interactive Tool</h3>
+        <p>Generate keys, encrypt and decrypt small messages using the RSA algorithm.</p>
+
+        <div class="rsa-row">
+          <label for="rsaP">Prime p:</label>
+          <input id="rsaP" type="number" value="61">
+          <label for="rsaQ">Prime q:</label>
+          <input id="rsaQ" type="number" value="53">
+          <button type="button" onclick="rsaGenerateKeys()">Generate Keys</button>
+        </div>
+
+        <div class="rsa-keys">
+          <p><strong>Public Key (n, e):</strong> <span id="rsaPublic">(none)</span></p>
+          <p><strong>Private Key (n, d):</strong> <span id="rsaPrivate">(none)</span></p>
+        </div>
+
+        <label for="rsaInput">Plaintext</label>
+        <textarea id="rsaInput" placeholder="Type a short message (ASCII)"></textarea>
+
+        <div class="rsa-buttons">
+          <button type="button" onclick="rsaEncrypt()">Encrypt</button>
+          <button type="button" onclick="rsaDecrypt()">Decrypt</button>
+          <button type="button" onclick="rsaBruteExample()">Fill Example</button>
+        </div>
+
+        <label for="rsaOutput">Ciphertext</label>
+        <textarea id="rsaOutput" readonly placeholder="Encrypted integers appear here"></textarea>
+
+        <p id="rsaStatus" class="status">Status: Waiting for key generation.</p>
+      </section>
+
+      <hr>
+      <a href="index.html" class="back-button">← Back to Home</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    © 2025 Alexandru Silivas — ID 2252622 — <a href="mailto:silivas.2252622@studenti.uniroma1.it">silivas.2252622@studenti.uniroma1.it</a>
+  </footer>
+
+  <!-- JS imports -->
+  <script src="rsa_demo.js"></script>
+
+</body>
+</html>
