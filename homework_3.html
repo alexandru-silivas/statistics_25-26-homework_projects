@@ -36,18 +36,87 @@
         letter distributions—mirroring the statistical approach seen in the Caesar Cipher assignment.
       </p>
 
-      <h3>1. How RSA Works — Step by Step</h3>
+      <!-- NEW SECTION: Understanding RSA -->
+      <h3>1. Understanding RSA and Its Role in Cybersecurity</h3>
+      <p>
+        The <strong>RSA algorithm</strong> (named after Rivest, Shamir, and Adleman) is one of the
+        cornerstones of modern <strong>asymmetric encryption</strong>. Unlike traditional ciphers
+        that use the same key for both encryption and decryption, RSA employs a <em>public key</em>
+        and a <em>private key</em>. This innovation allows secure communication even over
+        untrusted networks, since only the private key holder can decrypt the data.
+      </p>
+
+      <p>
+        RSA underpins much of today’s secure digital communication: it is used in
+        <strong>HTTPS</strong> connections, <strong>TLS/SSL</strong> certificates, <strong>digital signatures</strong>,
+        and <strong>email encryption</strong>. When you connect to a secure website, RSA ensures that
+        the data exchanged between your browser and the server cannot be intercepted or read
+        by unauthorized parties.
+      </p>
+
+      <p>
+        The algorithm’s strength lies in the mathematical difficulty of <strong>prime factorization</strong>:
+        while multiplying two large primes to form their product (<em>n = p × q</em>) is easy,
+        reversing the process—determining the primes given only <em>n</em>—is practically impossible
+        with current technology. This one-way property makes RSA both elegant and secure.
+      </p>
+
+      <p>
+        In summary, RSA works in three conceptual stages:
+      </p>
+      <ul>
+        <li><strong>Key Generation:</strong> Two large primes are selected to create the public and private keys.</li>
+        <li><strong>Encryption:</strong> The sender uses the public key to convert readable text into ciphertext.</li>
+        <li><strong>Decryption:</strong> The receiver uses the private key to reconstruct the original message.</li>
+      </ul>
+
+      <hr>
+
+      <!-- REWRITTEN EXPLANATION OF STEPS -->
+      <h3>2. How RSA Works — Step by Step</h3>
+      <p>
+        The RSA algorithm builds upon modular arithmetic and the properties of prime numbers.
+        Below is the detailed process:
+      </p>
+
       <ol>
-        <li>Choose two distinct prime numbers <em>p</em> and <em>q</em>.</li>
-        <li>Compute <em>n = p × q</em>. This is the modulus used in both keys.</li>
-        <li>Compute Euler’s totient function: <em>φ(n) = (p - 1)(q - 1)</em>.</li>
-        <li>Select an integer <em>e</em> (1 &lt; e &lt; φ(n)) such that <em>gcd(e, φ(n)) = 1</em>. This is the public exponent.</li>
-        <li>Find <em>d</em> such that <em>d × e ≡ 1 (mod φ(n))</em>. This is the private exponent.</li>
-        <li>Public key: <em>(n, e)</em> — Private key: <em>(n, d)</em>.</li>
-        <li>Encryption: <em>c = m<sup>e</sup> mod n</em>. Decryption: <em>m = c<sup>d</sup> mod n</em>.</li>
+        <li><strong>Choose two distinct prime numbers:</strong> 
+          Select two prime numbers <em>p</em> and <em>q</em>. They should be large and random to ensure security.</li>
+
+        <li><strong>Compute the modulus:</strong> 
+          Calculate <em>n = p × q</em>. The value <em>n</em> is used in both the public and private keys and defines the size of the key.</li>
+
+        <li><strong>Compute Euler’s totient function:</strong> 
+          Determine <em>φ(n) = (p − 1)(q − 1)</em>. This number represents how many integers are coprime to <em>n</em>.</li>
+
+        <li><strong>Select the public exponent:</strong>
+          Choose an integer <em>e</em> such that <em>1 &lt; e &lt; φ(n)</em> and <em>gcd(e, φ(n)) = 1</em>. 
+          A common choice for <em>e</em> is 65537, as it provides efficiency and security.</li>
+
+        <li><strong>Compute the private exponent:</strong> 
+          Find <em>d</em> such that <em>d × e ≡ 1 (mod φ(n))</em>. This means <em>d</em> is the modular inverse of <em>e</em> modulo <em>φ(n)</em>.</li>
+
+        <li><strong>Form the key pair:</strong> 
+          The <strong>public key</strong> is <em>(n, e)</em> and can be safely shared.
+          The <strong>private key</strong> is <em>(n, d)</em> and must remain secret.</li>
+
+        <li><strong>Encryption:</strong> 
+          Convert the plaintext message into numerical form (using ASCII codes or blocks of text). Then compute:
+          <br><em>c = m<sup>e</sup> mod n</em>, where <em>c</em> is the ciphertext.</li>
+
+        <li><strong>Decryption:</strong> 
+          Using the private key, recover the message by computing:
+          <br><em>m = c<sup>d</sup> mod n</em>, obtaining the original plaintext.</li>
       </ol>
 
-      <h3>2. Example with Small Primes</h3>
+      <p>
+        These mathematical operations ensure that even if an attacker intercepts the ciphertext
+        and knows the public key, they cannot easily compute the private key or the plaintext,
+        because factoring <em>n</em> into <em>p</em> and <em>q</em> is computationally infeasible
+        for sufficiently large values.
+      </p>
+
+      <h3>3. Example with Small Primes</h3>
       <p>Suppose we choose p = 61 and q = 53:</p>
       <ul>
         <li>n = 61 × 53 = 3233</li>
@@ -60,7 +129,7 @@
         Decrypting: 2790<sup>2753</sup> mod 3233 = 65 → "A".
       </p>
 
-      <h3>3. Interactive RSA Demonstration</h3>
+      <h3>4. Interactive RSA Demonstration</h3>
       <p>Use the tool below to experiment with key generation, encryption, and decryption. 
       Note that this version uses small primes and should not be used for real security purposes.</p>
 
@@ -117,7 +186,7 @@
       </section>
 
       <section class="rsa-discussion">
-        <h3>4. Results & Discussion</h3>
+        <h3>5. Results & Discussion</h3>
         <p>
           The RSA encryption algorithm transforms readable text into ciphertext that appears statistically random. 
           Unlike the Caesar cipher or other classical encryption methods, the frequency distribution of the ciphertext 
@@ -138,15 +207,13 @@
   </main>
 
   <footer class="site-footer">
-    © 2025 Alexandru Silivas — ID 2252622 — <a href="mailto:silivas.2252622@studenti.uniroma1.it">silivas.2252622@studenti.uniroma1.it</a>
+    © 2025 Alexandru Silivas — ID 2252622 — 
+    <a href="mailto:silivas.2252622@studenti.uniroma1.it">silivas.2252622@studenti.uniroma1.it</a>
   </footer>
 
   <!-- JS imports -->
-  <!-- Chart.js (for frequency visualization) -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  
-  <!-- RSA tool script -->
   <script src="rsa_demo.js"></script>
-  
+
 </body>
 </html>
