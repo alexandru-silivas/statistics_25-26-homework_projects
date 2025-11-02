@@ -115,6 +115,7 @@ function rsaDecrypt() {
   }
 
   const cipherText = (document.getElementById("ciphertext").value || "").trim();
+  console.log("Decrypt clicked. Ciphertext content:", cipherText);
   if (!cipherText) {
     status.textContent = "No ciphertext to decrypt.";
     return;
