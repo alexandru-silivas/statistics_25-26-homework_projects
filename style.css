@@ -187,15 +187,6 @@ footer.site-footer a:hover { color: var(--accent); }
   margin-top: 1.8em;           /* more space above section titles */
 }
 
-/* --- Homework 3 header layout fix --- */
-
-/* Keep only one separator under the main title */
-.main-content h1 + hr {
-  margin-top: 0.8rem;
-  margin-bottom: 1.4rem;
-  border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
 
 /* Style the subtitle cleanly (centered, elegant) */
 .main-content h2 {
@@ -205,23 +196,6 @@ footer.site-footer a:hover { color: var(--accent); }
   font-weight: 500;
   text-align: center;
 }
-
-/* Prevent extra hr under h2 from showing */
-.main-content h2 + hr {
-  display: none;
-}
-
-/* --- Homework 3 header cleanup --- */
-.main-content h2 + hr,
-.assignment-header h2 + hr {
-  display: none !important;
-}
-
-/* Optional: adjust spacing below subtitle */
-.main-content h2 {
-  margin-bottom: 1rem;
-}
-
 
 
 /* --- Code block styling for readability (Homework 2 and onwards) --- */
@@ -476,14 +450,33 @@ code.python .com {
 }
 
 
-/* --- Fix double separator in Homework 3 header --- */
 
-/* Hide any extra hr in the top section of Homework 3 */
-.assignment-header hr:nth-of-type(2) {
-  display: none !important;
+/* Prevent extra hr under h2 from showing */
+.main-content h2 + hr {
+  display: none;
 }
 
-/* (Optional) tighten up spacing */
-.assignment-header {
-  margin-bottom: 2rem;
+/* Optional: adjust spacing below subtitle */
+.main-content h2 {
+  margin-bottom: 1rem;
+}
+
+/* --- Homework 3 header final cleanup --- */
+.main-content h1 + hr {
+  margin: 0.8rem 0 1.4rem;
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.main-content h2 {
+  margin-top: 0.8rem;
+  margin-bottom: 1rem;
+  color: #a9bedc;
+  font-weight: 500;
+  text-align: center;
+}
+
+.assignment-header hr:nth-of-type(2),
+.main-content h2 + hr {
+  display: none !important;
 }
