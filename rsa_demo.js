@@ -235,9 +235,37 @@ function rsaShowFrequencyComparison(plainText, cipherText) {
 }
 
 
+// ---------- Educational Frequency-based Decryption Attempt ----------
+function rsaDecryptByFrequency() {
+  const status = document.getElementById("rsaStatus");
+  const cipherBox = document.getElementById("ciphertext");
+  const plainBox = document.getElementById("plaintext");
+  const cipherText = (cipherBox.value || "").trim();
+
+  if (!cipherText) {
+    status.textContent = "Please enter ciphertext before attempting frequency analysis.";
+    return;
+  }
+
+  // Visual feedback for the process
+  status.textContent = "🔍 Attempting frequency-based decryption (expected to fail for RSA)...";
+  plainBox.value = "";
+
+  // Simulated "attempt" delay
+  setTimeout(() => {
+    // RSA ciphertext is numeric, so frequency analysis yields nothing useful
+    plainBox.value = "[Frequency analysis failed: RSA ciphertext has no readable structure]";
+    status.textContent = "✅ Frequency-based decryption complete — RSA resists this attack.";
+
+    // Still update frequency chart comparison for illustration
+    rsaShowFrequencyComparison("", cipherText);
+  }, 1000);
+}
+
 // Make key functions accessible to HTML buttons
 window.generateKeys = generateKeys;
 window.fillExample = fillExample;
 window.rsaEncrypt = rsaEncrypt;
 window.rsaDecrypt = rsaDecrypt;
 window.rsaShowFrequencyComparison = rsaShowFrequencyComparison;
+window.rsaDecryptByFrequency = rsaDecryptByFrequency;
