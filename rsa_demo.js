@@ -106,22 +106,53 @@ function rsaEncrypt() {
 
 // ---------- Decrypt ----------
 function rsaDecrypt() {
-  console.log("Decrypt function triggered");
-  console.log("Current n:", window.rsa_n, "Current d:", window.rsa_d);
+  console.log("🔓 Decrypt function triggered");
+
   const n = window.rsa_n;
   const d = window.rsa_d;
   const status = document.getElementById("rsaStatus");
+  const cipherBox = document.getElementById("ciphertext");
+  const plainBox = document.getElementById("plaintext");
+
   if (!n || !d) {
     status.textContent = "Generate keys first.";
+    console.warn("Keys not found:", { n, d });
     return;
   }
 
-  const cipherText = (document.getElementById("ciphertext").value || "").trim();
-  console.log("Decrypt clicked. Ciphertext content:", cipherText);
+  const cipherText = (cipherBox.value || "").trim();
+  console.log("Ciphertext content:", cipherText);
+
   if (!cipherText) {
     status.textContent = "No ciphertext to decrypt.";
     return;
   }
+
+  // Parse comma-separated ciphertext values
+  const parts = cipherText.split(",").map(x => x.trim()).filter(Boolean);
+  let plain = "";
+
+  try {
+    for (const part of parts) {
+      const c = BigInt(part);
+      const m = modPow(c, d, n);
+      const decoded = String.fromCharCode(Number(m));
+      plain += decoded;
+      console.log(`Decrypted ${c} -> ${m} -> '${decoded}'`);
+    }
+  } catch (err) {
+    console.error("Decryption error:", err);
+    status.textContent = "Ciphertext format error — ensure numbers separated by commas.";
+    return;
+  }
+
+  plainBox.value = plain;
+  status.textContent = "✅ Decryption complete.";
+  console.log("Decrypted text:", plain);
+
+  rsaShowFrequencyComparison(plain, cipherText);
+}
+
 
   // parse csv bigints
   const parts = cipherText.split(",").map(s => s.trim()).filter(Boolean);
