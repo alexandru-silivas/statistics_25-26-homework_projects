@@ -465,3 +465,24 @@ code.python .com {
 .main-content h2 {
   margin-bottom: 1rem;
 }
+
+
+/* --- RSA Frequency Analysis --- */
+#rsa-tool h3 {
+  margin-top: 2rem;
+  font-size: 1.1rem;
+  color: var(--accent);
+  text-align: center;
+}
+
+#rsaFreqChartContainer {
+  margin-top: 1.5rem;
+  background: rgba(255,255,255,0.03);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+#rsaFreqChart {
+  width: 100%;
+  height: 320px;
+}
