@@ -486,3 +486,9 @@ code.python .com {
   width: 100%;
   height: 320px;
 }
+
+#rsaStatus {
+  color: #90ee90; /* light green for success */
+  font-weight: bold;
+  margin-top: 10px;
+}
