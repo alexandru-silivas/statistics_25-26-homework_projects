@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Homework 4 – Frequency Convergence</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="homework_1.html">HMWK 1</a></li>
+        <li><a href="homework_2.html">HMWK 2</a></li>
+        <li><a href="homework_3.html">HMWK 3</a></li>
+        <li><a href="homework_4.html" class="active">HMWK 4</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="main-content">
+      <h1>Homework 4</h1>
+      <hr class="section-separator" />
+      <h2>Explaining “Converge” in the Phrase  
+        <em>“The Frequency Converges to the Probability”</em>
+      </h2>
+
+      <p>
+        In probability theory, the word <strong>“converge”</strong> describes how repeated
+        experimental results become increasingly close to their expected theoretical value.
+        Specifically, in the phrase <em>“the frequency converges to the probability”</em>,
+        it means that as we perform more and more trials of a random experiment, the
+        <strong>observed frequency</strong> (the fraction of times an event occurs) approaches the
+        <strong>true probability</strong> of that event.
+      </p>
+
+      <h3>1. Conceptual Overview</h3>
+      <p>
+        Imagine tossing a fair coin. The theoretical probability of getting heads is 0.5.
+        If you toss the coin only a few times, you might get results like 3 heads in 5 tosses
+        (frequency = 0.6). But as you repeat the experiment hundreds or thousands of times,
+        the ratio of heads to total tosses will settle near 0.5.
+      </p>
+      <p>
+        This behavior is described by the <strong>Law of Large Numbers</strong>:
+        as the number of trials grows, the sample frequency stabilizes and
+        <em>converges</em> to the underlying probability.
+      </p>
+
+      <pre><code>P(A) = lim<sub>n→∞</sub> (Number of times A occurs) / n</code></pre>
+
+      <p>
+        In other words, while individual outcomes are random, the long-term average
+        reveals the predictable probability that governs them.
+      </p>
+
+      <h3>2. Visual Simulation: Coin Tosses</h3>
+      <p>
+        Below is an interactive visualization of coin tosses.
+        Each toss is simulated with a 50% chance of landing heads.
+        As the number of tosses increases, the observed frequency of heads
+        (blue line) converges toward the theoretical probability (red dashed line).
+      </p>
+
+      <div id="coinChartContainer">
+        <canvas id="coinChart"></canvas>
+      </div>
+
+      <div class="rsa-buttons">
+        <button type="button" onclick="simulateCoinTosses()">Simulate 100 Tosses</button>
+        <button type="button" onclick="resetCoinChart()">Reset</button>
+      </div>
+
+      <p id="coinStatus" class="status">Status: Waiting for simulation.</p>
+
+      <h3>3. Why This Matters</h3>
+      <p>
+        Convergence is at the heart of probability theory and statistics.
+        It explains why we can use experiments to estimate probabilities:
+        as the dataset grows, random fluctuations average out, and the results
+        reflect the true underlying distribution.
+      </p>
+      <p>
+        This idea also underpins many real-world applications, such as
+        <strong>machine learning</strong> (where models “learn” stable probabilities
+        from large datasets) and <strong>risk analysis</strong> (where repeated trials
+        reveal consistent statistical trends).
+      </p>
+
+      <h3>4. Summary</h3>
+      <ul>
+        <li><strong>Frequency</strong> — observed proportion of outcomes.</li>
+        <li><strong>Probability</strong> — theoretical likelihood of an event.</li>
+        <li><strong>Convergence</strong> — the process by which the observed frequency stabilizes around the probability as trials increase.</li>
+      </ul>
+
+      <p>
+        Thus, saying that <em>“the frequency converges to the probability”</em> expresses
+        the fundamental principle that randomness becomes predictable when averaged
+        over a large number of independent repetitions.
+      </p>
+
+      <hr />
+      <a href="index.html" class="back-button">← Back to Home</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    © 2025 Alexandru Silivas — ID 2252622 —
+    <a href="mailto:silivas.2252622@studenti.uniroma1.it">silivas.2252622@studenti.uniroma1.it</a>
+  </footer>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Coin Toss Simulation Script -->
+  <script>
+    let coinChart = null;
+    let tosses = 0;
+    let heads = 0;
+    const tossBatch = 100;
+
+    function initCoinChart() {
+      const ctx = document.getElementById("coinChart").getContext("2d");
+      coinChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: [],
+          datasets: [
+            {
+              label: "Observed Frequency of Heads",
+              data: [],
+              borderColor: "rgba(78,163,255,1)",
+              backgroundColor: "rgba(78,163,255,0.2)",
+              borderWidth: 2,
+              tension: 0.25
+            },
+            {
+              label: "Theoretical Probability (0.5)",
+              data: [],
+              borderColor: "rgba(255,99,132,0.8)",
+              borderDash: [6,4],
+              borderWidth: 2,
+              pointRadius: 0
+            }
+          ]
+        },
+        options: {
+          scales: {
+            y: {
+              min: 0,
+              max: 1,
+              title: { display: true, text: "Frequency of Heads" },
+              ticks: { color: "#cfd9e6" }
+            },
+            x: {
+              title: { display: true, text: "Number of Tosses" },
+              ticks: { color: "#cfd9e6" }
+            }
+          },
+          plugins: {
+            legend: { labels: { color: "#e6eef8" } }
+          }
+        }
+      });
+    }
+
+    function simulateCoinTosses() {
+      if (!coinChart) initCoinChart();
+      const status = document.getElementById("coinStatus");
+
+      for (let i = 0; i < tossBatch; i++) {
+        tosses++;
+        if (Math.random() < 0.5) heads++;
+        const freq = heads / tosses;
+
+        coinChart.data.labels.push(tosses);
+        coinChart.data.datasets[0].data.push(freq);
+        coinChart.data.datasets[1].data.push(0.5);
+      }
+
+      coinChart.update();
+      status.textContent = `Simulated ${tosses} tosses — Frequency of heads: ${(heads / tosses).toFixed(3)}`;
+    }
+
+    function resetCoinChart() {
+      if (coinChart) coinChart.destroy();
+      tosses = 0;
+      heads = 0;
+      coinChart = null;
+      document.getElementById("coinStatus").textContent = "Status: Chart reset.";
+    }
+
+    window.onload = initCoinChart;
+  </script>
+</body>
+</html>
