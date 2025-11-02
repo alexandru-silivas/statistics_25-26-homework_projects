@@ -37,10 +37,10 @@ function initializeCharts() {
   llnLargeChart = new Chart(ctxLarge, {
     type: "line",
     data: {
-      labels: Array.from({ length: 1000 }, (_, i) => i + 1),
+      labels: Array.from({ length: 500 }, (_, i) => i + 1),
       datasets: [
         { label: "Running Average", data: [], borderColor: "#00cc66", fill: false },
-        { label: "Expected Value (3.5)", data: Array(1000).fill(3.5), borderColor: "red", borderDash: [5, 5], fill: false }
+        { label: "Expected Value (3.5)", data: Array(500).fill(3.5), borderColor: "red", borderDash: [5, 5], fill: false }
       ]
     },
     options: { scales: { y: { beginAtZero: true, max: 6 } }, plugins: { legend: { labels: { color: "#e6eef8" } } } }
@@ -101,7 +101,7 @@ function simulateLLN(numRolls) {
       clearInterval(interval);
       document.getElementById(statusId).textContent = `Simulation complete — ${numRolls} rolls.`;
     }
-  }, numRolls === 50 ? 100 : 10);
+  }, numRolls === 50 ? 100 : 15); // slower for 50, slightly faster for 500
 }
 
 function resetLLN(size) {
