@@ -65,10 +65,11 @@
       Note that this version uses small primes and should not be used for real security purposes.</p>
 
       <!-- RSA Interactive Tool -->
-      <section id="rsa-demo" class="cipher-tool">
+      <section id="rsa-tool">
+        <h2>4. Interactive RSA Demonstration</h2>
         <p>
-          Use this interactive tool to encrypt, decrypt, and analyze letter frequencies 
-          using the RSA algorithm. Note: this uses small primes for demonstration only.
+          Use this interactive tool to experiment with key generation, encryption, and decryption.  
+          Note: this version uses small primes and is for educational purposes only.
         </p>
       
         <div class="rsa-row">
@@ -87,7 +88,7 @@
         <label for="rsaInput">Plaintext</label>
         <textarea id="rsaInput" placeholder="Type a short message (ASCII)"></textarea>
       
-        <div class="rsa-buttons">
+        <div>
           <button onclick="rsaEncrypt()">Encrypt</button>
           <button onclick="rsaDecrypt()">Decrypt</button>
           <button onclick="rsaBruteExample()">Fill Example</button>
@@ -98,10 +99,11 @@
       
         <p id="rsaStatus" class="status">Status: Waiting for key generation.</p>
       
-        <div id="rsaFreqChartContainer" style="margin-top:2rem;background:rgba(255,255,255,0.03);border-radius:12px;padding:1rem;">
+        <div id="rsaFreqChartContainer">
           <canvas id="rsaFreqChart"></canvas>
         </div>
       </section>
+
 
       <hr>
       <a href="index.html" class="back-button">← Back to Home</a>
