@@ -421,3 +421,19 @@ code.python .com {
   border-radius: 12px;
   padding: 1rem;
 }
+
+/* RSA Tool Styling Cleanup */
+.rsa-tool hr {
+  display: none; /* remove the inner separator */
+}
+
+.rsa-tool h3 {
+  display: none; /* remove redundant header */
+}
+
+.rsa-note {
+  font-size: 0.95rem;
+  color: #aab7c4;
+  margin-bottom: 1rem;
+  text-align: center;
+}
