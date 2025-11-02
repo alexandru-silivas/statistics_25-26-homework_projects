@@ -211,6 +211,18 @@ footer.site-footer a:hover { color: var(--accent); }
   display: none;
 }
 
+/* --- Homework 3 header cleanup --- */
+.main-content h2 + hr,
+.assignment-header h2 + hr {
+  display: none !important;
+}
+
+/* Optional: adjust spacing below subtitle */
+.main-content h2 {
+  margin-bottom: 1rem;
+}
+
+
 
 /* --- Code block styling for readability (Homework 2 and onwards) --- */
 pre {
