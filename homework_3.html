@@ -96,9 +96,32 @@
         <div id="rsaFreqChartContainer">
           <canvas id="rsaFreqChart"></canvas>
         </div>
+
+        <hr>
+        
+        <h3>Frequency Analysis and Reference Distribution</h3>
+        <p class="rsa-note">
+          Use this tool to compare letter frequency distributions between plaintext and
+          ciphertext. This analysis demonstrates how <strong>RSA encryption</strong>
+          randomizes the frequency structure of text, preventing decryption through
+          statistical means (unlike monoalphabetic ciphers such as Caesar).
+        </p>
+        
+        <div class="rsa-buttons">
+          <button type="button"
+                  onclick="rsaShowFrequencyComparison(
+                             document.getElementById('rsaInput').value,
+                             document.getElementById('rsaOutput').value)">
+            Compare Freq. (Plain vs Cipher)
+          </button>
+        </div>
+        
+        <div id="rsaFreqChartContainer">
+          <canvas id="rsaFreqChart"></canvas>
+        </div>
+
       </section>
-
-
+      
       <hr>
       <a href="index.html" class="back-button">← Back to Home</a>
     </div>
