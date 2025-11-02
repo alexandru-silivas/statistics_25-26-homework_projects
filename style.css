@@ -173,18 +173,9 @@ footer.site-footer a:hover { color: var(--accent); }
   line-height: 1.7;            /* slightly taller line spacing */
 }
 
-.main-content ul {
-  margin: 0.6em 0 1.4em 2em;   /* add some vertical space and indent more */
-  padding-left: 1.2em;         /* shift bullets further inward */
-}
-
 .main-content li {
   margin-bottom: 0.4em;        /* space between bullet points */
   line-height: 1.6;            /* improve readability */
-}
-
-.main-content h3 {
-  margin-top: 1.8em;           /* more space above section titles */
 }
 
 
@@ -450,17 +441,6 @@ code.python .com {
 }
 
 
-
-/* Prevent extra hr under h2 from showing */
-.main-content h2 + hr {
-  display: none;
-}
-
-/* Optional: adjust spacing below subtitle */
-.main-content h2 {
-  margin-bottom: 1rem;
-}
-
 /* --- Homework 3 header final cleanup --- */
 .main-content h1 + hr {
   margin: 0.8rem 0 1.4rem;
@@ -479,4 +459,9 @@ code.python .com {
 .assignment-header hr:nth-of-type(2),
 .main-content h2 + hr {
   display: none !important;
+}
+
+/* Optional: adjust spacing below subtitle */
+.main-content h2 {
+  margin-bottom: 1rem;
 }
