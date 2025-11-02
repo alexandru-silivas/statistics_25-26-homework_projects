@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Homework 4 – Frequency Convergence</title>
+  <title>Homework 4 – Frequency Convergence & Law of Large Numbers</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -25,84 +25,111 @@
     <div class="main-content">
       <h1>Homework 4</h1>
       <hr class="section-separator" />
-      <h2>Explaining “Converge” in the Phrase  
-        <em>“The Frequency Converges to the Probability”</em>
-      </h2>
 
-      <p>
-        In probability theory, the word <strong>“converge”</strong> describes how repeated
-        experimental results become increasingly close to their expected theoretical value.
-        Specifically, in the phrase <em>“the frequency converges to the probability”</em>,
-        it means that as we perform more and more trials of a random experiment, the
-        <strong>observed frequency</strong> (the fraction of times an event occurs) approaches the
-        <strong>true probability</strong> of that event.
-      </p>
+      <!-- ───────────────────────────── -->
+      <!-- ASSIGNMENT 1 -->
+      <!-- ───────────────────────────── -->
+      <section id="assignment1">
+        <h2>Assignment 1 — Understanding “Converge” in  
+          <em>“The Frequency Converges to the Probability”</em>
+        </h2>
 
-      <h3>1. Conceptual Overview</h3>
-      <p>
-        Imagine tossing a fair coin. The theoretical probability of getting heads is 0.5.
-        If you toss the coin only a few times, you might get results like 3 heads in 5 tosses
-        (frequency = 0.6). But as you repeat the experiment hundreds or thousands of times,
-        the ratio of heads to total tosses will settle near 0.5.
-      </p>
-      <p>
-        This behavior is described by the <strong>Law of Large Numbers</strong>:
-        as the number of trials grows, the sample frequency stabilizes and
-        <em>converges</em> to the underlying probability.
-      </p>
+        <p>
+          In probability theory, the word <strong>“converge”</strong> refers to the process
+          by which repeated experimental results become increasingly close to their expected
+          theoretical value. Specifically, in the phrase
+          <em>“the frequency converges to the probability”</em>, it means that as the number
+          of trials increases, the <strong>observed frequency</strong> (the fraction of times
+          an event occurs) approaches the <strong>true probability</strong> of that event.
+        </p>
 
-      <pre><code>P(A) = lim<sub>n→∞</sub> (Number of times A occurs) / n</code></pre>
+        <h3>1. Conceptual Overview</h3>
+        <p>
+          Consider tossing a fair coin. The theoretical probability of getting heads is 0.5.
+          If you toss the coin only a few times, the observed frequency may differ from this
+          value—perhaps 3 heads in 5 tosses (0.6). But as the number of tosses increases, the
+          frequency will stabilize around 0.5.
+        </p>
 
-      <p>
-        In other words, while individual outcomes are random, the long-term average
-        reveals the predictable probability that governs them.
-      </p>
+        <p>
+          This behavior illustrates the <strong>Law of Large Numbers</strong>:
+          as the number of trials grows, the sample frequency stabilizes and
+          <em>converges</em> to the true probability.
+        </p>
 
-      <h3>2. Visual Simulation: Coin Tosses</h3>
-      <p>
-        Below is an interactive visualization of coin tosses.
-        Each toss is simulated with a 50% chance of landing heads.
-        As the number of tosses increases, the observed frequency of heads
-        (blue line) converges toward the theoretical probability (red dashed line).
-      </p>
+        <pre><code>P(A) = lim<sub>n→∞</sub> (Number of times A occurs) / n</code></pre>
 
-      <div id="coinChartContainer">
-        <canvas id="coinChart"></canvas>
-      </div>
+        <h3>2. Visual Simulation — Coin Tosses</h3>
+        <p>
+          The following simulation shows this convergence effect.  
+          Each coin toss has a 50% chance of being heads. As we increase the number
+          of tosses, the <strong>observed frequency</strong> (blue line) approaches
+          the <strong>theoretical probability</strong> (red dashed line).
+        </p>
 
-      <div class="rsa-buttons">
-        <button type="button" onclick="simulateCoinTosses()">Simulate 100 Tosses</button>
-        <button type="button" onclick="resetCoinChart()">Reset</button>
-      </div>
+        <div id="coinChartContainer">
+          <canvas id="coinChart"></canvas>
+        </div>
 
-      <p id="coinStatus" class="status">Status: Waiting for simulation.</p>
+        <div class="rsa-buttons">
+          <button type="button" onclick="simulateCoinTosses()">Simulate 100 Tosses</button>
+          <button type="button" onclick="resetCoinChart()">Reset</button>
+        </div>
 
-      <h3>3. Why This Matters</h3>
-      <p>
-        Convergence is at the heart of probability theory and statistics.
-        It explains why we can use experiments to estimate probabilities:
-        as the dataset grows, random fluctuations average out, and the results
-        reflect the true underlying distribution.
-      </p>
-      <p>
-        This idea also underpins many real-world applications, such as
-        <strong>machine learning</strong> (where models “learn” stable probabilities
-        from large datasets) and <strong>risk analysis</strong> (where repeated trials
-        reveal consistent statistical trends).
-      </p>
+        <p id="coinStatus" class="status">Status: Waiting for simulation.</p>
 
-      <h3>4. Summary</h3>
-      <ul>
-        <li><strong>Frequency</strong> — observed proportion of outcomes.</li>
-        <li><strong>Probability</strong> — theoretical likelihood of an event.</li>
-        <li><strong>Convergence</strong> — the process by which the observed frequency stabilizes around the probability as trials increase.</li>
-      </ul>
+        <h3>3. Why It Matters</h3>
+        <p>
+          Convergence explains why randomness can lead to predictability in the long run.
+          It is the foundation of <strong>statistical inference</strong>, where we estimate
+          probabilities from observed data, and of <strong>machine learning</strong>, where
+          models learn stable patterns from repeated exposure to data.
+        </p>
 
-      <p>
-        Thus, saying that <em>“the frequency converges to the probability”</em> expresses
-        the fundamental principle that randomness becomes predictable when averaged
-        over a large number of independent repetitions.
-      </p>
+        <p>
+          Thus, when we say that “frequency converges to probability,” we mean that randomness
+          becomes predictable when averaged over many independent trials.
+        </p>
+      </section>
+
+      <!-- VISUAL DIVIDER BETWEEN ASSIGNMENTS -->
+      <hr class="section-separator" style="margin: 50px 0;" />
+
+      <!-- ───────────────────────────── -->
+      <!-- ASSIGNMENT 2 -->
+      <!-- ───────────────────────────── -->
+      <section id="assignment2">
+        <h2>Assignment 2 — Representation of the Law of Large Numbers</h2>
+
+        <p>
+          The <strong>Law of Large Numbers (LLN)</strong> states that as the number of
+          independent trials of a random experiment increases, the average of the results
+          approaches the expected value. It formalizes the intuition behind convergence:
+          large samples reduce randomness, leading to stable averages.
+        </p>
+
+        <p>
+          We can represent this principle visually by showing how the running average of random
+          results (like die rolls or coin tosses) gradually approaches the true expected value.
+        </p>
+
+        <div id="llnChartContainer">
+          <canvas id="llnChart"></canvas>
+        </div>
+
+        <div class="rsa-buttons">
+          <button type="button" onclick="simulateLLN()">Simulate 500 Trials</button>
+          <button type="button" onclick="resetLLN()">Reset</button>
+        </div>
+
+        <p id="llnStatus" class="status">Status: Waiting for simulation.</p>
+
+        <p>
+          As the number of trials increases, the graph demonstrates that random variations
+          tend to cancel out, and the average result converges toward the true mean —
+          a core idea in both probability and data science.
+        </p>
+      </section>
 
       <hr />
       <a href="index.html" class="back-button">← Back to Home</a>
@@ -117,8 +144,9 @@
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- Coin Toss Simulation Script -->
+  <!-- JS for Assignments -->
   <script>
+    // --- ASSIGNMENT 1: Frequency Convergence Simulation ---
     let coinChart = null;
     let tosses = 0;
     let heads = 0;
@@ -152,19 +180,13 @@
         options: {
           scales: {
             y: {
-              min: 0,
-              max: 1,
+              min: 0, max: 1,
               title: { display: true, text: "Frequency of Heads" },
               ticks: { color: "#cfd9e6" }
             },
-            x: {
-              title: { display: true, text: "Number of Tosses" },
-              ticks: { color: "#cfd9e6" }
-            }
+            x: { ticks: { color: "#cfd9e6" } }
           },
-          plugins: {
-            legend: { labels: { color: "#e6eef8" } }
-          }
+          plugins: { legend: { labels: { color: "#e6eef8" } } }
         }
       });
     }
@@ -189,13 +211,79 @@
 
     function resetCoinChart() {
       if (coinChart) coinChart.destroy();
-      tosses = 0;
-      heads = 0;
-      coinChart = null;
+      tosses = 0; heads = 0; coinChart = null;
       document.getElementById("coinStatus").textContent = "Status: Chart reset.";
     }
 
-    window.onload = initCoinChart;
+    // --- ASSIGNMENT 2: Law of Large Numbers Simulation ---
+    let llnChart = null;
+    let trials = 0;
+    let total = 0;
+
+    function initLLNChart() {
+      const ctx = document.getElementById("llnChart").getContext("2d");
+      llnChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: [],
+          datasets: [
+            {
+              label: "Running Average of Die Rolls",
+              data: [],
+              borderColor: "rgba(78,255,163,1)",
+              backgroundColor: "rgba(78,255,163,0.2)",
+              borderWidth: 2,
+              tension: 0.25
+            },
+            {
+              label: "Expected Value (3.5)",
+              data: [],
+              borderColor: "rgba(255,99,132,0.8)",
+              borderDash: [6,4],
+              borderWidth: 2,
+              pointRadius: 0
+            }
+          ]
+        },
+        options: {
+          scales: {
+            y: { min: 1, max: 6, ticks: { color: "#cfd9e6" } },
+            x: { ticks: { color: "#cfd9e6" } }
+          },
+          plugins: { legend: { labels: { color: "#e6eef8" } } }
+        }
+      });
+    }
+
+    function simulateLLN() {
+      if (!llnChart) initLLNChart();
+      const status = document.getElementById("llnStatus");
+
+      for (let i = 0; i < 500; i++) {
+        const roll = Math.floor(Math.random() * 6) + 1;
+        trials++;
+        total += roll;
+        const avg = total / trials;
+
+        llnChart.data.labels.push(trials);
+        llnChart.data.datasets[0].data.push(avg);
+        llnChart.data.datasets[1].data.push(3.5);
+      }
+
+      llnChart.update();
+      status.textContent = `Simulated ${trials} trials — Current average: ${(total / trials).toFixed(3)}`;
+    }
+
+    function resetLLN() {
+      if (llnChart) llnChart.destroy();
+      trials = 0; total = 0; llnChart = null;
+      document.getElementById("llnStatus").textContent = "Status: Chart reset.";
+    }
+
+    window.onload = function() {
+      initCoinChart();
+      initLLNChart();
+    };
   </script>
 </body>
 </html>
