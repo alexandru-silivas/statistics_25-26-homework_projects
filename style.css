@@ -487,8 +487,22 @@ code.python .com {
   height: 320px;
 }
 
-#rsaStatus {
-  color: #90ee90; /* light green for success */
-  font-weight: bold;
-  margin-top: 10px;
+
+/* RSA final discussion */
+.rsa-discussion {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  line-height: 1.6;
+}
+
+.rsa-discussion h3 {
+  color: #76baff;
+  margin-bottom: 0.8rem;
+}
+
+.rsa-discussion em {
+  color: #a8d1ff;
+  font-style: italic;
 }
