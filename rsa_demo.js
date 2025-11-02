@@ -78,21 +78,46 @@ function rsaEncrypt() {
   const cipher = codes.map(m => modPow(m, e, n));
   document.getElementById("rsaOutput").value = cipher.join(",");
   status.textContent = "Encrypted successfully.";
+
+  rsaShowFrequencyComparison(
+  document.getElementById("rsaInput").value,
+  document.getElementById("rsaOutput").value
+  );
 }
 
 function rsaDecrypt() {
-  const keys = window._rsa;
+  const n = window.rsa_n;
+  const d = window.rsa_d;
+  const output = document.getElementById("rsaOutput");
+  const input = document.getElementById("rsaInput");
   const status = document.getElementById("rsaStatus");
-  if (!keys) return status.textContent = "Generate keys first.";
 
-  const n = keys.n, d = keys.d;
-  const data = document.getElementById("rsaOutput").value.trim();
-  if (!data) return status.textContent = "No ciphertext to decrypt.";
+  if (!n || !d) {
+    status.textContent = "Generate keys first.";
+    return;
+  }
 
-  const nums = data.split(",").map(x => BigInt(x.trim()));
-  const plainCodes = nums.map(c => modPow(c, d, n));
-  document.getElementById("rsaInput").value = codesToText(plainCodes);
-  status.textContent = "Decrypted successfully.";
+  // Parse comma-separated ciphertext (e.g., "3000,3179")
+  const ciphertext = output.value
+    .split(',')
+    .map(x => parseInt(x.trim()))
+    .filter(x => !isNaN(x));
+
+  if (ciphertext.length === 0) {
+    status.textContent = "Enter a valid ciphertext.";
+    return;
+  }
+
+  // Decrypt each number
+  const plaintext = ciphertext
+    .map(c => String.fromCharCode(modExp(c, d, n)))
+    .join('');
+
+  input.value = plaintext;
+  status.textContent = "Decryption complete — plaintext restored successfully.";
+
+  // Update chart comparison automatically
+  rsaShowFrequencyComparison(plaintext, output.value);
 }
 
 function rsaBruteExample() {
@@ -146,6 +171,7 @@ function chiSquaredScore(observed) {
 // Chart.js global reference
 let rsaFreqChart = null;
 
+
 // Draw frequency comparison between plaintext and ciphertext
 function updateRSAFreqDualChart(plainFreqs, cipherFreqs) {
   const labels = Array.from({ length: 26 }, (_, i) =>
@@ -184,22 +210,56 @@ function updateRSAFreqDualChart(plainFreqs, cipherFreqs) {
   });
 }
 
+
 // Compare plaintext and ciphertext distributions
-function rsaShowFrequencyComparison(plaintext, ciphertextString) {
-  if (!plaintext.trim() || !ciphertextString.trim()) {
-    document.getElementById("rsaStatus").textContent =
-      "Please generate ciphertext first.";
-    return;
+function rsaShowFrequencyComparison(plainText, cipherText) {
+  const plainCounts = getLetterFrequencies(plainText);
+  const cipherCounts = getLetterFrequencies(cipherText);
+
+  const ctxContainer = document.getElementById("rsaFreqChartContainer");
+  ctxContainer.innerHTML = '<canvas id="rsaFreqChart"></canvas>';
+  const ctx = document.getElementById("rsaFreqChart").getContext("2d");
+
+  const labels = Object.keys(plainCounts);
+  const plainData = Object.values(plainCounts);
+  const cipherData = Object.values(cipherCounts);
+
+  new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels,
+      datasets: [
+        {
+          label: "Plaintext",
+          data: plainData,
+          backgroundColor: "rgba(78, 163, 255, 0.6)"
+        },
+        {
+          label: "Ciphertext",
+          data: cipherData,
+          backgroundColor: "rgba(46, 204, 113, 0.6)"
+        }
+      ]
+    },
+    options: {
+      plugins: {
+        legend: { labels: { color: "#e6eef8" } }
+      },
+      scales: {
+        x: { ticks: { color: "#bfc8d4" } },
+        y: { ticks: { color: "#bfc8d4" } }
+      }
+    }
+  });
+}
+
+function getLetterFrequencies(text) {
+  const freq = {};
+  const clean = text.toUpperCase().replace(/[^A-Z]/g, "");
+  for (const ch of clean) {
+    freq[ch] = (freq[ch] || 0) + 1;
   }
-
-  const plainFreqs = letterFrequencies(plaintext);
-  const cipherFreqs = letterFrequencies(ciphertextString);
-  const chiPlain = chiSquaredScore(plainFreqs).toFixed(2);
-  const chiCipher = chiSquaredScore(cipherFreqs).toFixed(2);
-
-  document.getElementById("rsaStatus").textContent =
-    `Plain χ²=${chiPlain} | Cipher χ²=${chiCipher} ` +
-    `(lower = closer to natural English)`;
-
-  updateRSAFreqDualChart(plainFreqs, cipherFreqs);
+  const total = clean.length || 1;
+  for (const key in freq) freq[key] = +(freq[key] / total * 100).toFixed(2);
+  return freq;
 }
