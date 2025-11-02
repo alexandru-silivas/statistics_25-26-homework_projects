@@ -49,20 +49,31 @@ function rsaKeyGenFromPrimes(p, q) {
   return { p, q, n, phi, e, d };
 }
 
-function rsaGenerateKeys() {
-  const pVal = document.getElementById("rsaP").value;
-  const qVal = document.getElementById("rsaQ").value;
-  const status = document.getElementById("rsaStatus");
-  const pub = document.getElementById("rsaPublic");
-  const priv = document.getElementById("rsaPrivate");
+function generateKeys() {
+  const p = parseInt(document.getElementById("p").value);
+  const q = parseInt(document.getElementById("q").value);
+  if (!p || !q) {
+    alert("Please enter valid primes!");
+    return;
+  }
 
-  const keys = rsaKeyGenFromPrimes(BigInt(pVal), BigInt(qVal));
-  if (keys.error) return status.textContent = keys.error;
+  const n = p * q;
+  const phi = (p - 1) * (q - 1);
+  const e = 65537;
+  const d = modInverse(e, phi);
 
-  window._rsa = keys;
-  pub.textContent = `(n=${keys.n}, e=${keys.e})`;
-  priv.textContent = `(n=${keys.n}, d=${keys.d})`;
-  status.textContent = "Keys generated successfully.";
+  // ✅ Save globally so encryption/decryption can use them
+  window.rsa_n = n;
+  window.rsa_e = e;
+  window.rsa_d = d;
+
+  // ✅ Update the UI
+  document.getElementById("publicKey").textContent = `(n=${n}, e=${e})`;
+  document.getElementById("privateKey").textContent = `(n=${n}, d=${d})`;
+
+  // Optional feedback
+  document.getElementById("rsaStatus").textContent =
+    "Keys generated successfully.";
 }
 
 function rsaEncrypt() {
