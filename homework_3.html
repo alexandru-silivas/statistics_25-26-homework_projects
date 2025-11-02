@@ -115,6 +115,22 @@
           )">Compare Freq. (Plain vs Cipher)</button>
         </div>
       </section>
+
+      <section class="rsa-discussion">
+        <h3>5. Results & Discussion</h3>
+        <p>
+          The RSA encryption algorithm transforms readable text into ciphertext that appears statistically random. 
+          Unlike the Caesar cipher or other classical encryption methods, the frequency distribution of the ciphertext 
+          bears no resemblance to that of the plaintext. This property prevents attackers from applying 
+          <em>frequency analysis</em>—a technique that relies on common patterns in natural language.
+        </p>
+        <p>
+          As seen above, the letter frequencies of the encrypted text are uniformly distributed, 
+          and the χ² (chi-squared) value for the ciphertext is significantly higher than that of typical English text. 
+          This confirms that RSA encryption effectively conceals the structure of the original message, 
+          making decryption without the private key computationally infeasible.
+        </p>
+      </section>
       
       <hr>
       <a href="index.html" class="back-button">← Back to Home</a>
