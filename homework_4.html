@@ -25,28 +25,31 @@
     <div class="main-content">
       <h1>Homework 4</h1>
       <hr class="section-separator">
+
       <h2>Assignment 1 — The Meaning of “Converge”</h2>
 
       <p>
-        In probability theory, when we say that “the frequency converges to the probability,” 
-        we mean that as the number of trials of a random experiment increases, the <em>observed 
-        frequency</em> of an outcome approaches its <em>theoretical probability</em>.
+        In probability theory, the phrase <strong>“the frequency converges to the probability”</strong> 
+        means that as we repeat an experiment many times, the <em>observed frequency</em> of an event 
+        approaches its <em>theoretical probability</em>. In simpler terms, the more data we gather, 
+        the closer our observations get to what probability theory predicts.
       </p>
       <p>
-        For instance, if we repeatedly toss a fair coin, we expect that about half of the outcomes 
-        will be heads. In the short term, this ratio might fluctuate (e.g., 3 heads in 5 tosses, 
-        or 47 heads in 100 tosses), but as the number of tosses grows, the relative frequency of 
-        heads will get closer and closer to 0.5 — it <strong>converges</strong> to the true probability.
+        For example, if you toss a fair coin repeatedly, you might not get exactly 50% heads at first. 
+        But as the number of tosses grows into the hundreds or thousands, the proportion of heads 
+        will <strong>converge</strong> toward 0.5 — the true probability of getting heads.
       </p>
 
       <section id="coin-section">
         <h3>Coin Toss Simulation</h3>
         <p>
-          The graph below simulates repeated coin tosses. Notice how the observed frequency 
-          (blue line) gradually stabilizes around 0.5 (the red dashed line) as the number of tosses increases.
+          The chart below simulates a sequence of coin tosses. Notice how the blue line 
+          (the observed frequency of heads) fluctuates strongly at first but gradually 
+          stabilizes near 0.5 as the number of tosses increases.
         </p>
+
         <div class="rsa-buttons">
-          <button type="button" onclick="simulateCoinTosses()">Simulate 100 Tosses</button>
+          <button type="button" onclick="simulateCoinTosses()">Simulate 200 Tosses</button>
           <button type="button" onclick="resetCoinChart()">Reset</button>
         </div>
         <p id="coinStatus" class="status">Status: Waiting to simulate.</p>
@@ -59,77 +62,56 @@
 
       <h2>Assignment 2 — The Law of Large Numbers</h2>
       <p>
-        The <strong>Law of Large Numbers (LLN)</strong> formalizes this concept mathematically. 
-        It states that as the number of independent trials increases, the sample mean of observed 
-        outcomes approaches the expected value. In other words, randomness “averages out” over 
-        time, and results become more stable and predictable.
+        The <strong>Law of Large Numbers (LLN)</strong> is one of the foundational principles of probability and statistics. 
+        It states that as the number of independent experiments increases, the average of the observed results 
+        will get closer and closer to the expected (theoretical) value.
       </p>
+
       <p>
-        There are two main forms:
+        This means that randomness has less impact when data accumulates — the noise smooths out, and 
+        the true statistical pattern emerges. This principle is what allows us to make reliable predictions 
+        from data, power statistical inference, and ensure fair randomness in algorithms and cryptographic systems.
+      </p>
+
+      <h3>Visualizing the Law of Large Numbers</h3>
+      <p>
+        The following two graphs show the <strong>average result of rolling a fair six-sided die</strong> 
+        as the number of rolls increases:
       </p>
       <ul>
-        <li><strong>Weak Law:</strong> The probability that the sample mean deviates significantly 
-        from the expected value becomes smaller as the sample size increases.</li>
-        <li><strong>Strong Law:</strong> The sample mean actually converges to the expected value 
-        with probability 1 as the sample size approaches infinity.</li>
+        <li><strong>First chart:</strong> Only 50 rolls — the average fluctuates heavily.</li>
+        <li><strong>Second chart:</strong> 1000 rolls — the average stabilizes near 3.5, the theoretical mean.</li>
       </ul>
 
+      <section id="lln-small-section">
+        <h3>Die Roll Simulation (50 Rolls)</h3>
+        <div class="rsa-buttons">
+          <button type="button" onclick="simulateLLN(50)">Simulate</button>
+          <button type="button" onclick="resetLLN('small')">Reset</button>
+        </div>
+        <p id="llnSmallStatus" class="status">Status: Waiting to simulate.</p>
+        <div id="llnSmallChartContainer">
+          <canvas id="llnSmallChart"></canvas>
+        </div>
+      </section>
+
+      <section id="lln-large-section">
+        <h3>Die Roll Simulation (1000 Rolls)</h3>
+        <div class="rsa-buttons">
+          <button type="button" onclick="simulateLLN(1000)">Simulate</button>
+          <button type="button" onclick="resetLLN('large')">Reset</button>
+        </div>
+        <p id="llnLargeStatus" class="status">Status: Waiting to simulate.</p>
+        <div id="llnLargeChartContainer">
+          <canvas id="llnLargeChart"></canvas>
+        </div>
+      </section>
+
       <p>
-        This concept explains why empirical frequencies can be used to estimate true probabilities, 
-        and why statistical averages become more reliable with larger datasets — a cornerstone 
-        of data science, signal processing, and cybersecurity analytics.
+        As seen in these two charts, with only a few rolls the average varies wildly due to randomness. 
+        However, as the number of rolls increases, the running average approaches the expected value 
+        of 3.5, beautifully demonstrating the <strong>Law of Large Numbers</strong> in action.
       </p>
-
-      <section id="lln-section">
-        <h3>Law of Large Numbers — Die Roll Simulation</h3>
-        <p>
-          The chart below simulates rolling a fair six-sided die multiple times. 
-          The green line represents the running average of observed rolls, which 
-          converges toward the expected value of <strong>3.5</strong> as the number of trials increases.
-        </p>
-        <div class="rsa-buttons">
-          <button type="button" onclick="simulateLLN()">Simulate 500 Rolls</button>
-          <button type="button" onclick="resetLLN()">Reset</button>
-        </div>
-        <p id="llnStatus" class="status">Status: Waiting to simulate.</p>
-        <div id="llnChartContainer">
-          <canvas id="llnChart"></canvas>
-        </div>
-      </section>
-
-      <section id="avg-section">
-        <h3>Average of Random Numbers [0–1]</h3>
-        <p>
-          This simulation illustrates the same law, but using continuous random values between 0 and 1. 
-          As the number of samples increases, the running average approaches 0.5, showing that even in 
-          continuous probability spaces, empirical averages converge toward the expected mean.
-        </p>
-        <div class="rsa-buttons">
-          <button type="button" onclick="simulateAverage()">Simulate 1000 Samples</button>
-          <button type="button" onclick="resetAverage()">Reset</button>
-        </div>
-        <p id="avgStatus" class="status">Status: Waiting to simulate.</p>
-        <div id="avgChartContainer">
-          <canvas id="avgChart"></canvas>
-        </div>
-      </section>
-
-      <section id="lln-coin-section">
-        <h3>Coin Toss LLN Simulation</h3>
-        <p>
-          This simulation shows the Law of Large Numbers using coin tosses again. As the number of tosses grows, 
-          the estimated probability of “heads” stabilizes around 0.5 — an empirical demonstration that frequencies 
-          <strong>converge to the true probability</strong>.
-        </p>
-        <div class="rsa-buttons">
-          <button type="button" onclick="simulateLLNCoin()">Simulate 1000 Tosses</button>
-          <button type="button" onclick="resetLLNCoin()">Reset</button>
-        </div>
-        <p id="llnCoinStatus" class="status">Status: Waiting to simulate.</p>
-        <div id="llnCoinChartContainer">
-          <canvas id="llnCoinChart"></canvas>
-        </div>
-      </section>
 
       <hr>
 
@@ -145,7 +127,7 @@
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- Homework 4 Simulation Script -->
-  <script src="convergence_and_lln.js"></script>
+  <!-- Homework 4 JavaScript -->
+  <script src="homework_4.js"></script>
 </body>
 </html>
