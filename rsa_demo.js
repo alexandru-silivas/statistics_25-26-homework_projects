@@ -1,12 +1,12 @@
 // rsa_demo.js - Educational RSA demo using BigInt
 
+// === Helper functions ===
 function textToCodes(text) {
   return Array.from(text).map(ch => BigInt(ch.charCodeAt(0)));
 }
 function codesToText(codes) {
   return codes.map(c => String.fromCharCode(Number(c))).join('');
 }
-
 function modPow(base, exp, mod) {
   base = (base % mod + mod) % mod;
   let result = 1n;
@@ -17,7 +17,6 @@ function modPow(base, exp, mod) {
   }
   return result;
 }
-
 function gcd(a, b) {
   while (b !== 0n) [a, b] = [b, a % b];
   return a;
@@ -28,7 +27,7 @@ function egcd(a, b) {
   return { g, x: y1, y: x1 - (a / b) * y1 };
 }
 function modInverse(a, m) {
-  const { g, x } = egcd(a, m);
+  const { g, x } = egcd(BigInt(a), BigInt(m));
   if (g !== 1n) return null;
   return (x % m + m) % m;
 }
@@ -38,9 +37,13 @@ function isPrimeSmall(n) {
   return true;
 }
 
+// === RSA Key Generation ===
 function rsaKeyGenFromPrimes(p, q) {
-  p = BigInt(p); q = BigInt(q);
-  if (!isPrimeSmall(p) || !isPrimeSmall(q) || p === q) return { error: "Please provide two distinct small primes." };
+  p = BigInt(p);
+  q = BigInt(q);
+  if (!isPrimeSmall(p) || !isPrimeSmall(q) || p === q) {
+    return { error: "Please provide two distinct small primes." };
+  }
   const n = p * q;
   const phi = (p - 1n) * (q - 1n);
   let e = 65537n;
@@ -57,92 +60,84 @@ function generateKeys() {
     return;
   }
 
-  const n = p * q;
-  const phi = (p - 1) * (q - 1);
-  const e = 65537;
-  const d = modInverse(e, phi);
+  const { n, phi, e, d } = rsaKeyGenFromPrimes(p, q);
+  if (!d) {
+    alert("Invalid key generation. Try different primes.");
+    return;
+  }
 
-  // ✅ Save globally so encryption/decryption can use them
-  window.rsa_n = n;
-  window.rsa_e = e;
-  window.rsa_d = d;
+  // Store keys globally
+  window.rsa_n = Number(n);
+  window.rsa_e = Number(e);
+  window.rsa_d = Number(d);
 
-  // ✅ Update the UI
+  // Update UI
   document.getElementById("publicKey").textContent = `(n=${n}, e=${e})`;
   document.getElementById("privateKey").textContent = `(n=${n}, d=${d})`;
-
-  // Optional feedback
-  document.getElementById("rsaStatus").textContent =
-    "Keys generated successfully.";
+  document.getElementById("rsaStatus").textContent = "✅ Keys generated successfully.";
 }
 
+// === Encrypt / Decrypt ===
 function rsaEncrypt() {
-  const keys = window._rsa;
-  const status = document.getElementById("rsaStatus");
-  if (!keys) return status.textContent = "Generate keys first.";
+  const n = window.rsa_n;
+  const e = window.rsa_e;
+  if (!n || !e) {
+    document.getElementById("rsaStatus").textContent = "Generate keys first.";
+    return;
+  }
 
-  const text = document.getElementById("rsaInput").value;
-  const n = keys.n, e = keys.e;
-  const codes = textToCodes(text);
-  if (codes.some(c => c >= n)) return status.textContent = "Message too long for n.";
+  const text = document.getElementById("plaintext").value;
+  if (!text) return;
 
-  const cipher = codes.map(m => modPow(m, e, n));
-  document.getElementById("rsaOutput").value = cipher.join(",");
-  status.textContent = "Encrypted successfully.";
+  const encrypted = [];
+  for (const ch of text) {
+    const m = ch.charCodeAt(0);
+    const c = modPow(m, BigInt(e), BigInt(n));
+    encrypted.push(c);
+  }
 
-  rsaShowFrequencyComparison(
-  document.getElementById("rsaInput").value,
-  document.getElementById("rsaOutput").value
-  );
+  document.getElementById("ciphertext").value = encrypted.join(",");
+  document.getElementById("rsaStatus").textContent = "✅ Encrypted successfully.";
+  rsaShowFrequencyComparison(text, encrypted.join(","));
 }
 
 function rsaDecrypt() {
   const n = window.rsa_n;
   const d = window.rsa_d;
-  const output = document.getElementById("rsaOutput");
-  const input = document.getElementById("rsaInput");
-  const status = document.getElementById("rsaStatus");
-
   if (!n || !d) {
-    status.textContent = "Generate keys first.";
+    document.getElementById("rsaStatus").textContent = "Generate keys first.";
     return;
   }
 
-  // Parse comma-separated ciphertext (e.g., "3000,3179")
-  const ciphertext = output.value
-    .split(',')
-    .map(x => parseInt(x.trim()))
-    .filter(x => !isNaN(x));
-
-  if (ciphertext.length === 0) {
-    status.textContent = "Enter a valid ciphertext.";
+  const cipherText = document.getElementById("ciphertext").value.trim();
+  if (!cipherText) {
+    document.getElementById("rsaStatus").textContent = "Enter ciphertext to decrypt.";
     return;
   }
 
-  // Decrypt each number
-  const plaintext = ciphertext
-    .map(c => String.fromCharCode(modExp(c, d, n)))
-    .join('');
+  const parts = cipherText.split(",").map(x => BigInt(x));
+  let result = "";
+  for (const c of parts) {
+    const m = modPow(c, BigInt(d), BigInt(n));
+    result += String.fromCharCode(Number(m));
+  }
 
-  input.value = plaintext;
-  status.textContent = "Decryption complete — plaintext restored successfully.";
-
-  // Update chart comparison automatically
-  rsaShowFrequencyComparison(plaintext, output.value);
+  document.getElementById("plaintext").value = result;
+  document.getElementById("rsaStatus").textContent = "✅ Decryption complete.";
+  rsaShowFrequencyComparison(result, cipherText);
 }
 
-function rsaBruteExample() {
-  document.getElementById("rsaP").value = 61;
-  document.getElementById("rsaQ").value = 53;
-  rsaGenerateKeys();
-  document.getElementById("rsaInput").value = "Hi";
-  rsaEncrypt();
+// === Example ===
+function fillExample() {
+  document.getElementById("p").value = 61;
+  document.getElementById("q").value = 53;
+  generateKeys();
+  document.getElementById("plaintext").value = "Hi";
+  document.getElementById("ciphertext").value = "";
+  document.getElementById("rsaStatus").textContent = "Example loaded.";
 }
 
-
-// --- RSA Frequency Analysis Utilities ---
-
-// English reference distribution (%)
+// === Frequency Analysis (existing, preserved) ===
 const ENGLISH_FREQ = {
   A: 8.167, B: 1.492, C: 2.782, D: 4.253, E: 12.702, F: 2.228, G: 2.015,
   H: 6.094, I: 6.966, J: 0.153, K: 0.772, L: 4.025, M: 2.406, N: 6.749,
@@ -150,127 +145,45 @@ const ENGLISH_FREQ = {
   V: 0.978, W: 2.360, X: 0.150, Y: 1.974, Z: 0.074
 };
 
-// Compute frequencies of letters in a text
-function letterFrequencies(text) {
-  const counts = {};
-  let total = 0;
-  for (const ch of text.toUpperCase()) {
-    if (/[A-Z]/.test(ch)) {
-      counts[ch] = (counts[ch] || 0) + 1;
-      total++;
-    }
-  }
-  const freqs = {};
-  for (let i = 0; i < 26; i++) {
-    const L = String.fromCharCode(65 + i);
-    freqs[L] = total ? ((counts[L] || 0) / total) * 100 : 0;
-  }
-  return freqs;
+function getLetterFrequencies(text) {
+  const freq = {};
+  const clean = text.toUpperCase().replace(/[^A-Z]/g, "");
+  for (const ch of clean) freq[ch] = (freq[ch] || 0) + 1;
+  const total = clean.length || 1;
+  for (const key in freq) freq[key] = +(freq[key] / total * 100).toFixed(2);
+  return freq;
 }
 
-// Chi-squared test between observed frequencies and English reference
-function chiSquaredScore(observed) {
-  let chi2 = 0;
-  for (const L in ENGLISH_FREQ) {
-    const O = observed[L] || 0;
-    const E = ENGLISH_FREQ[L] || 0.0001;
-    chi2 += Math.pow(O - E, 2) / E;
-  }
-  return chi2;
-}
-
-// Chart.js global reference
-let rsaFreqChart = null;
-
-
-// Draw frequency comparison between plaintext and ciphertext
-function updateRSAFreqDualChart(plainFreqs, cipherFreqs) {
-  const labels = Array.from({ length: 26 }, (_, i) =>
-    String.fromCharCode(65 + i)
-  );
-  const plainData = labels.map(L => plainFreqs[L]);
-  const cipherData = labels.map(L => cipherFreqs[L]);
-
-  const ctx = document.getElementById("rsaFreqChart").getContext("2d");
-  if (rsaFreqChart) rsaFreqChart.destroy();
-
-  rsaFreqChart = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels,
-      datasets: [
-        {
-          label: "Plaintext (%)",
-          data: plainData,
-          backgroundColor: "rgba(78,163,255,0.85)",
-        },
-        {
-          label: "Ciphertext (%)",
-          data: cipherData,
-          backgroundColor: "rgba(160,160,160,0.6)",
-        },
-      ],
-    },
-    options: {
-      scales: {
-        y: { beginAtZero: true, ticks: { color: "#cfd9e6" } },
-        x: { ticks: { color: "#cfd9e6" } },
-      },
-      plugins: { legend: { labels: { color: "#e6eef8" } } },
-    },
-  });
-}
-
-
-// Compare plaintext and ciphertext distributions
 function rsaShowFrequencyComparison(plainText, cipherText) {
   const plainCounts = getLetterFrequencies(plainText);
   const cipherCounts = getLetterFrequencies(cipherText);
 
-  const ctxContainer = document.getElementById("rsaFreqChartContainer");
-  ctxContainer.innerHTML = '<canvas id="rsaFreqChart"></canvas>';
+  const container = document.getElementById("rsaFreqChartContainer");
+  if (!container) return;
+
+  container.innerHTML = '<canvas id="rsaFreqChart"></canvas>';
   const ctx = document.getElementById("rsaFreqChart").getContext("2d");
 
-  const labels = Object.keys(plainCounts);
-  const plainData = Object.values(plainCounts);
-  const cipherData = Object.values(cipherCounts);
+  const labels = Object.keys(ENGLISH_FREQ);
+  const plainData = labels.map(L => plainCounts[L] || 0);
+  const cipherData = labels.map(L => cipherCounts[L] || 0);
 
-  new Chart(ctx, {
+  if (window.rsaFreqChart) window.rsaFreqChart.destroy();
+  window.rsaFreqChart = new Chart(ctx, {
     type: "bar",
     data: {
       labels,
       datasets: [
-        {
-          label: "Plaintext",
-          data: plainData,
-          backgroundColor: "rgba(78, 163, 255, 0.6)"
-        },
-        {
-          label: "Ciphertext",
-          data: cipherData,
-          backgroundColor: "rgba(46, 204, 113, 0.6)"
-        }
+        { label: "Plaintext", data: plainData, backgroundColor: "rgba(78,163,255,0.6)" },
+        { label: "Ciphertext", data: cipherData, backgroundColor: "rgba(46,204,113,0.6)" }
       ]
     },
     options: {
-      plugins: {
-        legend: { labels: { color: "#e6eef8" } }
-      },
+      plugins: { legend: { labels: { color: "#e6eef8" } } },
       scales: {
         x: { ticks: { color: "#bfc8d4" } },
         y: { ticks: { color: "#bfc8d4" } }
       }
     }
   });
-}
-
-function getLetterFrequencies(text) {
-  const freq = {};
-  const clean = text.toUpperCase().replace(/[^A-Z]/g, "");
-  for (const ch of clean) {
-    freq[ch] = (freq[ch] || 0) + 1;
-  }
-  const total = clean.length || 1;
-  for (const key in freq) freq[key] = +(freq[key] / total * 100).toFixed(2);
-  return freq;
 }
