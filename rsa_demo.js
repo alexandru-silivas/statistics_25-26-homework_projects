@@ -107,6 +107,7 @@ function rsaEncrypt() {
 // ---------- Decrypt ----------
 function rsaDecrypt() {
   console.log("Decrypt function triggered");
+  console.log("Current n:", window.rsa_n, "Current d:", window.rsa_d);
   const n = window.rsa_n;
   const d = window.rsa_d;
   const status = document.getElementById("rsaStatus");
