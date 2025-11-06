@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homework 5 — Averages and Online Statistics</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="homework_1.html">HMWK 1</a></li>
+        <li><a href="homework_2.html">HMWK 2</a></li>
+        <li><a href="homework_3.html">HMWK 3</a></li>
+        <li><a href="homework_4.html">HMWK 4</a></li>
+        <li><a href="homework_5.html" class="active">HMWK 5</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="main-content">
+      <h1>Homework 5</h1>
+      <hr class="section-separator">
+      <h2>Understanding Averages and Online Computation of Statistics</h2>
+
+      <p>
+        In this assignment, we explore different ways to define and compute the <strong>average</strong> (or measure of location),
+        and how to maintain key statistics like the <strong>mean</strong> and <strong>variance</strong> dynamically as new data arrives.
+      </p>
+
+      <h3>1. Different Types of Averages</h3>
+      <p>
+        The term “average” can mean several different things depending on the context. Each type has its own advantages and 
+        is suited for specific situations.
+      </p>
+
+      <ul>
+        <li>
+          <strong>Arithmetic Mean</strong> — the most common average, computed by summing all values and dividing by their count.  
+          <em>Best used when all data points are equally important and on the same scale.</em>
+          <pre><code class="python">
+// Example (Arithmetic Mean)
+let values = [2, 4, 6, 8];
+let mean = values.reduce((a,b) => a + b, 0) / values.length;
+console.log("Arithmetic mean =", mean);
+          </code></pre>
+        </li>
+
+        <li>
+          <strong>Geometric Mean</strong> — used when averaging ratios, percentages, or growth rates.  
+          <em>Example: average growth rate over several years.</em>
+          <pre><code class="python">
+// Example (Geometric Mean)
+let growth = [1.1, 1.05, 1.2];
+let gmean = Math.pow(growth.reduce((a,b)=>a*b), 1/growth.length);
+console.log("Geometric mean =", gmean);
+          </code></pre>
+        </li>
+
+        <li>
+          <strong>Harmonic Mean</strong> — appropriate when dealing with rates (e.g., speed, density, efficiency).  
+          <em>Example: averaging speeds over equal distances.</em>
+          <pre><code class="python">
+// Example (Harmonic Mean)
+let speeds = [60, 40];
+let hmean = speeds.length / speeds.reduce((a,b)=>a + 1/b, 0);
+console.log("Harmonic mean =", hmean);
+          </code></pre>
+        </li>
+
+        <li>
+          <strong>Weighted Mean</strong> — assigns different levels of importance (weights) to each value.  
+          <em>Used in grade calculations, portfolio averages, etc.</em>
+          <pre><code class="python">
+// Example (Weighted Mean)
+let scores = [80, 90, 70];
+let weights = [0.5, 0.3, 0.2];
+let wmean = scores.reduce((sum, x, i) => sum + x * weights[i], 0);
+console.log("Weighted mean =", wmean);
+          </code></pre>
+        </li>
+
+        <li>
+          <strong>Median</strong> — the middle value when data is ordered.  
+          <em>Useful when data contains outliers or is not symmetrically distributed.</em>
+          <pre><code class="python">
+// Example (Median)
+let data = [10, 2, 8, 4, 6];
+data.sort((a,b)=>a-b);
+let median = data.length % 2 ? 
+    data[Math.floor(data.length/2)] : 
+    (data[data.length/2-1]+data[data.length/2])/2;
+console.log("Median =", median);
+          </code></pre>
+        </li>
+      </ul>
+
+      <h3>2. Online Calculation of Mean and Variance</h3>
+      <p>
+        In many real-world scenarios — such as streaming data, IoT sensors, or continuous monitoring — 
+        it’s inefficient to store all previous data points just to recompute the mean and variance.
+        Instead, we can update them <strong>incrementally</strong> as new data arrives.
+      </p>
+
+      <p>
+        The following formulas allow efficient updates:
+      </p>
+
+      <pre><code class="python">
+// Online mean and variance update formulas:
+mean_new = mean_old + (x - mean_old) / n
+M2_new = M2_old + (x - mean_old) * (x - mean_new)
+variance = M2 / (n - 1)
+      </code></pre>
+
+      <p>
+        Below is a simple interactive tool that demonstrates how the mean and variance can be updated "online"
+        as new values are entered one by one.
+      </p>
+
+      <!-- Online Mean/Variance Tool -->
+      <section id="online-stats">
+        <label for="newValue">Enter new value:</label>
+        <input id="newValue" type="number" step="any" placeholder="e.g. 5.3">
+        <button type="button" onclick="addValue()">Add Value</button>
+
+        <p id="countDisplay">Count: 0</p>
+        <p id="meanDisplay">Mean: —</p>
+        <p id="varianceDisplay">Variance: —</p>
+
+        <div id="meanVarChartContainer">
+          <canvas id="meanVarChart"></canvas>
+        </div>
+      </section>
+
+      <p>
+        Each time a new value is entered, the mean and variance are updated using the online algorithm above — 
+        without needing to store or recalculate from all previous data points.
+      </p>
+
+      <hr>
+      <a href="index.html" class="back-button">← Back to Home</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    © 2025 Alexandru Silivas — ID 2252622 — 
+    <a href="mailto:silivas.2252622@studenti.uniroma1.it">silivas.2252622@studenti.uniroma1.it</a>
+  </footer>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- JS file for interactivity -->
+  <script src="homework_5.js"></script>
+
+</body>
+</html>
