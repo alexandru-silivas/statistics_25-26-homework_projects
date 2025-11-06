@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Homework 5 — Measures of Location & Online Statistics</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homework 5 — Measures of Location and Dispersion</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
   <!-- NAVBAR -->
   <header class="navbar">
     <nav>
@@ -17,6 +18,7 @@
         <li><a href="homework_3.html">HMWK 3</a></li>
         <li><a href="homework_4.html">HMWK 4</a></li>
         <li><a href="homework_5.html" class="active">HMWK 5</a></li>
+        <li><a href="homework_6.html">HMWK 6</a></li>
       </ul>
     </nav>
   </header>
@@ -24,180 +26,114 @@
   <main>
     <div class="main-content">
       <h1>Homework 5</h1>
-      <hr class="section-separator" />
+      <hr class="section-separator">
+      <h2>Measures of Location and Dispersion</h2>
 
-      <h2>1. Measures of Location — Understanding the Mean</h2>
       <p>
-        A <strong>measure of location</strong> (also called a measure of central tendency)
-        describes the "center" or "typical value" of a dataset — in other words,
-        where most values tend to cluster. Choosing the right measure depends on
-        the type of data and whether outliers or skewed distributions are present.
+        In statistics, the term <strong>measure of location</strong> (or central tendency)
+        describes a value that represents the center or typical value of a dataset.
+        These measures summarize where the majority of values are concentrated,
+        allowing us to get a sense of the “average” behavior of the data.
       </p>
 
-      <h3>Common Measures and When to Use Them</h3>
+      <h3>1. Common Measures of Location</h3>
+      <p>
+        There are several ways to define what the "center" of a dataset is, each
+        suited to different situations. Below are the most commonly used ones:
+      </p>
+
       <ul>
-        <li>
-          <strong>Arithmetic Mean:</strong>  
-          The most familiar type of average. You add up all the values and divide by their count.  
-          <br>Use it when your data is roughly symmetric and doesn’t have extreme outliers.  
-          <br><em>Example:</em> Average grades, temperatures, or salaries in a balanced dataset.
-          <pre><code>// Formula
-mean = (x₁ + x₂ + ... + xₙ) / n</code></pre>
+        <li><strong>Arithmetic Mean:</strong> The simple average of all values. It is
+          calculated as the sum of all data points divided by their number:
+          <br><em>mean = (x₁ + x₂ + ... + xₙ) / n</em>
+          <p>It is very sensitive to outliers but widely used when data is normally distributed.</p>
         </li>
 
-        <li>
-          <strong>Median:</strong>  
-          The middle value when the data is sorted. If there’s an even number of observations,
-          it’s the average of the two middle values.  
-          <br>Use it when the data is skewed or has outliers — it’s more robust.  
-          <br><em>Example:</em> Median house price (where a few very expensive houses would distort the mean).
+        <li><strong>Median:</strong> The middle value when data is ordered. If the number
+          of data points is even, the median is the average of the two middle values.
+          <p>The median is robust to outliers and is preferred when the dataset is skewed.</p>
         </li>
 
-        <li>
-          <strong>Mode:</strong>  
-          The most frequent value in the dataset.  
-          <br>Best used for categorical or discrete data (e.g., survey responses like “Yes/No”).  
-          <br><em>Example:</em> The most common shoe size or preferred product color.
+        <li><strong>Mode:</strong> The most frequently occurring value in a dataset.
+          <p>It’s useful for categorical data or when we want to identify the most common observation.</p>
         </li>
 
-        <li>
-          <strong>Geometric Mean:</strong>  
-          Useful for growth rates or multiplicative processes.  
-          <br>Instead of adding, it multiplies values and takes the n-th root:
-          <pre><code>geo_mean = (x₁ × x₂ × ... × xₙ)^(1/n)</code></pre>
-          <br><em>Example:</em> Average interest rate or population growth per year.
+        <li><strong>Geometric Mean:</strong> The nth root of the product of n values.
+          <br><em>G = (x₁ × x₂ × ... × xₙ)^(1/n)</em>
+          <p>Used primarily for rates of growth or ratios (e.g., in finance or population studies).</p>
         </li>
 
-        <li>
-          <strong>Harmonic Mean:</strong>  
-          Useful when averaging ratios or rates (like speeds).  
-          <br>It gives more weight to smaller numbers:
-          <pre><code>harm_mean = n / (Σ (1/xᵢ))</code></pre>
-          <br><em>Example:</em> Average speed when traveling equal distances at different speeds.
+        <li><strong>Harmonic Mean:</strong> The reciprocal of the arithmetic mean of reciprocals:
+          <br><em>H = n / (1/x₁ + 1/x₂ + ... + 1/xₙ)</em>
+          <p>Useful when averaging quantities like speed or density, where each observation has equal weight in time or space.</p>
         </li>
 
-        <li>
-          <strong>Trimmed Mean:</strong>  
-          Removes a small percentage of the highest and lowest values before averaging.
-          <br>This reduces the effect of outliers while keeping most of the data intact.
-          <br><em>Example:</em> Used in sports scoring systems where extreme judges’ scores are dropped.
+        <li><strong>Trimmed Mean:</strong> The mean calculated after removing a certain percentage
+          of the smallest and largest values.
+          <p>It combines robustness (like the median) with stability (like the mean), ideal for datasets with limited outliers.</p>
         </li>
       </ul>
 
-      <h3>Example Code Snippet (Python-like)</h3>
-      <pre><code># Data sample
-data = [2, 4, 6, 8, 100]
-
-# Arithmetic mean
-mean = sum(data) / len(data)  # 24.0
-
-# Median
-median = sorted(data)[len(data)//2]  # 6
-
-# Trimmed mean (remove 20% extremes)
-trim = int(len(data) * 0.2)
-trimmed_data = sorted(data)[trim:-trim]
-trimmed_mean = sum(trimmed_data) / len(trimmed_data)
-      </code></pre>
-
-      <h2>2. Mean vs Variance — Two Sides of a Dataset</h2>
+      <h3>2. Mean vs Variance — Location vs Dispersion</h3>
       <p>
-        The <strong>mean</strong> measures the <em>center</em> of your data,
-        while the <strong>variance</strong> measures the <em>spread</em> — how far values are from the mean.
-      </p>
-      <p>
-        Formally, the variance is the average of the squared differences between each value and the mean:
-      </p>
-      <pre><code>variance = Σ (x - mean)² / n</code></pre>
-      <p>
-        - A low variance means data points are tightly grouped near the mean.<br>
-        - A high variance means the data is more dispersed.
+        While the <strong>mean</strong> (or any measure of location) tells us where the data tends to cluster,
+        it does not tell us how <em>spread out</em> the data is. This is where the
+        <strong>variance</strong> comes in — it quantifies the amount of variability or dispersion in the dataset.
       </p>
 
       <p>
-        <strong>Example:</strong>  
-        Imagine two students’ exam results:
-      </p>
-      <ul>
-        <li>Student A: [80, 82, 79, 81, 80] → Mean = 80.4, Variance ≈ 1</li>
-        <li>Student B: [60, 95, 40, 100, 85] → Mean = 76, Variance ≈ 500</li>
-      </ul>
-      <p>
-        Both have high averages, but B’s results fluctuate much more — variance captures that instability.
-      </p>
-
-      <h2>3. Online Calculation of Mean and Variance</h2>
-      <p>
-        When processing a data stream (e.g., sensor readings, live user data), storing every value is inefficient.
-        Instead, we use an <strong>online algorithm</strong> to update the mean and variance in real time.
+        Formally, the variance of a dataset measures how far each observation deviates
+        from the mean, on average. If we denote the mean as <em>μ</em>, the variance is:
+        <br><em>Var(X) = (1/n) × Σ(xᵢ − μ)²</em>
       </p>
 
       <p>
-        The most numerically stable and efficient method is <strong>Welford’s algorithm</strong>:
+        The higher the variance, the more dispersed the values are around the mean.
+        The square root of the variance, called the <strong>standard deviation</strong>,
+        is in the same unit as the original data, making it easier to interpret.
       </p>
-      <pre><code>let n = 0, mean = 0, M2 = 0;
 
-function update(newValue) {
-  n++;
-  let delta = newValue - mean;
-  mean += delta / n;
-  M2 += delta * (newValue - mean);
-}
-
-let variance = M2 / n;
-      </code></pre>
+      <h4>Why We Need Both</h4>
       <p>
-        Here:
-        <ul>
-          <li><code>n</code> — number of observations seen so far.</li>
-          <li><code>mean</code> — running mean.</li>
-          <li><code>M2</code> — running sum of squared differences.</li>
-        </ul>
+        The mean alone can be misleading — two datasets can have the same mean
+        but very different variances. For example, consider:
       </p>
 
-      <h3>How the Interactive Tool Works</h3>
+      <pre><code>Dataset A: [10, 10, 10, 10, 10]   → mean = 10, variance = 0
+Dataset B: [5, 15, 5, 15, 5]       → mean = 10, variance > 0</code></pre>
+
       <p>
-        Below is a dynamic tool that lets you input numbers one by one.  
-        Each time you add a value:
+        Both have the same mean (10), but Dataset B has much more variation.
+        This is why we often use <strong>both measures together</strong>:
+        the mean describes where data lies, while the variance tells us how tightly or loosely
+        it’s grouped around that center.
       </p>
-      <ol>
-        <li>It updates the sample count (<code>n</code>).</li>
-        <li>Recalculates the <code>mean</code> and <code>variance</code> instantly.</li>
-        <li>Displays the result both numerically and visually on a live chart.</li>
-      </ol>
 
-      <h4>Relevant JS Code Excerpt:</h4>
-      <pre><code>const val = parseFloat(input.value);
-n++;
-const delta = val - mean;
-mean += delta / n;
-M2 += delta * (val - mean);
-const variance = n > 1 ? M2 / n : 0;
+      <h3>3. Example Code: Calculating Mean and Variance</h3>
+      <p>The following JavaScript example shows how to compute both values from a dataset:</p>
 
-means.push(mean);
-variances.push(variance);
-labels.push(n);
-statsChart.update();
+      <pre><code class="language-js">
+// Example dataset
+const data = [5, 8, 10, 7, 12];
+
+// Arithmetic mean
+const mean = data.reduce((a, b) => a + b, 0) / data.length;
+
+// Variance
+const variance = data.reduce((sum, x) => sum + (x - mean) ** 2, 0) / data.length;
+
+console.log("Mean:", mean);
+console.log("Variance:", variance);
       </code></pre>
 
       <p>
-        The blue line on the chart shows the running mean, while the orange line tracks the variance.  
-        Over time, as more values are added, you’ll notice both stabilizing — demonstrating statistical convergence.
+        This simple example shows how the mean represents the data’s center,
+        while the variance captures its spread. Both are essential for
+        understanding data behavior in fields such as finance, cybersecurity,
+        machine learning, and engineering.
       </p>
 
-      <!-- Interactive Tool -->
-      <section id="online-stats-tool">
-        <div class="rsa-row">
-          <label for="newValue">Add a number:</label>
-          <input id="newValue" type="number" placeholder="Enter a value..." />
-          <button type="button" onclick="addValue()">Add Value</button>
-        </div>
-
-        <p id="statsStatus">No data yet.</p>
-        <canvas id="statsChart" height="250"></canvas>
-      </section>
-
-      <hr />
+      <hr>
       <a href="index.html" class="back-button">← Back to Home</a>
     </div>
   </main>
@@ -207,7 +143,5 @@ statsChart.update();
     <a href="mailto:silivas.2252622@studenti.uniroma1.it">silivas.2252622@studenti.uniroma1.it</a>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="mean_variance_online.js"></script>
 </body>
 </html>
