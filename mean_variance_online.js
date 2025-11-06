@@ -1,20 +1,13 @@
-// mean_variance_online.js — Online mean and variance with live chart visualization
+// mean_variance_online.js — Online mean and variance demo (Welford’s algorithm)
 
-// -----------------------------
-// Global variables
-// -----------------------------
-let count = 0;
+// State variables
+let n = 0;
 let mean = 0;
 let M2 = 0;
-let meanHistory = [];
-let varHistory = [];
-let indexHistory = [];
 
-// -----------------------------
-// Chart initialization
-// -----------------------------
-const ctx = document.getElementById("onlineStatsChart").getContext("2d");
-const chart = new Chart(ctx, {
+// Chart setup
+const ctx = document.getElementById("onlineChart").getContext("2d");
+let chart = new Chart(ctx, {
   type: "line",
   data: {
     labels: [],
@@ -22,97 +15,74 @@ const chart = new Chart(ctx, {
       {
         label: "Mean (μ)",
         data: [],
-        borderColor: "rgba(78,163,255,1)",
-        borderWidth: 2,
+        borderColor: "rgba(75, 192, 192, 1)",
         fill: false,
-        tension: 0.2
+        tension: 0.2,
       },
       {
         label: "Variance (σ²)",
         data: [],
-        borderColor: "rgba(255,180,70,0.9)",
-        borderWidth: 2,
+        borderColor: "rgba(255, 99, 132, 1)",
         fill: false,
-        tension: 0.2
-      }
-    ]
+        tension: 0.2,
+      },
+    ],
   },
   options: {
     responsive: true,
-    plugins: {
-      legend: {
-        labels: { color: "#e6eef8", font: { size: 13 } }
-      }
-    },
     scales: {
-      x: {
-        title: { display: true, text: "Observation index", color: "#cfd9e6" },
-        ticks: { color: "#cfd9e6" },
-        grid: { color: "rgba(255,255,255,0.05)" }
-      },
       y: {
         beginAtZero: true,
-        title: { display: true, text: "Value", color: "#cfd9e6" },
         ticks: { color: "#cfd9e6" },
-        grid: { color: "rgba(255,255,255,0.05)" }
-      }
-    }
-  }
+      },
+      x: {
+        ticks: { color: "#cfd9e6" },
+      },
+    },
+    plugins: {
+      legend: { labels: { color: "#e6eef8" } },
+    },
+  },
 });
 
-// -----------------------------
-// Core update algorithm
-// -----------------------------
-function addValue(x) {
-  count++;
+// Update displayed stats
+function updateDisplay() {
+  document.getElementById("count").textContent = n;
+  document.getElementById("mean").textContent = mean.toFixed(4);
+  document.getElementById("variance").textContent = n > 1 ? (M2 / n).toFixed(4) : "0.0000";
+}
+
+// Add new value and update mean/variance
+function addValue() {
+  const input = document.getElementById("newValue");
+  const x = parseFloat(input.value);
+  if (isNaN(x)) return;
+
+  n++;
   const delta = x - mean;
-  mean += delta / count;
-  M2 += delta * (x - mean);
-
-  const variance = count > 1 ? M2 / count : 0;
-
-  meanHistory.push(mean);
-  varHistory.push(variance);
-  indexHistory.push(count);
+  mean += delta / n;
+  const delta2 = x - mean;
+  M2 += delta * delta2;
 
   // Update chart
-  chart.data.labels = indexHistory;
-  chart.data.datasets[0].data = meanHistory;
-  chart.data.datasets[1].data = varHistory;
+  chart.data.labels.push(n);
+  chart.data.datasets[0].data.push(mean);
+  chart.data.datasets[1].data.push(M2 / n);
   chart.update();
 
-  // Update text info
-  document.getElementById("statsDisplay").textContent =
-    `n = ${count} | Mean μ = ${mean.toFixed(3)} | Variance σ² = ${variance.toFixed(3)}`;
+  // Update stats display
+  updateDisplay();
+  input.value = "";
 }
 
-// -----------------------------
-// Add random value (simulated streaming data)
-// -----------------------------
-function addRandomValue() {
-  // Mix mostly small values + some larger outliers
-  const random = Math.random() < 0.9 ? Math.random() * 10 : Math.random() * 50;
-  addValue(random);
-}
-
-// -----------------------------
-// Reset all data
-// -----------------------------
-function resetData() {
-  count = 0;
+// Reset everything
+function resetValues() {
+  n = 0;
   mean = 0;
   M2 = 0;
-  meanHistory = [];
-  varHistory = [];
-  indexHistory = [];
   chart.data.labels = [];
   chart.data.datasets[0].data = [];
   chart.data.datasets[1].data = [];
   chart.update();
-  document.getElementById("statsDisplay").textContent = "No data yet.";
+  updateDisplay();
 }
-
-// -----------------------------
-// Initialize empty chart display
-// -----------------------------
-resetData();
