@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Homework 5 — Averages and Online Statistics</title>
+  <title>Homework 5 – Averages and Online Variance</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -25,122 +25,149 @@
   <main>
     <div class="main-content">
       <h1>Homework 5</h1>
-      <hr class="section-separator">
-      <h2>Understanding Averages and Online Computation of Statistics</h2>
+      <hr>
+      <h2>Measures of Location and Online Computation of Mean & Variance</h2>
 
       <p>
-        In this assignment, we explore different ways to define and compute the <strong>average</strong> (or measure of location),
-        and how to maintain key statistics like the <strong>mean</strong> and <strong>variance</strong> dynamically as new data arrives.
+        In this assignment, we explore the various ways of computing averages (also called 
+        <strong>measures of location</strong>), understand when they are most useful, and
+        learn how to compute the <em>mean</em> and <em>variance</em> incrementally — 
+        that is, in real time as new data points arrive.
       </p>
 
-      <h3>1. Different Types of Averages</h3>
+      <h3>1. Common Types of Averages</h3>
       <p>
-        The term “average” can mean several different things depending on the context. Each type has its own advantages and 
-        is suited for specific situations.
+        Several measures have been proposed to represent the “central tendency” of a dataset,
+        each suitable for different kinds of data and distributions:
       </p>
 
       <ul>
-        <li>
-          <strong>Arithmetic Mean</strong> — the most common average, computed by summing all values and dividing by their count.  
-          <em>Best used when all data points are equally important and on the same scale.</em>
+        <li><strong>Arithmetic Mean:</strong> The sum of values divided by the count. 
+          Works best for uniformly distributed numerical data.
           <pre><code class="python">
-// Example (Arithmetic Mean)
-let values = [2, 4, 6, 8];
-let mean = values.reduce((a,b) => a + b, 0) / values.length;
-console.log("Arithmetic mean =", mean);
+values = [2, 4, 6, 8]
+mean = sum(values) / len(values)  # 5.0
           </code></pre>
         </li>
-
-        <li>
-          <strong>Geometric Mean</strong> — used when averaging ratios, percentages, or growth rates.  
-          <em>Example: average growth rate over several years.</em>
+        <li><strong>Median:</strong> The middle value after sorting. 
+          Ideal when the dataset contains outliers that could skew the mean.
           <pre><code class="python">
-// Example (Geometric Mean)
-let growth = [1.1, 1.05, 1.2];
-let gmean = Math.pow(growth.reduce((a,b)=>a*b), 1/growth.length);
-console.log("Geometric mean =", gmean);
+values = [1, 2, 100]
+median = sorted(values)[len(values)//2]  # 2
           </code></pre>
         </li>
-
-        <li>
-          <strong>Harmonic Mean</strong> — appropriate when dealing with rates (e.g., speed, density, efficiency).  
-          <em>Example: averaging speeds over equal distances.</em>
+        <li><strong>Mode:</strong> The most frequent value. Useful for categorical or discrete data.
           <pre><code class="python">
-// Example (Harmonic Mean)
-let speeds = [60, 40];
-let hmean = speeds.length / speeds.reduce((a,b)=>a + 1/b, 0);
-console.log("Harmonic mean =", hmean);
+from statistics import mode
+values = [1, 2, 2, 3]
+mode(values)  # 2
           </code></pre>
         </li>
-
-        <li>
-          <strong>Weighted Mean</strong> — assigns different levels of importance (weights) to each value.  
-          <em>Used in grade calculations, portfolio averages, etc.</em>
+        <li><strong>Geometric Mean:</strong> The nth root of the product of n numbers.
+          Appropriate for growth rates or percentages.
           <pre><code class="python">
-// Example (Weighted Mean)
-let scores = [80, 90, 70];
-let weights = [0.5, 0.3, 0.2];
-let wmean = scores.reduce((sum, x, i) => sum + x * weights[i], 0);
-console.log("Weighted mean =", wmean);
+import math
+values = [2, 8]
+geo_mean = math.sqrt(values[0] * values[1])  # 4.0
           </code></pre>
         </li>
-
-        <li>
-          <strong>Median</strong> — the middle value when data is ordered.  
-          <em>Useful when data contains outliers or is not symmetrically distributed.</em>
+        <li><strong>Harmonic Mean:</strong> Used when averaging rates or ratios (like speed or density).
           <pre><code class="python">
-// Example (Median)
-let data = [10, 2, 8, 4, 6];
-data.sort((a,b)=>a-b);
-let median = data.length % 2 ? 
-    data[Math.floor(data.length/2)] : 
-    (data[data.length/2-1]+data[data.length/2])/2;
-console.log("Median =", median);
+import statistics
+values = [60, 40]
+harmonic_mean = statistics.harmonic_mean(values)  # ≈ 48.0
           </code></pre>
         </li>
       </ul>
 
-      <h3>2. Online Calculation of Mean and Variance</h3>
+      <hr>
+
+      <h3>2. Understanding Mean and Variance</h3>
       <p>
-        In many real-world scenarios — such as streaming data, IoT sensors, or continuous monitoring — 
-        it’s inefficient to store all previous data points just to recompute the mean and variance.
-        Instead, we can update them <strong>incrementally</strong> as new data arrives.
+        The <strong>mean</strong> and the <strong>variance</strong> are the two most fundamental
+        descriptive statistics. They help us understand both the central value and how widely
+        the data points are spread around it.
       </p>
 
+      <h4>Mean — the Center of Data</h4>
       <p>
-        The following formulas allow efficient updates:
+        The <em>mean</em> (or average) is calculated by summing all observations and dividing by their number:
       </p>
-
-      <pre><code class="python">
-// Online mean and variance update formulas:
-mean_new = mean_old + (x - mean_old) / n
-M2_new = M2_old + (x - mean_old) * (x - mean_new)
-variance = M2 / (n - 1)
+      <pre><code class="math">
+Mean = (x₁ + x₂ + ⋯ + xₙ) / n
       </code></pre>
 
       <p>
-        Below is a simple interactive tool that demonstrates how the mean and variance can be updated "online"
-        as new values are entered one by one.
+        For example, for the values 2, 4, and 6, the mean is (2 + 4 + 6) / 3 = 4.
+        This represents the center or expected value of the dataset.
       </p>
 
-      <!-- Online Mean/Variance Tool -->
-      <section id="online-stats">
-        <label for="newValue">Enter new value:</label>
-        <input id="newValue" type="number" step="any" placeholder="e.g. 5.3">
+      <h4>Variance — the Spread of Data</h4>
+      <p>
+        The <em>variance</em> measures how much data points deviate from the mean.
+        While the mean tells us where the center is, the variance tells us how “wide” the data is spread.
+      </p>
+      <pre><code class="math">
+Variance = ( (x₁ - Mean)² + (x₂ - Mean)² + ⋯ + (xₙ - Mean)² ) / (n - 1)
+      </code></pre>
+      <p>
+        A small variance means most data points are close to the mean (low variability),
+        while a large variance indicates more dispersion (high variability).
+      </p>
+
+      <h4>Mean vs Variance</h4>
+      <p>
+        The <strong>mean</strong> shows the center of the data; the <strong>variance</strong> shows how far values deviate from it.
+        Two datasets can have the same mean but drastically different variances — indicating different levels of consistency or reliability.
+      </p>
+
+      <hr>
+
+      <h3>3. Online Computation — Mean and Variance in Real Time</h3>
+      <p>
+        In streaming or real-time data systems, recomputing the mean and variance from scratch every time 
+        a new value is received would be inefficient. Instead, we use an <strong>online algorithm</strong> 
+        that updates these statistics incrementally.
+      </p>
+
+      <p>
+        The interactive tool below lets you input values one by one and immediately see how 
+        the <strong>mean</strong> and <strong>variance</strong> evolve as new data arrives.
+      </p>
+
+      <section id="online-stats-tool">
+        <label for="valueInput">Enter a value:</label>
+        <input type="number" id="valueInput" step="any" placeholder="e.g., 5.2">
         <button type="button" onclick="addValue()">Add Value</button>
 
-        <p id="countDisplay">Count: 0</p>
-        <p id="meanDisplay">Mean: —</p>
-        <p id="varianceDisplay">Variance: —</p>
-
-        <div id="meanVarChartContainer">
-          <canvas id="meanVarChart"></canvas>
+        <div class="results">
+          <p><strong>Count:</strong> <span id="count">0</span></p>
+          <p><strong>Mean:</strong> <span id="mean">0</span></p>
+          <p><strong>Variance:</strong> <span id="variance">0</span></p>
         </div>
       </section>
 
+      <h4>How It Works</h4>
       <p>
-        Each time a new value is entered, the mean and variance are updated using the online algorithm above — 
-        without needing to store or recalculate from all previous data points.
+        The calculator keeps track of three variables:
+        <code>count</code> (number of values), <code>mean</code> (average so far), 
+        and <code>M2</code> (the sum of squared deviations). When a new value <code>x</code> arrives:
+      </p>
+
+      <pre><code class="javascript">
+// Add new value x
+count += 1;
+let delta = x - mean;
+mean += delta / count;
+M2 += delta * (x - mean);
+
+// Variance formula (for n > 1)
+variance = M2 / (count - 1);
+      </code></pre>
+
+      <p>
+        This method is known as <strong>Welford’s algorithm</strong>, 
+        which efficiently and accurately updates variance without storing all past data.
       </p>
 
       <hr>
@@ -149,14 +176,12 @@ variance = M2 / (n - 1)
   </main>
 
   <footer class="site-footer">
-    © 2025 Alexandru Silivas — ID 2252622 — 
-    <a href="mailto:silivas.2252622@studenti.uniroma1.it">silivas.2252622@studenti.uniroma1.it</a>
+    © 2025 Alexandru Silivas — ID 2252622 —
+    <a href="mailto:silivas.2252622@studenti.uniroma1.it">
+      silivas.2252622@studenti.uniroma1.it
+    </a>
   </footer>
 
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- JS file for interactivity -->
   <script src="mean_variance_online.js"></script>
-
 </body>
 </html>
