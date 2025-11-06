@@ -30,108 +30,144 @@
       <h2>Measures of Location and Dispersion</h2>
 
       <p>
-        In statistics, the term <strong>measure of location</strong> (or central tendency)
-        describes a value that represents the center or typical value of a dataset.
-        These measures summarize where the majority of values are concentrated,
-        allowing us to get a sense of the “average” behavior of the data.
+        This assignment explores two fundamental concepts in statistics:
+        <strong>measures of location</strong> (or central tendency) and
+        <strong>measures of dispersion</strong>. Together, these measures describe
+        how data is distributed — both where it is centered and how spread out it is.
       </p>
 
-      <h3>1. Common Measures of Location</h3>
+      <h3>1. Measures of Location (Central Tendency)</h3>
       <p>
-        There are several ways to define what the "center" of a dataset is, each
-        suited to different situations. Below are the most commonly used ones:
+        Measures of location indicate the <em>center</em> or typical value around which data points
+        cluster. They summarize a dataset with a single representative number, giving a sense of
+        its “average” behavior. The most common measures include:
       </p>
 
       <ul>
-        <li><strong>Arithmetic Mean:</strong> The simple average of all values. It is
-          calculated as the sum of all data points divided by their number:
-          <br><em>mean = (x₁ + x₂ + ... + xₙ) / n</em>
-          <p>It is very sensitive to outliers but widely used when data is normally distributed.</p>
+        <li>
+          <strong>Arithmetic Mean:</strong> The most widely used measure of central tendency, 
+          calculated by summing all values and dividing by their count.
+          <pre><code class="language-js">
+// JavaScript example:
+const values = [2, 4, 6, 8, 10];
+const mean = values.reduce((a, b) => a + b, 0) / values.length;
+console.log(mean); // 6
+          </code></pre>
+          <em>Useful when data is symmetrically distributed without extreme outliers.</em>
         </li>
 
-        <li><strong>Median:</strong> The middle value when data is ordered. If the number
-          of data points is even, the median is the average of the two middle values.
-          <p>The median is robust to outliers and is preferred when the dataset is skewed.</p>
+        <li>
+          <strong>Median:</strong> The middle value when data is sorted.
+          It’s less sensitive to outliers and skewed distributions.
+          <pre><code class="language-js">
+const values = [1, 3, 100];
+values.sort((a, b) => a - b);
+const median = values.length % 2
+  ? values[(values.length - 1) / 2]
+  : (values[values.length / 2 - 1] + values[values.length / 2]) / 2;
+console.log(median); // 3
+          </code></pre>
+          <em>Preferred for skewed distributions (e.g., income data).</em>
         </li>
 
-        <li><strong>Mode:</strong> The most frequently occurring value in a dataset.
-          <p>It’s useful for categorical data or when we want to identify the most common observation.</p>
-        </li>
-
-        <li><strong>Geometric Mean:</strong> The nth root of the product of n values.
-          <br><em>G = (x₁ × x₂ × ... × xₙ)^(1/n)</em>
-          <p>Used primarily for rates of growth or ratios (e.g., in finance or population studies).</p>
-        </li>
-
-        <li><strong>Harmonic Mean:</strong> The reciprocal of the arithmetic mean of reciprocals:
-          <br><em>H = n / (1/x₁ + 1/x₂ + ... + 1/xₙ)</em>
-          <p>Useful when averaging quantities like speed or density, where each observation has equal weight in time or space.</p>
-        </li>
-
-        <li><strong>Trimmed Mean:</strong> The mean calculated after removing a certain percentage
-          of the smallest and largest values.
-          <p>It combines robustness (like the median) with stability (like the mean), ideal for datasets with limited outliers.</p>
+        <li>
+          <strong>Mode:</strong> The most frequently occurring value in a dataset.
+          <pre><code class="language-js">
+const values = [1, 2, 2, 3, 3, 3, 4];
+const freq = {};
+values.forEach(v => freq[v] = (freq[v] || 0) + 1);
+const mode = Object.keys(freq).reduce((a, b) => freq[a] > freq[b] ? a : b);
+console.log(mode); // 3
+          </code></pre>
+          <em>Useful for categorical or discrete data (e.g., most common product sold).</em>
         </li>
       </ul>
 
-      <h3>2. Mean vs Variance — Location vs Dispersion</h3>
       <p>
-        While the <strong>mean</strong> (or any measure of location) tells us where the data tends to cluster,
-        it does not tell us how <em>spread out</em> the data is. This is where the
-        <strong>variance</strong> comes in — it quantifies the amount of variability or dispersion in the dataset.
+        Each of these measures tells a slightly different story about the same dataset.
+        For example, the <strong>mean</strong> captures the overall average, while the
+        <strong>median</strong> provides a better picture when extreme values distort the average.
+        The <strong>mode</strong> reflects the most typical value, often used in qualitative analyses.
+      </p>
+
+      <h3>2. Measures of Dispersion (Variability)</h3>
+      <p>
+        While measures of location describe where the data tends to cluster,
+        <strong>measures of dispersion</strong> indicate how much the data spreads out around that center.
+        Without dispersion, two datasets could share the same mean but behave very differently.
+      </p>
+
+      <ul>
+        <li>
+          <strong>Range:</strong> The simplest measure, defined as the difference between the maximum and minimum values.
+          <pre><code class="language-js">
+const values = [4, 7, 9, 12, 15];
+const range = Math.max(...values) - Math.min(...values);
+console.log(range); // 11
+          </code></pre>
+          <em>Quick but highly sensitive to outliers.</em>
+        </li>
+
+        <li>
+          <strong>Variance:</strong> The average of squared deviations from the mean. It quantifies
+          how far individual points lie from the center on average.
+          <pre><code class="language-js">
+const values = [4, 7, 9, 12, 15];
+const mean = values.reduce((a, b) => a + b, 0) / values.length;
+const variance = values.reduce((acc, v) => acc + (v - mean) ** 2, 0) / values.length;
+console.log(variance);
+          </code></pre>
+          <em>Used extensively in probability, finance, and quality control.</em>
+        </li>
+
+        <li>
+          <strong>Standard Deviation:</strong> The square root of the variance.
+          It expresses dispersion in the same units as the original data.
+          <pre><code class="language-js">
+const stdDev = Math.sqrt(variance);
+console.log(stdDev);
+          </code></pre>
+          <em>Preferred when comparing variability across datasets with similar units.</em>
+        </li>
+
+        <li>
+          <strong>Interquartile Range (IQR):</strong> The difference between the 75th percentile (Q3)
+          and the 25th percentile (Q1). It represents the range of the middle 50% of data.
+          <pre><code class="language-js">
+// Simple percentile approximation:
+function percentile(arr, p) {
+  arr.sort((a, b) => a - b);
+  const i = (arr.length - 1) * p;
+  const lower = Math.floor(i), upper = Math.ceil(i);
+  return arr[lower] + (arr[upper] - arr[lower]) * (i - lower);
+}
+const values = [1, 3, 5, 7, 9, 11];
+const IQR = percentile(values, 0.75) - percentile(values, 0.25);
+console.log(IQR);
+          </code></pre>
+          <em>Useful when detecting outliers or for non-normal distributions.</em>
+        </li>
+      </ul>
+
+      <h3>3. Why We Need Both Location and Dispersion</h3>
+      <p>
+        Measures of <strong>location</strong> tell us the central value, while measures of
+        <strong>dispersion</strong> show how tightly or loosely the data is spread around it.
+        One without the other can lead to misleading interpretations.
       </p>
 
       <p>
-        Formally, the variance of a dataset measures how far each observation deviates
-        from the mean, on average. If we denote the mean as <em>μ</em>, the variance is:
-        <br><em>Var(X) = (1/n) × Σ(xᵢ − μ)²</em>
+        For instance, consider two exam groups with the same mean score of 70:
+        one has scores between 68 and 72 (low dispersion), while another has scores
+        between 30 and 110 (high dispersion). The mean alone hides this crucial difference.
       </p>
 
-      <p>
-        The higher the variance, the more dispersed the values are around the mean.
-        The square root of the variance, called the <strong>standard deviation</strong>,
-        is in the same unit as the original data, making it easier to interpret.
-      </p>
-
-      <h4>Why We Need Both</h4>
-      <p>
-        The mean alone can be misleading — two datasets can have the same mean
-        but very different variances. For example, consider:
-      </p>
-
-      <pre><code>Dataset A: [10, 10, 10, 10, 10]   → mean = 10, variance = 0
-Dataset B: [5, 15, 5, 15, 5]       → mean = 10, variance > 0</code></pre>
-
-      <p>
-        Both have the same mean (10), but Dataset B has much more variation.
-        This is why we often use <strong>both measures together</strong>:
-        the mean describes where data lies, while the variance tells us how tightly or loosely
-        it’s grouped around that center.
-      </p>
-
-      <h3>3. Example Code: Calculating Mean and Variance</h3>
-      <p>The following JavaScript example shows how to compute both values from a dataset:</p>
-
-      <pre><code class="language-js">
-// Example dataset
-const data = [5, 8, 10, 7, 12];
-
-// Arithmetic mean
-const mean = data.reduce((a, b) => a + b, 0) / data.length;
-
-// Variance
-const variance = data.reduce((sum, x) => sum + (x - mean) ** 2, 0) / data.length;
-
-console.log("Mean:", mean);
-console.log("Variance:", variance);
-      </code></pre>
-
-      <p>
-        This simple example shows how the mean represents the data’s center,
-        while the variance captures its spread. Both are essential for
-        understanding data behavior in fields such as finance, cybersecurity,
-        machine learning, and engineering.
-      </p>
+      <div class="rsa-note">
+        In summary, <strong>measures of location</strong> (mean, median, mode) describe
+        where data points cluster, and <strong>measures of dispersion</strong>
+        (variance, standard deviation, range, IQR) describe how spread out they are.
+        Both are essential for accurate and meaningful statistical analysis.
+      </div>
 
       <hr>
       <a href="index.html" class="back-button">← Back to Home</a>
