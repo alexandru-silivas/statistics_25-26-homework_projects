@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Homework 6 — Online Mean and Variance</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Homework 6 — Online Mean & Variance (Derivations, Implementation, Tests)</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
   <!-- NAVBAR -->
   <header class="navbar">
     <nav>
@@ -27,119 +26,96 @@
     <div class="main-content">
       <h1>Homework 6</h1>
       <hr class="section-separator">
-      <h2>Calculating Mean and Variance Online</h2>
+      <h2>Derivations, Online Algorithms & Tests</h2>
 
+      <h3>1. Recurrence for the Arithmetic Mean (simple proof)</h3>
       <p>
-        In the previous assignment, we explored how to calculate the <strong>mean</strong> and
-        <strong>variance</strong> from a complete dataset. However, in real-world applications—
-        especially in fields like cybersecurity, data streaming, and financial analysis—
-        data often arrives incrementally. It is therefore essential to compute statistical
-        measures <em>online</em>, updating them efficiently each time a new value is observed.
+        Let <em>μₙ</em> denote the mean after observing <em>n</em> values x₁,...,xₙ:
       </p>
-
-      <h3>1. What Does “Online” Mean?</h3>
-      <p>
-        An <strong>online algorithm</strong> computes statistics dynamically as new data points
-        arrive, without storing the entire dataset or recomputing everything from scratch.
-        This approach is particularly useful for large datasets or continuous data streams.
-      </p>
-
-      <h3>2. Online Mean Computation</h3>
-      <p>
-        The online mean can be updated using a simple recurrence relation:
-      </p>
-
-      <pre><code class="language-math">
-meanₙ = meanₙ₋₁ + (xₙ − meanₙ₋₁) / n
+      <pre><code class="math">
+μₙ = (x₁ + x₂ + ... + xₙ) / n
+μₙ₋₁ = (x₁ + x₂ + ... + xₙ₋₁) / (n-1)
       </code></pre>
-
-      <p>
-        This formula updates the mean each time a new data point <em>xₙ</em> is added,
-        without needing to reprocess all previous values. It’s a constant-time update,
-        which makes it efficient and ideal for real-time analysis.
-      </p>
-
-      <pre><code class="language-js">
-// Online mean in JavaScript
-let mean = 0;
-let count = 0;
-
-function updateMean(newValue) {
-  count++;
-  mean += (newValue - mean) / count;
-  return mean;
-}
+      <p>We can express μₙ in terms of μₙ₋₁:</p>
+      <pre><code class="math">
+μₙ = ( (n−1)·μₙ₋₁ + xₙ ) / n
+    = μₙ₋₁ + (xₙ − μₙ₋₁) / n
       </code></pre>
-
-      <h3>3. Online Variance Computation</h3>
       <p>
-        The variance can also be computed online using <strong>Welford’s algorithm</strong>,
-        which is both numerically stable and efficient:
+        This gives the online recurrence:
+        <strong>μ ← μ + (x − μ) / n</strong>,
+        which updates the mean in constant time using only the previous mean and the new value.
       </p>
 
-      <pre><code class="language-js">
-let count = 0;
-let mean = 0;
-let M2 = 0; // sum of squared deviations
+      <h3>2. Recurrence for Variance (Welford’s derivation)</h3>
+      <p>
+        Define M₂ₙ = Σ<sub>i=1..n</sub> (xᵢ − μₙ)² (the sum of squared deviations from the current mean).
+        The sample variance is M₂ₙ / n (or M₂ₙ / (n−1) for unbiased estimate).
+      </p>
+      <p>Welford’s online update avoids computing differences from a moving mean directly:</p>
+      <pre><code class="math">
+Given previous mean μₙ₋₁ and previous M2ₙ₋₁, for new xₙ:
 
-function updateVariance(newValue) {
-  count++;
-  const delta = newValue - mean;
-  mean += delta / count;
-  M2 += delta * (newValue - mean);
-  const variance = M2 / count;
-  return { mean, variance };
-}
+1) δ = xₙ − μₙ₋₁
+2) μₙ = μₙ₋₁ + δ / n
+3) M2ₙ = M2ₙ₋₁ + δ * (xₙ − μₙ)
+
+Note: step 3 can be written as M2ₙ = M2ₙ₋₁ + δ * δ2 where δ2 = xₙ − μₙ
       </code></pre>
-
       <p>
-        Each new observation updates the mean and the accumulated squared deviations <em>M2</em>.
-        From this, the variance can be computed efficiently without revisiting old data points.
+        <em>Why this works (sketch):</em> expand the squared deviations and rearrange terms to isolate
+        the previous M<sub>2</sub> plus the incremental correction δ·(xₙ − μₙ). This update is numerically stable
+        because it avoids subtracting two large nearly-equal sums, which is the source of catastrophic cancellation.
       </p>
 
-      <h3>4. Why Online Computation Matters</h3>
+      <h3>3. Numerical Stability — Why Welford wins</h3>
       <p>
-        Online methods are fundamental in systems that handle continuous data or large-scale
-        analytics, such as:
+        Traditional "batch" formulas (compute mean, then compute Σ(x−mean)²) are:
+        - <strong>Memory intensive</strong> (need all data), and
+        - Prone to <strong>round-off error</strong> when numbers are large or when variance is small relative
+          to mean (catastrophic cancellation).
       </p>
-      <ul>
-        <li>Real-time anomaly detection in cybersecurity</li>
-        <li>Streaming financial indicators</li>
-        <li>Sensor networks and IoT analytics</li>
-        <li>Machine learning model updates without retraining</li>
-      </ul>
-
       <p>
-        These applications rely on the ability to update metrics on-the-fly without the
-        computational overhead of recomputing from scratch.
-      </p>
-
-      <h3>5. Interactive Visualization — Online Mean & Variance</h3>
-      <p>
-        The following interactive tool simulates incoming data points. Each time you
-        click <strong>“Add Random Value”</strong>, a new number is generated, and both
-        the mean and variance are recalculated and updated dynamically on the chart.
-      </p>
-
-      <section id="online-stats-tool">
-        <canvas id="onlineStatsChart"></canvas>
-
-        <div class="online-controls">
-          <button type="button" onclick="addRandomValue()">Add Random Value</button>
-          <button type="button" onclick="resetData()">Reset</button>
-        </div>
-
-        <p id="statsDisplay">No data yet.</p>
-      </section>
-
-      <p class="rsa-note">
-        This interactive example demonstrates how online algorithms react in real time:
-        as new data points are added, the mean (blue line) stabilizes, and the variance
-        (orange line) indicates how spread out the data remains as the dataset grows.
+        <strong>Welford’s algorithm</strong> accumulates squared deviations incrementally and uses the two δ values
+        (before/after updating the mean), which significantly reduces numerical error and requires constant memory.
       </p>
 
       <hr>
-      <a href="index.html" class="back-button">← Back to Home</a>
+
+      <h3>4. Implementation (interactive demo + test harness)</h3>
+      <p>
+        Below is the interactive demo: add random values, inspect online mean & variance, and run automated tests
+        comparing online vs batch (exact) computation on random datasets.
+      </p>
+
+      <section id="online-demo">
+        <canvas id="onlineStatsChart"></canvas>
+
+        <div style="margin-top:14px;" class="rsa-row">
+          <button type="button" onclick="addRandomValue()">Add Random Value</button>
+          <button type="button" onclick="resetData()">Reset</button>
+          <button type="button" onclick="runTests()">Run Tests</button>
+        </div>
+
+        <p id="statsDisplay">No data yet.</p>
+        <div id="testResults" style="margin-top:12px;color:var(--muted);font-size:0.95rem;"></div>
+      </section>
+
+      <h3>5. Test plan (what the harness does)</h3>
+      <ol>
+        <li>Generate small random datasets (sizes and distributions vary).</li>
+        <li>Compute batch mean/variance and online mean/variance.</li>
+        <li>Report absolute differences and maximum deviation across tests.</li>
+      </ol>
+
+      <h3>6. Implementation notes</h3>
+      <ul>
+        <li>We use population variance (M2 / n) in the demo. For unbiased sample variance use M2 / (n − 1).</li>
+        <li>The test harness reports errors on the scale of floating point precision; Welford should match batch results closely.</li>
+      </ul>
+
+      <hr>
+      <a href="homework_5.html" class="back-button">← Back to Homework 5</a>
     </div>
   </main>
 
@@ -153,6 +129,5 @@ function updateVariance(newValue) {
 
   <!-- Homework 6 JS -->
   <script src="mean_variance_online.js"></script>
-
 </body>
 </html>
