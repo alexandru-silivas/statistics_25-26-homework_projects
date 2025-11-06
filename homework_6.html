@@ -1,10 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Homework 6 — Online Mean & Variance (Derivations & Implementation)</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homework 6</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- MathJax for rendering formulas -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
   <!-- NAVBAR -->
@@ -12,10 +21,6 @@
     <nav>
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
-        <li><a href="homework_1.html">HMWK 1</a></li>
-        <li><a href="homework_2.html">HMWK 2</a></li>
-        <li><a href="homework_3.html">HMWK 3</a></li>
-        <li><a href="homework_4.html">HMWK 4</a></li>
         <li><a href="homework_5.html">HMWK 5</a></li>
         <li><a href="homework_6.html" class="active">HMWK 6</a></li>
       </ul>
@@ -26,137 +31,133 @@
     <div class="main-content">
       <h1>Homework 6</h1>
       <hr class="section-separator">
-      <h2>Online Computation of Mean and Variance</h2>
+      <h2>Online Algorithms for Mean and Variance</h2>
 
       <p>
-        In many data-driven and real-time systems, data arrive continuously and it is inefficient or even
-        impossible to store all previous samples to recompute statistics each time.
-        The goal of this exercise is to <strong>derive simple recurrence relationships</strong>
-        for the arithmetic mean and the variance and to <strong>implement online algorithms</strong>
-        that update these quantities incrementally as new data become available.
+        Traditional “batch” algorithms for mean and variance require storing all previous data points
+        and recomputing statistics each time a new value is added. This approach is computationally
+        expensive and prone to floating-point errors — especially when processing large datasets.
+        <strong>Online algorithms</strong> address this by updating statistics incrementally as new data arrives,
+        using compact recurrence formulas that preserve numerical stability and efficiency.
       </p>
 
-      <h3>1. The Arithmetic Mean (Measure of Location)</h3>
+      <h3>1. Derivation of the Recurrence Relations</h3>
       <p>
-        The <strong>arithmetic mean</strong> summarizes the "central tendency" of a dataset.
-        For a sequence of values \(x_1, x_2, \ldots, x_n\), the mean after
-        \(n\) observations is defined as:
-      </p>
-      <pre><code class="math">μₙ = (1/n) · Σᵢ₌₁ⁿ xᵢ</code></pre>
-      <p>
-        Suppose we already know the mean after \(n-1\) observations, \(μₙ₋₁\).  
-        When a new observation \(xₙ\) arrives, the updated mean can be computed without
-        summing everything again:
-      </p>
-      <pre><code class="math">
-μₙ = ( (n−1)·μₙ₋₁ + xₙ ) / n
-    = μₙ₋₁ + (xₙ − μₙ₋₁)/n
-      </code></pre>
-      <p>
-        This recurrence allows the mean to be updated in constant time and constant memory.
-        It is the foundation for all online algorithms.
+        Suppose we have a sequence of observations $x_1, x_2, \dots, x_n$.  
+        The arithmetic mean (average) of the first $n$ samples is defined as:
       </p>
 
-      <h3>2. The Variance (Measure of Dispersion)</h3>
+      <p style="text-align:center;">$$
+        \mu_n = \frac{1}{n} \sum_{i=1}^{n} x_i
+      $$</p>
+
       <p>
-        While the mean tells us where the data tend to cluster (location),
-        it says nothing about how widely spread they are.  
-        The <strong>variance</strong> quantifies this <em>dispersion</em>:
-      </p>
-      <pre><code class="math">
-σ² = (1/n) · Σᵢ₌₁ⁿ (xᵢ − μₙ)²
-      </code></pre>
-      <p>
-        A low variance indicates that values are close to the mean, while a high variance
-        shows that data points are more dispersed.
-        Measures of location and dispersion are complementary:
-        <ul>
-          <li>The mean alone cannot describe the variability of data.</li>
-          <li>The variance alone cannot describe where the data are centered.</li>
-        </ul>
-        Together they give a more complete statistical picture of a dataset.
+        When a new value $x_{n+1}$ arrives, the mean can be updated incrementally as:
       </p>
 
-      <h3>3. Derivation of the Online Variance (Welford’s Algorithm)</h3>
+      <p style="text-align:center;">$$
+        \mu_{n+1} = \mu_n + \frac{x_{n+1} - \mu_n}{n + 1}
+      $$</p>
+
       <p>
-        Define \(M2_n = \sum_{i=1}^{n} (x_i - μ_n)^2\).
-        When a new value \(x_n\) is added:
-      </p>
-      <pre><code class="math">
-δ  = xₙ − μₙ₋₁
-μₙ = μₙ₋₁ + δ / n
-M2ₙ = M2ₙ₋₁ + δ · (xₙ − μₙ)
-      </code></pre>
-      <p>
-        The key insight is that \(M2\) accumulates the sum of squared deviations
-        <em>without</em> needing all previous values.  
-        The population variance is \(σ² = M2ₙ / n\),
-        and the unbiased sample variance is \(s² = M2ₙ / (n−1)\).
-      </p>
-      <p>
-        Welford’s formulation avoids the numerical instability of the naïve
-        two-pass algorithm (compute mean, then subtract), which suffers from
-        <strong>catastrophic cancellation</strong> when data are large or tightly clustered.
+        This formula allows updating the mean efficiently without recalculating the entire sum.
       </p>
 
-      <h3>4. Implementation and Demonstration</h3>
       <p>
-        The script below uses the recurrences above to update mean and variance online.
-        Each click adds a random value (most small, some large outliers) and immediately
-        updates both statistics. The chart shows how the mean and variance evolve
-        as more data points are observed.
+        Similarly, the variance — which measures the dispersion or spread of the data — is defined as:
       </p>
 
-      <section id="online-demo">
-        <canvas id="onlineStatsChart"></canvas>
+      <p style="text-align:center;">$$
+        \sigma_n^2 = \frac{1}{n} \sum_{i=1}^{n} (x_i - \mu_n)^2
+      $$</p>
 
-        <div style="margin-top:14px;" class="rsa-row">
-          <button type="button" onclick="addRandomValue()">Add Random Value</button>
-          <button type="button" onclick="resetData()">Reset</button>
+      <p>
+        Updating variance online requires care to avoid numerical instability.
+        A numerically stable recurrence relation can be derived (known as <strong>Welford’s algorithm</strong>):
+      </p>
+
+      <p style="text-align:center;">$$
+        \begin{aligned}
+        \delta &= x_{n+1} - \mu_n \\
+        \mu_{n+1} &= \mu_n + \frac{\delta}{n + 1} \\
+        M_{2,n+1} &= M_{2,n} + \delta (x_{n+1} - \mu_{n+1})
+        \end{aligned}
+      $$</p>
+
+      <p>
+        The variance is then computed as:
+      </p>
+
+      <p style="text-align:center;">$$
+        \sigma_{n+1}^2 = \frac{M_{2,n+1}}{n + 1}
+      $$</p>
+
+      <p>
+        This method prevents rounding errors and does not require storing all previous samples.
+      </p>
+
+      <h3>2. Interactive Demonstration: Online Mean & Variance</h3>
+      <p>
+        The interactive tool below demonstrates how mean and variance evolve as new data points are entered.
+        You can input values one by one, and the chart updates dynamically to reflect the recalculated
+        mean and variance using the online recurrence formulas.
+      </p>
+
+      <section id="online-tool">
+        <div class="input-section">
+          <label for="newValue">Enter new value:</label>
+          <input type="number" id="newValue" step="any">
+          <button type="button" onclick="addValue()">Add Value</button>
+          <button type="button" onclick="resetValues()">Reset</button>
         </div>
 
-        <p id="statsDisplay">No data yet.</p>
+        <div class="stats-display">
+          <p><strong>Count (n):</strong> <span id="count">0</span></p>
+          <p><strong>Mean (μ):</strong> <span id="mean">0</span></p>
+          <p><strong>Variance (σ²):</strong> <span id="variance">0</span></p>
+        </div>
+
+        <div id="chart-container">
+          <canvas id="onlineChart"></canvas>
+        </div>
       </section>
 
-      <h3>5. Code Walkthrough</h3>
+      <h3>3. Explanation of the Implementation</h3>
       <p>
-        The online algorithm is implemented in JavaScript as follows:
+        The JavaScript code keeps track of the current count, mean, and the auxiliary term $M_2$
+        (used in Welford’s algorithm). Each time a new data point is added, the following steps occur:
       </p>
-      <pre><code>
-// Initialization
-let count = 0, mean = 0, M2 = 0;
 
-// Update step (for each new x)
-count++;
-const delta = x - mean;
-mean += delta / count;
-M2 += delta * (x - mean);
+      <ul>
+        <li>Compute $\delta = x - \mu_{old}$ (difference from the previous mean)</li>
+        <li>Update the mean using $\mu_{new} = \mu_{old} + \frac{\delta}{n}$</li>
+        <li>Update $M_2$ with $M_{2,new} = M_{2,old} + \delta (x - \mu_{new})$</li>
+        <li>Compute variance: $\sigma^2 = M_2 / n$</li>
+      </ul>
 
-const variance = M2 / count;
-      </code></pre>
       <p>
-        Each update uses only the previous mean, the current count, and the new value.
-        This keeps computation <strong>O(1)</strong> per data point
-        and avoids storing past observations.
+        This method is efficient (O(1) time per update) and avoids the numerical instability
+        caused by summing large numbers or computing differences of nearly equal values.
       </p>
+
+      <h3>4. Practical Relevance</h3>
       <p>
-        The chart is generated using <strong>Chart.js</strong>,
-        dynamically plotting the sequence of means and variances.
-        It provides a visual demonstration that as the number of samples increases,
-        both quantities converge to stable values — illustrating
-        the <em>law of large numbers</em> in action.
+        Online algorithms are particularly useful in streaming data applications — such as
+        real-time analytics, IoT sensor monitoring, or financial tick data — where new observations
+        arrive continuously and reprocessing all previous data would be infeasible.
       </p>
 
       <hr>
-      <a href="homework_5.html" class="back-button">← Back to Homework 5</a>
+      <a href="index.html" class="back-button">← Back to Home</a>
     </div>
   </main>
 
   <footer class="site-footer">
-    © 2025 Alexandru Silivas — ID 2252622 —
+    © 2025 Alexandru Silivas — ID 2252622 — 
     <a href="mailto:silivas.2252622@studenti.uniroma1.it">silivas.2252622@studenti.uniroma1.it</a>
   </footer>
 
+  <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="mean_variance_online.js"></script>
 </body>
