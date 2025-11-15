@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Homework 7 — Server Security Random Walks & Binomial Convergence</title>
   <link rel="stylesheet" href="style.css">
+  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -19,6 +20,8 @@
         <li><a href="homework_5.html">HMWK 5</a></li>
         <li><a href="homework_6.html">HMWK 6</a></li>
         <li><a href="homework_7.html" class="active">HMWK 7</a></li>
+        <li><a href="homework_8.html">HMWK 8</a></li>
+        <li><a href="homework_9.html">HMWK 9</a></li>
       </ul>
     </nav>
   </header>
@@ -28,54 +31,86 @@
       <h1>Homework 7</h1>
       <hr class="section-separator">
 
-      <h2>Security Updates as a Biased Random Walk</h2>
+      <h2>Security updates, random walks and binomial convergence (n = 50 weeks)</h2>
+
       <p>
-        We model a server that receives weekly security updates over <strong>n = 50</strong> weeks.
-        Every week, <strong>m</strong> independent attackers each try to breach the system, with
-        probability <strong>p</strong>. If at least one attacker succeeds, the server is considered
-        breached that week; otherwise, it's secure.
-      </p>
-      <p>
-        The probability the server remains secure for a week is
-        <strong>s = (1 − p)<sup>m</sup></strong>, and the breach probability is
-        <strong>b = 1 − s</strong>. We translate weekly outcomes into a random walk:
-        +1 for a secure week, −1 for a breached week.
+        Model: each week there are <strong>m</strong> independent attackers, each with breach probability <strong>p</strong>.
+        The server is considered breached in a week if at least one attacker succeeds. Assign +1 if the server
+        remains secure that week, −1 if breached. Over n weeks the cumulative score is the sum of those ±1 steps.
       </p>
 
-      <h3>Why This is a “Random Walk”</h3>
       <p>
-        Interpreting +1 / −1 steps as a walk, the server’s cumulative score over time behaves like a
-        biased random walk: the step bias depends on the number of attackers and their success probability.
-        Over 50 weeks, different scenarios (e.g., few attackers vs many) lead to very different walk trajectories.
+        Weekly secure probability: <strong>s = (1 − p)<sup>m</sup></strong>. Number of secure weeks K ∼ Binomial(n, s).
+        Final score S = 2K − n; possible scores are {−n, −n+2, …, n−2, n}. The theoretical probability:
       </p>
 
-      <h3>Fixed Demonstrative Simulations</h3>
-      <p>Below are three fixed simulations with the same timescale (50 weeks) and fixed Y-axis (scores from −50 to +50):</p>
-
-      <ul>
-        <li><strong>Graph 1:</strong> One attacker for 50 weeks — the risk is relatively low, so the walk mostly stays near zero.</li>
-        <li><strong>Graph 2:</strong> 50 attackers for 50 weeks — the breach probability is very high, so the walk tends to go down faster.</li>
-        <li><strong>Graph 3:</strong> We run 500 independent trials (each trial is a 50-week walk with 50 attackers). This produces a “cloud” of random-walk paths, all drifting downward, showing how likely it is to accumulate a very negative score when breach risk is high.</li>
-      </ul>
-
-      <div style="margin-top: 24px;">
-        <h4>1) 1 Attacker, 50 Weeks</h4>
-        <canvas id="walk1" height="180"></canvas>
-
-        <h4 style="margin-top:22px;">2) 50 Attackers, 50 Weeks</h4>
-        <canvas id="walk2" height="180"></canvas>
-
-        <h4 style="margin-top:22px;">3) 500 Trials of 50-Week Walks (50 Attackers)</h4>
-        <canvas id="walk3" height="220"></canvas>
-      </div>
+      <p style="text-align:center;">
+        <strong>P(S = 2k − n) = C(n,k) · s<sup>k</sup> · (1−s)<sup>n−k</sup></strong>
+      </p>
 
       <hr>
+
+      <h3>Simulations & fixed demonstrations</h3>
+      <p>
+        The three panels below run fixed demonstrations (no inputs):  
+        <strong>(A)</strong> 1 attacker, 80 simulations visualized;  
+        <strong>(B)</strong> 50 attackers, 80 simulations;  
+        <strong>(C)</strong> 50 attackers, 400 simulations (many trials — heavy breach bias).
+      </p>
+
+      <div style="margin-top:18px;">
+        <!-- Panel A -->
+        <h4>Panel A — 1 attacker over 50 weeks (80 simulations)</h4>
+        <div style="display:flex;gap:18px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:280px;">
+            <p style="margin:6px 0 8px 0">Sample trajectories (many runs plotted).</p>
+            <canvas id="trajA" height="180"></canvas>
+          </div>
+          <div style="flex:1;min-width:280px;">
+            <p style="margin:6px 0 8px 0">Histogram of final scores (empirical)</p>
+            <canvas id="histA" height="180"></canvas>
+          </div>
+          <div style="flex:1;min-width:280px;">
+            <p style="margin:6px 0 8px 0">Histogram + theoretical binomial overlay</p>
+            <canvas id="overlayA" height="180"></canvas>
+          </div>
+        </div>
+
+        <!-- Panel B -->
+        <h4 style="margin-top:22px;">Panel B — 50 attackers over 50 weeks (80 simulations)</h4>
+        <div style="display:flex;gap:18px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:280px;">
+            <canvas id="trajB" height="180"></canvas>
+          </div>
+          <div style="flex:1;min-width:280px;">
+            <canvas id="histB" height="180"></canvas>
+          </div>
+          <div style="flex:1;min-width:280px;">
+            <canvas id="overlayB" height="180"></canvas>
+          </div>
+        </div>
+
+        <!-- Panel C -->
+        <h4 style="margin-top:22px;">Panel C — Many trials: 50 attackers over 50 weeks (400 simulations)</h4>
+        <div style="display:flex;gap:18px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:320px;">
+            <p style="margin:6px 0 8px 0">Cloud of 400 trajectories (light grey)</p>
+            <canvas id="trajC" height="250"></canvas>
+          </div>
+          <div style="flex:1;min-width:320px;">
+            <p style="margin:6px 0 8px 0">Histogram + theoretical overlay (counts)</p>
+            <canvas id="histC" height="250"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <hr style="margin-top:22px;">
       <a href="index.html" class="back-button">← Back to Home</a>
     </div>
   </main>
 
   <footer class="site-footer">
-    © 2025 Alexandru Silivas — ID 2252622 — 
+    © 2025 Alexandru Silivas — ID 2252622 —
     <a href="mailto:silivas.2252622@studenti.uniroma1.it">silivas.2252622@studenti.uniroma1.it</a>
   </footer>
 
