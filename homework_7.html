@@ -5,12 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Homework 7 — Server Security Random Walks & Binomial Convergence</title>
   <link rel="stylesheet" href="style.css">
-
-  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <!-- NAVBAR -->
   <header class="navbar">
     <nav>
       <ul class="nav-links">
@@ -22,8 +19,6 @@
         <li><a href="homework_5.html">HMWK 5</a></li>
         <li><a href="homework_6.html">HMWK 6</a></li>
         <li><a href="homework_7.html" class="active">HMWK 7</a></li>
-        <li><a href="homework_8.html">HMWK 8</a></li>
-        <li><a href="homework_9.html">HMWK 9</a></li>
       </ul>
     </nav>
   </header>
@@ -32,91 +27,58 @@
     <div class="main-content">
       <h1>Homework 7</h1>
       <hr class="section-separator">
-      <h2>Server security updates as random walks — simulation & binomial convergence</h2>
 
+      <h2>Security Updates as a Biased Random Walk</h2>
       <p>
-        This assignment models a server receiving weekly security updates for <strong>n</strong> weeks.
-        Each week <strong>m</strong> independent attackers attempt to breach the server, each with
-        success probability <strong>p</strong>. If <em>any</em> attacker succeeds in a week the server
-        is considered <strong>breached</strong> for that week; otherwise it is considered
-        <strong>secure</strong>.
-      </p>
-
-      <h3>Mathematical model</h3>
-      <p>
-        Let the weekly probability the server stays secure be
-        <strong>s = (1 − p)<sup>m</sup></strong>. The probability of a breach in a week is
-        <strong>b = 1 − s</strong>.
+        We model a server that receives weekly security updates over <strong>n = 50</strong> weeks.
+        Every week, <strong>m</strong> independent attackers each try to breach the system, with
+        probability <strong>p</strong>. If at least one attacker succeeds, the server is considered
+        breached that week; otherwise, it's secure.
       </p>
       <p>
-        Over n weeks the number of secure weeks K is distributed as
-        <strong>K ~ Binomial(n, s)</strong>. We assign +1 to a secure week, −1 to a breached week.
-        The total score after n weeks is therefore:
+        The probability the server remains secure for a week is
+        <strong>s = (1 − p)<sup>m</sup></strong>, and the breach probability is
+        <strong>b = 1 − s</strong>. We translate weekly outcomes into a random walk:
+        +1 for a secure week, −1 for a breached week.
       </p>
-      <p style="text-align:center;"><strong>S = (+1)·K + (−1)·(n−K) = 2K − n</strong></p>
+
+      <h3>Why This is a “Random Walk”</h3>
       <p>
-        So possible total scores are {−n, −n+2, …, n−2, n}. The theoretical probability mass for a final
-        score S = 2k − n (i.e. k secure weeks) is:
-      </p>
-      <p style="text-align:center;">
-        <strong>P(S = 2k − n) = C(n,k) · s<sup>k</sup> · b<sup>n−k</sup></strong>
+        Interpreting +1 / −1 steps as a walk, the server’s cumulative score over time behaves like a
+        biased random walk: the step bias depends on the number of attackers and their success probability.
+        Over 50 weeks, different scenarios (e.g., few attackers vs many) lead to very different walk trajectories.
       </p>
 
-      <h3>Interpretation as a random walk</h3>
-      <p>
-        The sequence of weekly +1/−1 outcomes is a simple random walk with biased steps: a +1 occurs with
-        probability s and −1 with probability b. The cumulative sum over time is the walk. By simulating many
-        independent trajectories and counting final scores we can empirically estimate the distribution of S
-        and compare it to the Binomial-based theoretical distribution. As n (and the number of simulated trajectories)
-        grow, empirical frequencies should converge to the theoretical probabilities.
-      </p>
+      <h3>Fixed Demonstrative Simulations</h3>
+      <p>Below are three fixed simulations with the same timescale (50 weeks) and fixed Y-axis (scores from −50 to +50):</p>
 
-      <hr>
+      <ul>
+        <li><strong>Graph 1:</strong> One attacker for 50 weeks — the risk is relatively low, so the walk mostly stays near zero.</li>
+        <li><strong>Graph 2:</strong> 50 attackers for 50 weeks — the breach probability is very high, so the walk tends to go down faster.</li>
+        <li><strong>Graph 3:</strong> We run 500 independent trials (each trial is a 50-week walk with 50 attackers). This produces a “cloud” of random-walk paths, all drifting downward, showing how likely it is to accumulate a very negative score when breach risk is high.</li>
+      </ul>
 
-      <h3>Interactive Simulation</h3>
-      <p>Use the controls to set parameters and run simulations. The page will show:</p>
-      <ol>
-        <li>A single live trajectory (cumulative score vs week).</li>
-        <li>Histogram of final scores (empirical) after many simulations.</li>
-        <li>Histogram with theoretical binomial overlay (scaled to the number of simulations).</li>
-      </ol>
+      <div style="margin-top: 24px;">
+        <h4>1) 1 Attacker, 50 Weeks</h4>
+        <canvas id="walk1" height="180"></canvas>
 
-      <!-- Controls -->
-      <div class="rsa-row" style="gap:12px; margin-bottom:12px;">
-        <label>n (weeks): <input id="inputN" type="number" value="20" min="1" step="1" style="width:88px;"></label>
-        <label>m (attackers/week): <input id="inputM" type="number" value="3" min="1" step="1" style="width:88px;"></label>
-        <label>p (attacker success): <input id="inputP" type="number" value="0.05" min="0" max="1" step="0.01" style="width:92px;"></label>
-        <label>Simulations: <input id="inputSim" type="number" value="2000" min="1" step="1" style="width:110px;"></label>
+        <h4 style="margin-top:22px;">2) 50 Attackers, 50 Weeks</h4>
+        <canvas id="walk2" height="180"></canvas>
 
-        <button type="button" onclick="simulateOnce()">Simulate Trajectory</button>
-        <button type="button" onclick="simulateMany()">Run Batch Simulations</button>
-        <button type="button" onclick="resetAll()">Reset</button>
+        <h4 style="margin-top:22px;">3) 500 Trials of 50-Week Walks (50 Attackers)</h4>
+        <canvas id="walk3" height="220"></canvas>
       </div>
 
-      <!-- Charts -->
-      <div style="margin-top:10px;">
-        <h4>1) Live Random Walk (single simulated trajectory)</h4>
-        <div id="trajContainer"><canvas id="trajChart" height="160"></canvas></div>
-
-        <h4 style="margin-top:18px;">2) Histogram of Final Scores (empirical)</h4>
-        <div id="histContainer"><canvas id="histChart" height="200"></canvas></div>
-
-        <h4 style="margin-top:18px;">3) Histogram + Theoretical Binomial Overlay</h4>
-        <div id="overlayContainer"><canvas id="overlayChart" height="220"></canvas></div>
-      </div>
-
-      <p id="hw7Status" class="status" style="margin-top:12px;">Status: idle.</p>
       <hr>
       <a href="index.html" class="back-button">← Back to Home</a>
     </div>
   </main>
 
   <footer class="site-footer">
-    © 2025 Alexandru Silivas — ID 2252622 —
+    © 2025 Alexandru Silivas — ID 2252622 — 
     <a href="mailto:silivas.2252622@studenti.uniroma1.it">silivas.2252622@studenti.uniroma1.it</a>
   </footer>
 
-  <!-- JS (simulation) -->
   <script src="pentest.js"></script>
 </body>
 </html>
