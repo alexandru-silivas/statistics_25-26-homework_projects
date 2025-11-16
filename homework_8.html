@@ -1,128 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Homework 8 — Bernoulli Process, Random Walks & Combinatorics</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homework 8 – Bernoulli Processes, Random Walks & Pascal</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
-  <header class="navbar">
-    <nav>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="homework_1.html">HMWK 1</a></li>
-        <li><a href="homework_2.html">HMWK 2</a></li>
-        <li><a href="homework_3.html">HMWK 3</a></li>
-        <li><a href="homework_4.html">HMWK 4</a></li>
-        <li><a href="homework_5.html">HMWK 5</a></li>
-        <li><a href="homework_6.html">HMWK 6</a></li>
-        <li><a href="homework_7.html">HMWK 7</a></li>
-        <li><a href="homework_8.html" class="active">HMWK 8</a></li>
-        <li><a href="homework_9.html">HMWK 9</a></li>
-      </ul>
-    </nav>
-  </header>
 
-  <main>
-    <div class="main-content">
-      <h1>Homework 8</h1>
-      <hr class="section-separator">
+<header class="navbar">
+  <nav>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="homework_1.html">HMWK 1</a></li>
+      <li><a href="homework_2.html">HMWK 2</a></li>
+      <li><a href="homework_3.html">HMWK 3</a></li>
+      <li><a href="homework_4.html">HMWK 4</a></li>
+      <li><a href="homework_5.html">HMWK 5</a></li>
+      <li><a href="homework_6.html">HMWK 6</a></li>
+      <li><a href="homework_7.html">HMWK 7</a></li>
+      <li><a href="homework_8.html" class="active">HMWK 8</a></li>
+      <li><a href="homework_9.html">HMWK 9</a></li>
+    </ul>
+  </nav>
+</header>
 
-      <h2>Bernoulli processes vs Random walks — combinatorics and structure</h2>
+<main>
+<div class="main-content">
 
-      <p>
-        This assignment explores the close relationship between a <strong>Bernoulli process</strong> and a
-        <strong>random walk</strong>. A Bernoulli process is a sequence of independent trials with success
-        probability <em>p</em>. If we map success → +1 and failure → −1, the cumulative sum is a random walk.
-        The number of successes after <em>n</em> trials follows a <strong>Binomial(n, p)</strong> distribution.
-      </p>
+  <h1>Homework 8</h1>
+  <hr class="section-separator">
 
-      <h3>What we will do</h3>
-      <ol>
-        <li>Visually show convergence of empirical frequency to <em>p</em> (Law of Large Numbers — ties to HW4).</li>
-        <li>Simulate random-walk trajectories and compare final-score histograms to the binomial PMF (ties to HW7).</li>
-        <li>Display Pascal’s triangle (Tartaglia) and explain binomial coefficients, binomial expansion and brief links to the Fibonacci sequence.</li>
-      </ol>
+  <h2>Bernoulli Processes, Random Walks, Pascal's Triangle, and Combinatorics</h2>
 
-      <hr>
+  <p>
+    This homework compares the Bernoulli process studied in <strong>Homework 4</strong>
+    and the random-walk simulations of <strong>Homework 7</strong>, showing how both are
+    manifestations of the same underlying mathematical structure: the
+    <strong>binomial distribution</strong> and its combinatorial foundations.
+  </p>
 
-      <h3>1 — Bernoulli frequency convergence (interactive)</h3>
-      <p>
-        Run a sequence of Bernoulli trials and watch the running frequency of successes converge to <strong>p</strong>.
-        This is the practical demonstration of the Law of Large Numbers (see Homework 4 for theory and experiments).
-      </p>
+  <!-- SECTION 1 -->
+  <h3>1. Bernoulli Processes vs Random Walks</h3>
 
-      <div class="rsa-row" style="gap:12px;align-items:center;margin-bottom:10px">
-        <label>Trials: <input id="convN" type="number" value="1000" min="10" style="width:100px"></label>
-        <label>Success p: <input id="convP" type="number" value="0.3" step="0.01" min="0" max="1" style="width:90px"></label>
-        <label>Runs: <input id="convRuns" type="number" value="1" min="1" style="width:80px"></label>
-        <button onclick="runConvergence()">Run</button>
-        <button onclick="resetConvergence()" style="margin-left:8px;background:#c33;color:#fff">Reset</button>
-      </div>
+  <p>
+    A <strong>Bernoulli process</strong> is a sequence of independent trials, each producing
+    either a success (1) with probability <em>p</em> or a failure (0) with probability 
+    <em>1 − p</em>. In <strong>Homework 4</strong>, we observed how the
+    <strong>relative frequency of successes converges to p</strong> as the number of trials
+    grows — a direct demonstration of the Law of Large Numbers.
+  </p>
 
-      <canvas id="convChart" height="220"></canvas>
+  <p>
+    A <strong>random walk</strong>, as introduced in <strong>Homework 7</strong>, is obtained
+    by mapping each Bernoulli trial to a step: +1 for success and −1 for failure.
+    The cumulative sum of steps produces a trajectory over time.
+  </p>
 
-      <hr>
+  <p>
+    What appears to be two different processes is actually the same object viewed
+    from two perspectives:  
+    <strong>Bernoulli → counts; Random walk → cumulative signed displacement.</strong>
+  </p>
 
-      <h3>2 — Random walk trajectories & Binomial PMF</h3>
-      <p>
-        Choose <em>n</em> and <em>p</em>. We simulate multiple random-walk trajectories (success → +1, failure → −1)
-        over n steps and show the histogram of final scores together with the theoretical binomial curve (converted to score-space).
-      </p>
+  <div class="info-box">
+    <strong>Bernoulli:</strong> K successes after n trials  
+    <br>
+    <strong>Random walk:</strong> Final position S = #successes − #failures = 2K − n
+  </div>
 
-      <div class="rsa-row" style="gap:12px;align-items:center;margin-bottom:10px">
-        <label>n (weeks): <input id="rwN" type="number" value="50" min="1" style="width:86px"></label>
-        <label>success p: <input id="rwP" type="number" value="0.3" step="0.01" min="0" max="1" style="width:86px"></label>
-        <label>sims: <input id="rwSims" type="number" value="200" min="1" style="width:86px"></label>
-        <button onclick="runRandomWalk()">Run</button>
-        <button onclick="resetRandomWalk()" style="margin-left:8px;background:#c33;color:#fff">Reset</button>
-      </div>
+  <p>
+    This connection means that the <strong>distribution of final random-walk scores</strong>
+    is completely determined by the <strong>binomial distribution</strong>, which in turn
+    is determined by <strong>binomial coefficients</strong>.
+  </p>
 
-      <canvas id="rwTraj" height="220"></canvas>
-      <canvas id="rwHist" height="220"></canvas>
+  <!-- SECTION 2 -->
+  <h3>2. Pascal’s Triangle (Tartaglia) & Binomial Coefficients</h3>
 
-      <hr>
+  <p>
+    Pascal’s triangle is a triangular array of <strong>binomial coefficients</strong>.
+    Each entry represents the number of ways to choose <em>k</em> successes in <em>n</em> trials:
+  </p>
 
-      <h3>3 — Pascal’s triangle (Tartaglia) and binomial coefficients</h3>
-      <p>
-        Pascal’s triangle encodes binomial coefficients <em>C(n,k)</em>. The binomial PMF for Binomial(n,p)
-        uses these coefficients. Below we render the first <strong>nRows</strong> rows; click a row index to highlight it.
-      </p>
+  <p class="math-center"><strong>C(n, k) = n! / (k!(n − k)!)</strong></p>
 
-      <div class="rsa-row" style="gap:12px;align-items:center;margin-bottom:8px">
-        <label>Rows: <input id="ptRows" type="number" value="10" min="3" max="20" style="width:84px"></label>
-        <button onclick="renderPascal()">Render</button>
-      </div>
+  <p>
+    Each row of the triangle represents the coefficients of the binomial expansion:
+  </p>
 
-      <div id="pascalContainer" style="overflow:auto;max-height:260px;background:rgba(255,255,255,0.02);padding:10px;border-radius:8px"></div>
+  <p class="math-center"><strong>(p + (1 − p))ⁿ = Σ C(n, k) pᵏ (1 − p)ⁿ⁻ᵏ</strong></p>
 
-      <h4>Fibonacci from Pascal diagonals (short note)</h4>
-      <p>
-        Sums along shallow diagonals of Pascal’s triangle produce Fibonacci numbers.
-        For small rows we show the mapping underneath the triangle when you render it.
-      </p>
+  <p>
+    These coefficients count the number of possible sequences with exactly
+    <em>k</em> successes — the building blocks of both
+    <strong>Bernoulli-process frequencies</strong> and
+    <strong>random-walk final-score distributions</strong>.
+  </p>
 
-      <hr>
+  <h4>Interactive Tartaglia Triangle</h4>
 
-      <h3>Short comparison to Homework 4 & Homework 7</h3>
-      <p>
-        <strong>Homework 4 (LLN)</strong>: Bernoulli convergence of sample frequency → p is an empirical Law of Large Numbers demonstration.
-        <strong>Homework 7 (Random walk)</strong>: a Bernoulli process mapped via +1/−1 steps yields the random walk and binomial final-score distribution.
-        This page bridges the two: the Bernoulli trial probabilities produce the binomial coefficients (Pascal) which give the PMF used in HW7 histograms.
-      </p>
+  <label for="ptRows">Rows:</label>
+  <input id="ptRows" type="number" value="10" min="3" max="25"
+         oninput="renderPascal()">
 
-      <hr>
-      <a href="index.html" class="back-button">← Back to Home</a>
-    </div>
-  </main>
+  <div id="pascalContainer"
+       style="padding:10px; background:rgba(255,255,255,0.02); border-radius:8px; margin-top:15px;">
+  </div>
 
-  <footer class="site-footer">
-    © 2025 Alexandru Silivas — ID 2252622 —
-    <a href="mailto:silivas.2252622@studenti.uniroma1.it">silivas.2252622@studenti.uniroma1.it</a>
-  </footer>
+  <p>
+    Below the triangle, the page also shows <strong>Fibonacci diagonal sums</strong>,
+    revealing a classical combinatorial connection: summing along “shallow diagonals”
+    of Pascal’s triangle yields Fibonacci numbers.
+  </p>
 
-  <script src="process_comparations.js"></script>
+
+  <!-- SECTION 3 -->
+  <h3>3. Deep Analogy Between Homework 4 & Homework 7</h3>
+
+  <p>
+    The Law of Large Numbers from HW4 and the random-walk simulations from HW7 are
+    two faces of the same coin.
+  </p>
+
+  <h4>Bernoulli → LLN (Homework 4)</h4>
+  <p>
+    In HW4, repeated Bernoulli trials showed:
+  </p>
+  <p class="math-center"><strong>frequency → probability</strong></p>
+  <p>
+    As the number of trials grows, randomness “smooths out” and outcomes stabilize.
+  </p>
+
+  <h4>Bernoulli → Random Walk (Homework 7)</h4>
+  <p>
+    In HW7, the same trials were interpreted as +1 or −1 steps.  
+    Instead of frequency convergence, we studied:
+  </p>
+  <p class="math-center"><strong>distribution of final scores</strong></p>
+
+  <p>
+    The “bell-shaped” histograms in HW7 were simply the <strong>binomial distribution
+    expressed in walk coordinates</strong>.
+  </p>
+
+  <h4>How Pascal Ties Them Together</h4>
+
+  <ul>
+    <li>Pascal’s triangle counts paths in the random walk.</li>
+    <li>These counts determine the binomial distribution.</li>
+    <li>The LLN describes convergence to the same distribution.</li>
+    <li>The binomial expansion algebraically encodes the whole process.</li>
+  </ul>
+
+  <p>
+    Even Fibonacci appears because its diagonals count restricted classes of walk paths.
+  </p>
+
+  <div class="info-box">
+    <strong>Conclusion:</strong>  
+    HW4 (LLN) describes the <em>frequency</em> behavior of Bernoulli trials.  
+    HW7 (random walk) describes the <em>combinatorial</em> behavior.  
+    Pascal’s triangle is the <em>bridge</em> between the two.
+  </div>
+
+  <br>
+
+  <a href="index.html" class="back-button">← Back to Home</a>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  © 2025 Alexandru Silivas — ID 2252622 —
+  <a href="mailto:silivas.2252622@studenti.uniroma1.it">
+    silivas.2252622@studenti.uniroma1.it
+  </a>
+</footer>
+
+<script src="process_comparisons.js"></script>
+
 </body>
 </html>
