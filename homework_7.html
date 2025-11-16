@@ -1,124 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Homework 7 — Random Walk Security Simulation</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Homework 7 — Server Security Random Walks & Binomial Convergence</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body>
+  <header class="navbar">
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="homework_1.html">HMWK 1</a></li>
+        <li><a href="homework_2.html">HMWK 2</a></li>
+        <li><a href="homework_3.html">HMWK 3</a></li>
+        <li><a href="homework_4.html">HMWK 4</a></li>
+        <li><a href="homework_5.html">HMWK 5</a></li>
+        <li><a href="homework_6.html">HMWK 6</a></li>
+        <li><a href="homework_7.html" class="active">HMWK 7</a></li>
+        <li><a href="homework_8.html">HMWK 8</a></li>
+        <li><a href="homework_9.html">HMWK 9</a></li>
+      </ul>
+    </nav>
+  </header>
 
-<header class="navbar">
-  <nav>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="homework_1.html">HMWK 1</a></li>
-      <li><a href="homework_2.html">HMWK 2</a></li>
-      <li><a href="homework_3.html">HMWK 3</a></li>
-      <li><a href="homework_4.html">HMWK 4</a></li>
-      <li><a href="homework_5.html">HMWK 5</a></li>
-      <li><a href="homework_6.html">HMWK 6</a></li>
-      <li><a href="homework_7.html" class="active">HMWK 7</a></li>
-      <li><a href="homework_8.html">HMWK 8</a></li>
-      <li><a href="homework_9.html">HMWK 9</a></li>
-    </ul>
-  </nav>
-</header>
+  <main>
+    <div class="main-content">
+      <h1>Homework 7</h1>
+      <hr class="section-separator">
+      <h2>Server updates as random walks and convergence to Binomial (n = 50)</h2>
 
-<main>
-  <div class="main-content">
-    <h1>Homework 7 — Random Walk Security Model</h1>
-    <hr class="section-separator">
-
-    <p>
-      In this assignment, we model a server that receives security updates weekly. 
-      Each week, <strong>m attackers</strong> independently attempt to breach the system, each with probability <strong>p</strong>.  
-      If the server survives a week, it scores <strong>+1</strong>.  
-      If breached, it scores <strong>-1</strong>.  
-      Over <strong>n weeks</strong>, this creates a <em>cumulative score</em> that behaves like a <strong>random walk</strong>.
-    </p>
-
-    <p>
-      We simulate trajectories and compare final score distributions to the theoretical 
-      <strong>binomial distribution</strong>, showing convergence as <em>n</em> and <em>m</em> increase.
-    </p>
-
-    <hr>
-
-    <!-- PANEL A -->
-    <section>
-      <h2>Panel A — One attacker, 50 weeks</h2>
       <p>
-        With <strong>m = 1</strong> attacker and a low breach probability <strong>p = 0.05</strong>, 
-        the server is usually safe. The security score drifts upward.
+        Model: each week there are <strong>m</strong> independent attackers, each with breach probability <strong>p</strong>.
+        A week is <strong>secure</strong> if no attacker succeeds (probability <em>s=(1−p)<sup>m</sup></em>); otherwise it's breached.
+        Assign +1 for a secure week, −1 for a breached week. Over <strong>n</strong> weeks the cumulative score <strong>S</strong> is the sum of those ±1 steps.
       </p>
 
-      <canvas id="trajA" height="220"></canvas>
-      <canvas id="histA" height="220"></canvas>
-    </section>
-
-    <hr>
-
-    <!-- PANEL B -->
-    <section>
-      <h2>Panel B — Balanced walk (50 attackers, 50 weeks, forced fairness)</h2>
-      <p>
-        Even though there are many attackers, we artificially force the probability of surviving a week
-        to be <strong>s = 0.5</strong>.  
-        This yields a symmetric distribution around 0, matching the reference site.
+      <p style="text-align:center;">
+        With <strong>K</strong> = number of secure weeks, <strong>K ~ Binomial(n, s)</strong> and final score <strong>S = 2K − n</strong>.
       </p>
 
-      <canvas id="trajB" height="220"></canvas>
-      <canvas id="histB" height="220"></canvas>
-    </section>
+      <hr>
 
-    <hr>
+      <!-- PANEL A -->
+      <section>
+        <h3>Panel A — Realistic: 1 attacker, p = 0.05 (80 sims)</h3>
+        <p>Expected weekly secure probability s = (1 − p)<sup>m</sup> = 0.95. Final score should be high (positive drift).</p>
+        <canvas id="trajA" height="220"></canvas>
+        <canvas id="histA" height="220"></canvas>
+      </section>
 
-    <!-- PANEL C -->
-    <section>
-      <h2>Panel C — 50 attackers, 50 weeks, 500 simulations</h2>
-      <p>
-        Now we let the real formula apply: <strong>s = (1 - p)^50</strong>.  
-        With many attackers, survival becomes rare.  
-        The score drifts sharply downward, matching realistic multi-attacker threat models.
-      </p>
+      <hr>
 
-      <canvas id="trajC" height="220"></canvas>
-      <canvas id="histC" height="220"></canvas>
-    </section>
+      <!-- PANEL B -->
+      <section>
+        <h3>Panel B — Balanced random walk (forced s = 0.5, 80 sims)</h3>
+        <p>Here we force weekly survival probability to 0.5 (educational). This yields a symmetric random walk like the reference.</p>
+        <canvas id="trajB" height="220"></canvas>
+        <canvas id="histB" height="220"></canvas>
+      </section>
 
-    <hr>
+      <hr>
 
-    <!-- INTERACTIVE PANEL -->
-    <section>
-      <h2>Interactive Simulator</h2>
-      <p>Try your own parameters and visualize a random walk and its distribution.</p>
+      <!-- PANEL C -->
+      <section>
+        <h3>Panel C — Strong attacks: m = 50, p = 0.05 (400 sims)</h3>
+        <p>Many attackers dramatically reduce s; the walk drifts downward. This is the realistic high-threat scenario.</p>
+        <canvas id="trajC" height="220"></canvas>
+        <canvas id="histC" height="220"></canvas>
+      </section>
 
-      <div class="rsa-row">
-        <label>Weeks:</label><input id="i_weeks" type="number" value="50">
-        <label>Attackers:</label><input id="i_m" type="number" value="10">
-        <label>Breach p:</label><input id="i_p" type="number" step="0.01" value="0.05">
-        <label>Simulations:</label><input id="i_sims" type="number" value="200">
-        <button onclick="runInteractive()">Run</button>
-      </div>
+      <hr>
 
-      <canvas id="trajI" height="220"></canvas>
-      <canvas id="histI" height="220"></canvas>
-    </section>
+      <!-- INTERACTIVE PANEL -->
+      <section>
+        <h3>Interactive Simulator</h3>
+        <p>Pick parameters and run simulations. The histogram overlays the theoretical expected counts (scaled).</p>
 
-    <hr>
-    <a href="index.html" class="back-button">← Back to Home</a>
+        <div class="rsa-row" style="gap:12px; align-items:center;">
+          <label>Weeks: <input id="i_weeks" type="number" value="50" min="1" style="width:84px"></label>
+          <label>Attackers: <input id="i_m" type="number" value="10" min="1" style="width:84px"></label>
+          <label>Breach p: <input id="i_p" type="number" value="0.05" step="0.01" min="0" max="1" style="width:88px"></label>
+          <label>Sims: <input id="i_sims" type="number" value="200" min="1" style="width:84px"></label>
+          <button onclick="runInteractive()" style="margin-left:6px">Run</button>
+          <button onclick="resetInteractive()" style="margin-left:6px;background:#c33;color:#fff">Reset</button>
+        </div>
 
-  </div>
-</main>
+        <canvas id="trajI" height="250"></canvas>
+        <canvas id="histI" height="250"></canvas>
+      </section>
 
-<footer class="site-footer">
-  © 2025 Alexandru Silivas — ID 2252622 —
-  <a href="mailto:silivas.2252622@studenti.uniroma1.it">silivas.2252622@studenti.uniroma1.it</a>
-</footer>
+      <hr>
+      <a href="index.html" class="back-button">← Back to Home</a>
+    </div>
+  </main>
 
-<script src="pentest.js"></script>
+  <footer class="site-footer">
+    © 2025 Alexandru Silivas — ID 2252622 —
+    <a href="mailto:silivas.2252622@studenti.uniroma1.it">silivas.2252622@studenti.uniroma1.it</a>
+  </footer>
+
+  <script src="pentest.js"></script>
 </body>
 </html>
