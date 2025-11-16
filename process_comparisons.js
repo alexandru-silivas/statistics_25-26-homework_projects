@@ -1,15 +1,137 @@
-// --- Binomial coefficient -------------------------------------------------
+// process_comparisons.js
+// Bernoulli Process, Random Walks, Pascal Triangle, Fibonacci, etc.
+
+// -------------------------------------------------------------
+// Utility functions
+// -------------------------------------------------------------
+
+// Binomial coefficient (n choose k)
 function nCk(n, k) {
   if (k < 0 || k > n) return 0;
   if (k === 0 || k === n) return 1;
   let res = 1;
   for (let i = 1; i <= k; i++) {
-    res = res * (n - i + 1) / i;
+    res = res * (n - (k - i)) / i;
   }
   return Math.round(res);
 }
 
-// --- Render Pascal Triangle ----------------------------------------------
+// Generate Bernoulli trial (1 = success, 0 = fail)
+function bernoulli(p) {
+  return Math.random() < p ? 1 : 0;
+}
+
+// -------------------------------------------------------------
+// Bernoulli process simulator for interactive section
+// -------------------------------------------------------------
+let interactiveChart = null;
+
+function runInteractiveSimulation() {
+  const trials = parseInt(document.getElementById("intTrials").value);
+  const p = parseFloat(document.getElementById("intP").value);
+
+  if (!trials || p < 0 || p > 1) {
+    alert("Please enter valid input.");
+    return;
+  }
+
+  // Run Bernoulli process
+  const results = [];
+  let sum = 0;
+  for (let i = 0; i < trials; i++) {
+    const x = bernoulli(p);
+    results.push(x);
+    sum += x;
+  }
+
+  // Plot empirical frequency convergence
+  const cumulative = [];
+  let running = 0;
+  for (let i = 0; i < results.length; i++) {
+    running += results[i];
+    cumulative.push(running / (i + 1));
+  }
+
+  // Prepare chart container
+  const ctx = document.getElementById("interactiveBernoulliChart").getContext("2d");
+
+  if (interactiveChart) interactiveChart.destroy();
+
+  interactiveChart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: cumulative.map((_, i) => i + 1),
+      datasets: [
+        {
+          label: "Empirical Frequency",
+          data: cumulative,
+          fill: false,
+          borderColor: "rgba(78,163,255,0.9)",
+          tension: 0.15,
+        },
+        {
+          label: "Theoretical Probability p",
+          data: Array(cumulative.length).fill(p),
+          borderColor: "rgba(255,99,132,0.7)",
+          borderDash: [6, 6],
+          pointRadius: 0,
+          tension: 0,
+        }
+      ]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 1,
+          title: {
+            display: true,
+            text: "Frequency"
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: "Trials"
+          }
+        }
+      }
+    }
+  });
+}
+
+// Reset button
+function resetInteractive() {
+  if (interactiveChart) {
+    interactiveChart.destroy();
+    interactiveChart = null;
+  }
+  const ctx = document.getElementById("interactiveBernoulliChart").getContext("2d");
+
+  // draw blank skeleton chart
+  interactiveChart = new Chart(ctx, {
+    type: "line",
+    data: { labels: [], datasets: [] },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 1,
+          title: { display: true, text: "Frequency" }
+        },
+        x: {
+          title: { display: true, text: "Trials" }
+        }
+      }
+    }
+  });
+}
+
+
+
+// -------------------------------------------------------------
+// Pascal's Triangle (Tartaglia) — Fully auto-expanding version
+// -------------------------------------------------------------
 function renderPascal() {
   const rows = Math.max(3, Math.min(25,
     parseInt(document.getElementById("ptRows").value, 10) || 10
@@ -17,10 +139,6 @@ function renderPascal() {
 
   const container = document.getElementById("pascalContainer");
   container.innerHTML = "";
-
-  // auto-adjust height so no scrolling needed
-  const rowHeight = 32;
-  container.style.height = (rows * rowHeight + 60) + "px";
 
   // compute triangle
   const tri = [];
@@ -31,7 +149,7 @@ function renderPascal() {
     }
   }
 
-  // render rows
+  // render rows (no fixed height, expands naturally)
   for (let r = 0; r < rows; r++) {
     const rowDiv = document.createElement("div");
     rowDiv.style.display = "flex";
@@ -50,6 +168,7 @@ function renderPascal() {
       cell.style.textAlign = "center";
       rowDiv.appendChild(cell);
     }
+
     container.appendChild(rowDiv);
   }
 
@@ -76,5 +195,14 @@ function renderPascal() {
   container.appendChild(fibDiv);
 }
 
-// render once on load
-window.addEventListener("DOMContentLoaded", renderPascal);
+
+// -------------------------------------------------------------
+// Initialize on page load
+// -------------------------------------------------------------
+window.addEventListener("DOMContentLoaded", () => {
+  // Draw empty Bernoulli chart skeleton
+  resetInteractive();
+
+  // Draw initial Pascal triangle
+  renderPascal();
+});
