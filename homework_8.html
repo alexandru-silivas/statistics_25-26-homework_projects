@@ -4,15 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Homework 8 – Bernoulli Process, Random Walk, Binomial Coefficients</title>
+  <title>Homework 8 — Bernoulli Processes, Random Walks, Binomial Coefficients</title>
 
   <link rel="stylesheet" href="style.css">
 
-  <style>
-    /* --- Extra styling specifically for HW8 --- */
+  <!-- MathJax for LaTeX rendering -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
+  <style>
     #pascalContainer {
-      margin-top: 15px;
+      margin-top: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -23,26 +30,34 @@
 
     .pascal-row {
       margin: 2px 0;
+      line-height: 1.3em;
     }
 
-    /* Prevent overlap with following text */
-    #pascal-section {
-      margin-bottom: 60px;
-    }
-
-    /* Chart area */
     .chart-block {
-      margin: 40px 0;
+      margin: 40px auto;
+      max-width: 850px;
     }
 
     .chart-title {
       font-weight: bold;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
+      text-align: center;
     }
 
-    .wide-chart {
+    #pascal-section {
+      margin-bottom: 60px;
+    }
+
+    #interactiveControls {
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    #interactiveRandomWalk {
       max-width: 900px;
-      margin: 0 auto;
+      margin: 30px auto;
     }
   </style>
 </head>
@@ -69,113 +84,127 @@
 
   <main>
     <div class="main-content">
+
       <h1>Homework 8</h1>
       <hr class="section-separator">
 
-      <h2>Bernoulli Processes, Random Walks, Binomial Coefficients, Pascal’s Triangle & Fibonacci</h2>
+      <h2>Bernoulli Processes, Random Walks, and the Structure of Binomial Mathematics</h2>
 
       <p>
-        This assignment compares Bernoulli processes with random walks, highlights their visual similarities
-        and differences, and explores their deep mathematical connections with binomial coefficients,
-        Pascal’s triangle (Tartaglia’s triangle), the binomial distribution, binomial expansion, and even
-        the Fibonacci sequence.
-      </p>
-
-      <p>
-        The previous homework (<strong>Homework 7</strong>) involved simulating security-breach random walks,
-        while <strong>Homework 4</strong> focused on the Law of Large Numbers through Bernoulli and frequency
-        convergence. This homework ties these topics together and shows how the same mathematical objects
-        — binomial coefficients — sit underneath all of them.
-      </p>
-
-      <h3>1. Bernoulli Process vs Random Walk</h3>
-
-      <p>
-        A <strong>Bernoulli process</strong> is a sequence of independent experiments, each producing a 1 (success)
-        or 0 (failure). When we transform successes into +1 and failures into –1, we obtain a
-        <strong>symmetric random walk</strong>.  
-        This is exactly what we did in <strong>Homework 7</strong>: each secure week = +1,
-        each breach = –1.
+        This homework ties together several ideas encountered previously: Bernoulli trials, the Law of Large Numbers (HW4),
+        Random Walks (HW7), and combinatorial structures such as binomial coefficients, Pascal’s Triangle, binomial expansion,
+        Fibonacci recursion, and more.  
       </p>
 
       <p>
-        The Law of Large Numbers (as studied in Homework 4) governs Bernoulli processes: as the number of trials
-        increases, the empirical frequency of successes converges toward the true probability \(p\).  
-        In Homework 7, we instead looked at <em>cumulative sums</em> (random walks), but the underlying Bernoulli
-        mechanism is the same.
-      </p>
-
-      <h3>2. Pascal’s Triangle (Tartaglia) & Binomial Coefficients</h3>
-
-      <p>
-        Each row of Pascal's Triangle corresponds to the coefficients of the binomial expansion:
-      </p>
-
-      <p style="text-align:center; font-size:1.2em;">
-        \((a + b)^n = \sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^k\)
+        A <strong>Bernoulli process</strong> is a sequence of independent trials where each trial results in a
+        success (1) with probability \(p\) or a failure (0) with probability \(1-p\). If instead of 1 and 0
+        we assign \(+1\) to success and \(-1\) to failure, the Bernoulli process becomes a <strong>symmetric or asymmetric random walk</strong>.
       </p>
 
       <p>
-        In probability, the binomial distribution is:
-      </p>
-
-      <p style="text-align:center; font-size:1.2em;">
-        \(P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}\)
+        This is exactly the same mechanism encountered in Homework 7 when modeling weekly server security:
+        a secure week counted as \(+1\), a breach counted as \(-1\), and the total score behaved as a random walk driven by Bernoulli trials.
       </p>
 
       <p>
-        Both Homework 4 (Bernoulli frequencies) and Homework 7 (random walk scores) trace back to these same
-        coefficients. Pascal’s Triangle effectively <strong>counts the number of possible paths</strong>
-        that lead to a given outcome.
+        In Homework 4, we used Bernoulli trials to illustrate the <strong>Law of Large Numbers</strong>.
+        Here we extend that connection: the number of successes after \(n\) Bernoulli trials follows a
+        <strong>binomial distribution</strong>, whose coefficients appear in <strong>Pascal’s Triangle (Tartaglia)</strong>.
+        These coefficients also govern the <strong>binomial expansion</strong> and are closely related to
+        <strong>Fibonacci numbers</strong> through diagonal summations.
       </p>
 
+      <hr class="section-separator">
+
+      <!-- PASCAL TRIANGLE -->
       <section id="pascal-section">
-        <h3>Interactive Pascal / Tartaglia Triangle</h3>
+        <h2>Pascal’s (Tartaglia’s) Triangle and Binomial Coefficients</h2>
 
         <p>
-          Increase the number of rows to see how the triangle grows.  
-          The container automatically expands so nothing overlaps.
+          Pascal’s Triangle encodes the binomial coefficients \(\binom{n}{k}\) that appear in:
         </p>
 
-        <label for="ptRows"><strong>Number of rows:</strong></label>
-        <input id="ptRows" type="number" value="10" min="3" max="30" oninput="renderPascal()">
+        <p class="formula">
+          \[
+            (a + b)^n = \sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^{k}.
+          \]
+        </p>
+
+        <p>
+          It is also the counting structure underlying the binomial distribution
+          \(B(n,p)\), which determines the probability that a Bernoulli process has \(k\) successes in \(n\) trials:
+        </p>
+
+        <p class="formula">
+          \[
+            P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}.
+          \]
+        </p>
+
+        <label for="pascalRows"><strong>Number of rows:</strong></label>
+        <input id="pascalRows" type="number" min="1" max="25" value="10" oninput="renderPascal()" />
 
         <div id="pascalContainer"></div>
       </section>
 
-      <h3>3. Fibonacci & Pascal</h3>
+      <hr class="section-separator">
 
-      <p>
-        One of the most beautiful mathematical facts is that the Fibonacci sequence appears in Pascal's triangle:
-        summing along the shallow diagonals yields:
-      </p>
+      <!-- CHART SECTION: Bernoulli vs Random Walk -->
+      <section>
+        <h2>Bernoulli Processes and Random Walks</h2>
 
-      <p style="text-align:center; font-size:1.2em;">
-        \(1, 1, 2, 3, 5, 8, 13, 21, ...\)
-      </p>
+        <p>
+          Assigning \(+1\) to a success and \(-1\) to a failure transforms a Bernoulli process into a random walk.
+          If \(p = 0.5\), the walk is symmetric and stays near 0 with high probability.
+          If \(p \neq 0.5\), the walk drifts upward or downward.
+        </p>
 
-      <p>
-        This further illustrates how random-walk paths, Bernoulli processes, combinations,
-        and classical number sequences are all deeply linked through combinatorics.
-      </p>
+        <div class="chart-block">
+          <div class="chart-title">Example Random Walk (p = 0.5)</div>
+          <canvas id="rw1"></canvas>
+        </div>
+
+        <div class="chart-block">
+          <div class="chart-title">Example Random Walk (p = 0.7)</div>
+          <canvas id="rw2"></canvas>
+        </div>
+      </section>
+
+      <hr class="section-separator">
+
+      <!-- INTERACTIVE RANDOM WALK -->
+      <section>
+        <h2>Interactive Random Walk Simulator</h2>
+
+        <p>
+          Change the parameters and see how the trajectory evolves.  
+          The walk updates as new simulated Bernoulli steps are added.
+        </p>
+
+        <div id="interactiveControls">
+          <label>p: <input id="pInput" type="number" value="0.5" step="0.05" min="0" max="1"></label>
+          <label>Steps: <input id="stepsInput" type="number" value="50" min="1" max="500"></label>
+          <button onclick="simulateInteractiveWalk()">Simulate</button>
+          <button onclick="resetInteractiveWalk()">Reset</button>
+        </div>
+
+        <canvas id="interactiveRandomWalk"></canvas>
+      </section>
 
       <hr>
 
       <a href="index.html" class="back-button">← Back to Home</a>
+
     </div>
   </main>
 
   <footer class="site-footer">
-    © 2025 Alexandru Silivas — ID 2252622 — 
-    <a href="mailto:silivas.2252622@studenti.uniroma1.it">
-      silivas.2252622@studenti.uniroma1.it
-    </a>
+    © 2025 Alexandru Silivas — ID 2252622 —
+    <a href="mailto:silivas.2252622@studenti.uniroma1.it">silivas.2252622@studenti.uniroma1.it</a>
   </footer>
 
-  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <!-- Homework 8 JS -->
   <script src="process_comparisons.js"></script>
 
 </body>
