@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Homework 7 — Server Security Random Walks & Binomial Convergence</title>
   <link rel="stylesheet" href="style.css">
-  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -30,81 +29,94 @@
     <div class="main-content">
       <h1>Homework 7</h1>
       <hr class="section-separator">
-
-      <h2>Security updates, random walks and binomial convergence (n = 50 weeks)</h2>
+      <h2>Server updates as random walks and convergence to Binomial</h2>
 
       <p>
         Model: each week there are <strong>m</strong> independent attackers, each with breach probability <strong>p</strong>.
-        The server is considered breached in a week if at least one attacker succeeds. Assign +1 if the server
-        remains secure that week, −1 if breached. Over n weeks the cumulative score is the sum of those ±1 steps.
-      </p>
-
-      <p>
-        Weekly secure probability: <strong>s = (1 − p)<sup>m</sup></strong>. Number of secure weeks K ∼ Binomial(n, s).
-        Final score S = 2K − n; possible scores are {−n, −n+2, …, n−2, n}. The theoretical probability:
+        A week is <strong>secure</strong> if no attacker succeeds (probability $s=(1-p)^m$); otherwise it's breached.
+        Assign +1 for a secure week, −1 for a breached week. Over $n$ weeks the cumulative score $S$ is the sum of those ±1 steps.
       </p>
 
       <p style="text-align:center;">
-        <strong>P(S = 2k − n) = C(n,k) · s<sup>k</sup> · (1−s)<sup>n−k</sup></strong>
+        With $K$ the number of secure weeks, $K\sim\mathrm{Binomial}(n,s)$ and final score $S=2K-n$.  
+        Thus $P(S=2k-n)=\binom{n}{k}s^k(1-s)^{n-k}$.
       </p>
 
       <hr>
 
-      <h3>Simulations & fixed demonstrations</h3>
-      <p>
-        The three panels below run fixed demonstrations (no inputs):  
-        <strong>(A)</strong> 1 attacker, 80 simulations visualized;  
-        <strong>(B)</strong> 50 attackers, 80 simulations;  
-        <strong>(C)</strong> 50 attackers, 400 simulations (many trials — heavy breach bias).
-      </p>
+      <h3>Fixed demonstrations (no UI controls)</h3>
+      <p>Three fixed panels are below. All use <strong>n = 50</strong> weeks and Y-axis fixed to <strong>−50..+50</strong>.</p>
 
-      <div style="margin-top:18px;">
-        <!-- Panel A -->
-        <h4>Panel A — 1 attacker over 50 weeks (80 simulations)</h4>
-        <div style="display:flex;gap:18px;flex-wrap:wrap;">
-          <div style="flex:1;min-width:280px;">
-            <p style="margin:6px 0 8px 0">Sample trajectories (many runs plotted).</p>
-            <canvas id="trajA" height="180"></canvas>
-          </div>
-          <div style="flex:1;min-width:280px;">
-            <p style="margin:6px 0 8px 0">Histogram of final scores (empirical)</p>
-            <canvas id="histA" height="180"></canvas>
-          </div>
-          <div style="flex:1;min-width:280px;">
-            <p style="margin:6px 0 8px 0">Histogram + theoretical binomial overlay</p>
-            <canvas id="overlayA" height="180"></canvas>
-          </div>
+      <h4>Panel A — realistic model (m = 1 attacker, p = 0.05, 80 simulations)</h4>
+      <div style="display:flex;gap:18px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:300px">
+          <p style="margin:6px 0 8px 0">Sample trajectories (80 runs)</p>
+          <canvas id="trajA" height="180"></canvas>
         </div>
-
-        <!-- Panel B -->
-        <h4 style="margin-top:22px;">Panel B — 50 attackers over 50 weeks (80 simulations)</h4>
-        <div style="display:flex;gap:18px;flex-wrap:wrap;">
-          <div style="flex:1;min-width:280px;">
-            <canvas id="trajB" height="180"></canvas>
-          </div>
-          <div style="flex:1;min-width:280px;">
-            <canvas id="histB" height="180"></canvas>
-          </div>
-          <div style="flex:1;min-width:280px;">
-            <canvas id="overlayB" height="180"></canvas>
-          </div>
+        <div style="flex:1;min-width:300px">
+          <p style="margin:6px 0 8px 0">Histogram of final scores (empirical)</p>
+          <canvas id="histA" height="180"></canvas>
         </div>
+        <div style="flex:1;min-width:300px">
+          <p style="margin:6px 0 8px 0">Histogram + theoretical overlay</p>
+          <canvas id="overlayA" height="180"></canvas>
+        </div>
+      </div>
 
-        <!-- Panel C -->
-        <h4 style="margin-top:22px;">Panel C — Many trials: 50 attackers over 50 weeks (400 simulations)</h4>
-        <div style="display:flex;gap:18px;flex-wrap:wrap;">
-          <div style="flex:1;min-width:320px;">
-            <p style="margin:6px 0 8px 0">Cloud of 400 trajectories (light grey)</p>
-            <canvas id="trajC" height="250"></canvas>
-          </div>
-          <div style="flex:1;min-width:320px;">
-            <p style="margin:6px 0 8px 0">Histogram + theoretical overlay (counts)</p>
-            <canvas id="histC" height="250"></canvas>
-          </div>
+      <h4 style="margin-top:22px;">Panel B — balanced random walk (forced s = 0.5, 50 attackers, 80 simulations)</h4>
+      <div style="display:flex;gap:18px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:300px">
+          <p style="margin:6px 0 8px 0">Sample trajectories (80 runs, balanced)</p>
+          <canvas id="trajB" height="180"></canvas>
+        </div>
+        <div style="flex:1;min-width:300px">
+          <p style="margin:6px 0 8px 0">Histogram of final scores (empirical)</p>
+          <canvas id="histB" height="180"></canvas>
+        </div>
+        <div style="flex:1;min-width:300px">
+          <p style="margin:6px 0 8px 0">Histogram + theoretical overlay (s=0.5)</p>
+          <canvas id="overlayB" height="180"></canvas>
+        </div>
+      </div>
+
+      <h4 style="margin-top:22px;">Panel C — strong attack scenario (m = 50, p = 0.05, 400 simulations)</h4>
+      <div style="display:flex;gap:18px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:360px">
+          <p style="margin:6px 0 8px 0">Cloud of 400 trajectories (faint)</p>
+          <canvas id="trajC" height="250"></canvas>
+        </div>
+        <div style="flex:1;min-width:360px">
+          <p style="margin:6px 0 8px 0">Histogram + theoretical overlay</p>
+          <canvas id="histC" height="250"></canvas>
         </div>
       </div>
 
       <hr style="margin-top:22px;">
+
+      <h3>Interactive simulation</h3>
+      <p>Change parameters and run a simulation. The interactive panel shows trajectories (multiple runs), histogram and theoretical overlay for comparison.</p>
+
+      <div class="rsa-row" style="gap:12px; margin-bottom:14px;">
+        <label>Weeks (n): <input id="intN" type="number" value="50" min="1" step="1" style="width:88px"></label>
+        <label>Attackers (m): <input id="intM" type="number" value="10" min="1" step="1" style="width:88px"></label>
+        <label>Attacker p: <input id="intP" type="number" value="0.05" min="0" max="1" step="0.01" style="width:92px"></label>
+        <label>Sims: <input id="intS" type="number" value="200" min="1" step="1" style="width:92px"></label>
+        <button type="button" onclick="runInteractive()">Run Interactive</button>
+        <button type="button" onclick="resetInteractive()">Reset</button>
+      </div>
+
+      <div style="display:flex;gap:18px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:360px">
+          <p style="margin:6px 0 8px 0">Trajectories</p>
+          <canvas id="trajI" height="250"></canvas>
+        </div>
+        <div style="flex:1;min-width:360px">
+          <p style="margin:6px 0 8px 0">Histogram + theoretical overlay</p>
+          <canvas id="histI" height="250"></canvas>
+        </div>
+      </div>
+
+      <hr style="margin-top:20px">
       <a href="index.html" class="back-button">← Back to Home</a>
     </div>
   </main>
