@@ -1,150 +1,176 @@
-// process_comparisons.js — corrected version (no forced heights)
-// Pascal Triangle + Random Walks + Interactive Simulator
+// =============================================================
+// HOMEWORK 8 — Bernoulli, Random Walk, Pascal Triangle, Fibonacci
+// =============================================================
 
-// ---------- Pascal Triangle ----------
-function generatePascal(n) {
-  const tri = [];
-  for (let r = 0; r < n; r++) {
-    const row = [];
-    for (let k = 0; k <= r; k++) {
-      if (k === 0 || k === r) row.push(1);
-      else row.push(tri[r - 1][k - 1] + tri[r - 1][k]);
-    }
-    tri.push(row);
+// ---------- GLOBAL CHART REFERENCES ----------
+let chartBernoulliVsRW = null;
+let chartFibonacciRelation = null;
+let chartInteractive = null;
+
+// =============================================================
+// Bernoulli vs Random Walk chart
+// =============================================================
+function drawBernoulliVsRandomWalk() {
+  const ctx = document.getElementById("chartBernoulliVsRandomWalk").getContext("2d");
+
+  const n = 50;
+  const p = 0.5;
+
+  let bernoulli = [];
+  let walk = [];
+  let cumulative = 0;
+
+  for (let i = 0; i < n; i++) {
+    const val = Math.random() < p ? 1 : 0;
+    bernoulli.push(val);
+
+    cumulative += val === 1 ? 1 : -1;
+    walk.push(cumulative);
   }
-  return tri;
-}
 
-function getPascalRowsInput() {
-  return document.getElementById("pascalRows") ||
-         document.getElementById("ptRows") ||
-         document.getElementById("pascalRowsInput");
-}
+  if (chartBernoulliVsRW) chartBernoulliVsRW.destroy();
 
-function renderPascal() {
-  const input = getPascalRowsInput();
-  const rows = input ? Math.max(1, Math.min(30, parseInt(input.value))) : 12;
-
-  const container = document.getElementById("pascalContainer");
-  if (!container) return;
-
-  const tri = generatePascal(rows);
-
-  container.innerHTML = "";
-  tri.forEach(row => {
-    const div = document.createElement("div");
-    div.className = "pascal-row";
-    div.textContent = row.join("   ");
-    container.appendChild(div);
-  });
-}
-
-// ---------- Random Walk Simulation ----------
-function bernoulliStep(p) {
-  return Math.random() < p ? 1 : -1;
-}
-
-function randomWalk(steps, p) {
-  let pos = 0;
-  const arr = [0];
-  for (let i = 0; i < steps; i++) {
-    pos += bernoulliStep(p);
-    arr.push(pos);
-  }
-  return arr;
-}
-
-// ---------- Chart Utility ----------
-let chart_rw1 = null;
-let chart_rw2 = null;
-let chart_interactive = null;
-
-function destroyChart(c) {
-  if (c && typeof c.destroy === "function") c.destroy();
-}
-
-function createWalkChart(canvasId, arr, label) {
-  const canvas = document.getElementById(canvasId);
-  if (!canvas) return;
-
-  const ctx = canvas.getContext("2d");
-
-  return new Chart(ctx, {
+  chartBernoulliVsRW = new Chart(ctx, {
     type: "line",
     data: {
-      labels: arr.map((_, i) => i),
-      datasets: [{
-        label,
-        data: arr,
-        borderWidth: 2,
-        pointRadius: 0,
-        tension: 0.15,
-        borderColor: "rgba(78,163,255,1)"
-      }]
+      labels: [...Array(n).keys()],
+      datasets: [
+        {
+          label: "Random Walk",
+          data: walk,
+          borderWidth: 2,
+          borderColor: "rgba(80,150,255,0.9)",
+          pointRadius: 0
+        }
+      ]
     },
     options: {
       responsive: true,
-      maintainAspectRatio: false, // CSS controls size
       scales: {
-        x: {
-          title: { display: true, text: "Step" },
-          ticks: { color: "#d0d8e6" }
-        },
-        y: {
-          title: { display: true, text: "Score" },
-          ticks: { color: "#d0d8e6" }
-        }
-      },
-      plugins: {
-        legend: { labels: { color: "#e6eef8" } }
+        y: { title: { display: true, text: "Score (+/-)" } },
+        x: { title: { display: true, text: "Step" } }
       }
     }
   });
 }
 
-// ---------- Initialize Example Charts ----------
-function initExampleWalks() {
-  destroyChart(chart_rw1);
-  destroyChart(chart_rw2);
+// =============================================================
+// Tartaglia / Pascal Triangle
+// =============================================================
+function generateTartaglia() {
+  const rows = parseInt(document.getElementById("rowsInput").value);
+  if (!rows || rows < 1) return;
 
-  chart_rw1 = createWalkChart("rw1", randomWalk(50, 0.5), "Random Walk (p=0.5)");
-  chart_rw2 = createWalkChart("rw2", randomWalk(50, 0.7), "Random Walk (p=0.7)");
+  let triangle = [];
+
+  for (let r = 0; r < rows; r++) {
+    triangle[r] = [];
+    for (let c = 0; c <= r; c++) {
+      if (c === 0 || c === r) triangle[r][c] = 1;
+      else triangle[r][c] = triangle[r - 1][c - 1] + triangle[r - 1][c];
+    }
+  }
+
+  let output = "";
+  for (let r = 0; r < rows; r++) {
+    output += triangle[r].join(" ") + "\n";
+  }
+
+  const target = document.getElementById("tartagliaTriangle");
+  target.textContent = output;
 }
 
-// ---------- Interactive Walk ----------
-function simulateInteractiveWalk() {
-  const p = parseFloat(document.getElementById("pInput").value) || 0.5;
-  const steps = parseInt(document.getElementById("stepsInput").value) || 50;
+// =============================================================
+// Fibonacci Relation Chart
+// =============================================================
+function drawFibonacciRelation() {
+  const ctx = document.getElementById("chartFibonacciRelation").getContext("2d");
 
-  destroyChart(chart_interactive);
+  const fib = [1, 1];
+  for (let i = 2; i < 12; i++) fib.push(fib[i - 1] + fib[i - 2]);
 
-  const arr = randomWalk(steps, Math.max(0, Math.min(1, p)));
+  if (chartFibonacciRelation) chartFibonacciRelation.destroy();
 
-  chart_interactive = createWalkChart(
-    "interactiveRandomWalk",
-    arr,
-    `Interactive Walk (p=${p})`
-  );
+  chartFibonacciRelation = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: fib.map((_, i) => `F${i + 1}`),
+      datasets: [
+        {
+          label: "Fibonacci Numbers",
+          data: fib,
+          backgroundColor: "rgba(255,180,80,0.8)"
+        }
+      ]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: "Value" }
+        },
+        x: { title: { display: true, text: "Index" } }
+      }
+    }
+  });
 }
 
-function resetInteractiveWalk() {
-  destroyChart(chart_interactive);
-  chart_interactive = null;
+// =============================================================
+// Interactive Bernoulli / Walk Simulator
+// =============================================================
+function runInteractiveSimulation() {
+  const p = parseFloat(document.getElementById("inputP").value);
+  const n = parseInt(document.getElementById("inputN").value);
 
-  const canvas = document.getElementById("interactiveRandomWalk");
-  if (canvas) {
-    const ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  let walk = [];
+  let cumulative = 0;
+
+  for (let i = 0; i < n; i++) {
+    const success = Math.random() < p;
+    cumulative += success ? 1 : -1;
+    walk.push(cumulative);
+  }
+
+  const ctx = document.getElementById("interactiveGraph").getContext("2d");
+
+  if (chartInteractive) chartInteractive.destroy();
+
+  chartInteractive = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: [...Array(n).keys()],
+      datasets: [
+        {
+          label: "Random Walk",
+          data: walk,
+          borderColor: "rgba(255,120,120,0.9)",
+          borderWidth: 2,
+          pointRadius: 0
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { title: { display: true, text: "Score" } },
+        x: { title: { display: true, text: "Trial" } }
+      }
+    }
+  });
+}
+
+function resetInteractive() {
+  if (chartInteractive) {
+    chartInteractive.destroy();
+    chartInteractive = null;
   }
 }
 
-// ---------- On Page Load ----------
-window.addEventListener("DOMContentLoaded", () => {
-  const input = getPascalRowsInput();
-  if (input) {
-    input.addEventListener("input", renderPascal);
-  }
-
-  renderPascal();
-  setTimeout(initExampleWalks, 50);
-});
+// =============================================================
+// INITIAL LOAD
+// =============================================================
+window.onload = () => {
+  drawBernoulliVsRandomWalk();
+  drawFibonacciRelation();
+  generateTartaglia();
+};
