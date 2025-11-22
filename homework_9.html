@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Homework 9 — Interpretations of Probability & Measure Theory</title>
+
+  <!-- Main site style -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- MathJax for formulas -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [["$", "$"], ["\\(", "\\)"]] },
+      svg: { fontCache: "global" }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="homework_1.html">HMWK 1</a></li>
+        <li><a href="homework_2.html">HMWK 2</a></li>
+        <li><a href="homework_3.html">HMWK 3</a></li>
+        <li><a href="homework_4.html">HMWK 4</a></li>
+        <li><a href="homework_5.html">HMWK 5</a></li>
+        <li><a href="homework_6.html">HMWK 6</a></li>
+        <li><a href="homework_7.html">HMWK 7</a></li>
+        <li><a href="homework_8.html">HMWK 8</a></li>
+        <li><a href="homework_9.html" class="active">HMWK 9</a></li>
+        <li><a href="homework_8.html">HMWK 10</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="main-content">
+      <h1>Homework 9</h1>
+      <hr class="section-separator" />
+
+      <h2>Interpretations of Probability, Axioms & Measure Theory</h2>
+
+      <p>
+        This assignment reviews the major interpretations of probability, shows how the axiomatic
+        (Kolmogorov) approach resolves conceptual inconsistencies, and introduces the relationship
+        between probability theory and measure theory. Finally, it derives fundamental properties such
+        as <strong>subadditivity</strong> and the <strong>inclusion–exclusion principle</strong>.
+      </p>
+
+      <!-- Section 1 -->
+      <h3>1. Main Interpretations of Probability</h3>
+
+      <p>
+        Probability is not a single concept — it has multiple philosophical interpretations, each
+        motivated by different practical needs and intuitions.
+      </p>
+
+      <h4>1.1 Classical Interpretation (Laplace)</h4>
+      <p>
+        The classical view defines probability as:
+      </p>
+
+      <p class="formula">$$P(E) = \frac{\text{number of favorable outcomes}}{\text{number of equally likely outcomes}}$$</p>
+
+      <p>
+        This works well when:
+      </p>
+
+      <ul>
+        <li>All outcomes are equally likely</li>
+        <li>There is a finite sample space</li>
+        <li>Problems involve symmetry (dice, cards, coins)</li>
+      </ul>
+
+      <p><strong>Limitation:</strong> breaks down when outcomes are not equally likely or when the sample space is infinite.</p>
+
+      <h4>1.2 Frequentist Interpretation</h4>
+      <p>
+        Probability is defined as the <strong>long-run relative frequency</strong> of an event:
+      </p>
+
+      <p class="formula">
+        $$P(E) = \lim_{n\to\infty} \frac{N_E(n)}{n}$$
+      </p>
+
+      <p>
+        Used in:
+      </p>
+
+      <ul>
+        <li>Quality control</li>
+        <li>Experimental sciences</li>
+        <li>Monte Carlo simulations</li>
+      </ul>
+
+      <p><strong>Limitation:</strong> does not apply to single events (“What is the probability that it will rain tomorrow?”).</p>
+
+      <h4>1.3 Bayesian Interpretation</h4>
+      <p>
+        Probability represents a <strong>degree of belief</strong> about uncertain events.
+      </p>
+
+      <p class="formula">$$P(H|\text{data}) \propto P(\text{data}|H)\,P(H)$$</p>
+
+      <p>
+        Bayesian probability:
+      </p>
+
+      <ul>
+        <li>Allows updating knowledge with new evidence</li>
+        <li>Handles unique events naturally</li>
+        <li>Is widely used in machine learning and AI</li>
+      </ul>
+
+      <p><strong>Limitation:</strong> depends on the choice of prior, which can be subjective.</p>
+
+      <h4>1.4 Geometric Interpretation</h4>
+      <p>
+        Used when outcomes form a continuous domain (length, area, volume).
+      </p>
+
+      <p class="formula">
+        $$P(E) = \frac{\text{measure of }E}{\text{measure of total space}}$$
+      </p>
+
+      <p>
+        Example: “Choose a random point on a segment of length 1.”
+      </p>
+
+      <h4>1.5 Why These Views Conflict</h4>
+      <ul>
+        <li>Classical probability assumes symmetry, frequentist does not.</li>
+        <li>Frequentist needs repeated experiments; Bayesian does not.</li>
+        <li>Geometric probability requires a notion of measure.</li>
+      </ul>
+
+      <p>
+        These inconsistencies led to the creation of the modern <strong>axiomatic approach</strong>.
+      </p>
+
+      <!-- Section 2 -->
+      <h3>2. The Axiomatic Approach (Kolmogorov)</h3>
+
+      <p>
+        Andrey Kolmogorov (1933) resolved conceptual disagreements by defining probability using
+        precise mathematical axioms, independent of any interpretation.
+      </p>
+
+      <p>
+        Let $(\Omega, \mathcal{F}, P)$ be a probability space where:
+      </p>
+
+      <ul>
+        <li>$\Omega$ is the sample space</li>
+        <li>$\mathcal{F}$ is a σ-algebra of events</li>
+        <li>$P:\mathcal{F}\to [0,1]$ is a probability measure</li>
+      </ul>
+
+      <h4>The Axioms</h4>
+
+      <p class="formula">
+        1. Non-negativity: $$P(E) \ge 0 \text{ for all } E\in\mathcal{F}$$  
+        2. Normalization: $$P(\Omega)=1$$  
+        3. Countable additivity:  
+        $$P\Big(\bigcup_{i=1}^{\infty}E_i\Big) = \sum_{i=1}^{\infty} P(E_i) \quad \text{for disjoint } E_i$$
+      </p>
+
+      <p>
+        Every interpretation (classical, frequentist, Bayesian, geometric) becomes just a
+        <strong>different way to assign the measure $P$</strong>.
+      </p>
+
+      <!-- Section 3 -->
+      <h3>3. Probability & Measure Theory</h3>
+
+      <p>
+        Probability theory is a special case of measure theory. Here is the correspondence:
+      </p>
+
+      <ul>
+        <li><strong>σ-algebra</strong>: collection of measurable sets (events)</li>
+        <li><strong>Probability measure</strong>: a measure with total mass 1</li>
+        <li><strong>Random variable</strong>: measurable function $X:\Omega\to\mathbb{R}$</li>
+      </ul>
+
+      <p>
+        A random variable is not “random” — it is a <strong>function</strong>.  
+        The randomness comes from the underlying probability measure.
+      </p>
+
+      <!-- Section 4 -->
+      <h3>4. Subadditivity & Inclusion–Exclusion</h3>
+
+      <h4>4.1 Subadditivity</h4>
+      <p>
+        From the axioms, for any events $A$ and $B$:
+      </p>
+
+      <p class="formula">
+        $$P(A\cup B) \le P(A) + P(B)$$
+      </p>
+
+      <h4>Proof:</h4>
+
+      <p>
+        Write $A\cup B$ as disjoint sets:
+      </p>
+
+      <p class="formula">
+        $$A\cup B = A \cup (B\setminus A)$$
+      </p>
+
+      <p>Then:</p>
+
+      <p class="formula">
+        $$P(A\cup B) = P(A) + P(B\setminus A) \le P(A) + P(B)$$
+      </p>
+
+      <h4>4.2 Inclusion–Exclusion (Two Events)</h4>
+
+      <p class="formula">
+        $$P(A\cup B) = P(A) + P(B) - P(A\cap B)$$
+      </p>
+
+      <p><strong>Derivation:</strong></p>
+
+      <p class="formula">
+        $$P(A) + P(B) = P(A\cup B) + P(A\cap B)$$
+      </p>
+
+      <p>Rearranging yields the inclusion–exclusion formula.</p>
+
+      <h4>General Version (n Events)</h4>
+
+      <p class="formula">
+        $$P\Big(\bigcup_{i=1}^n A_i\Big)
+        = \sum_i P(A_i)
+        - \sum_{i<j} P(A_i\cap A_j)
+        + \sum_{i<j<k} P(A_i\cap A_j\cap A_k)
+        - \cdots$$
+      </p>
+
+      <p>
+        This alternating pattern emerges directly from the structure of measure theory.
+      </p>
+
+      <hr />
+      <a href="index.html" class="back-button">← Back to Home</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    © 2025 Alexandru Silivas — ID 2252622 —
+    <a href="mailto:silivas.2252622@studenti.uniroma1.it">
+      silivas.2252622@studenti.uniroma1.it
+    </a>
+  </footer>
+
+</body>
+</html>
