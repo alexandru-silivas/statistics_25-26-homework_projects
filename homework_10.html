@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homework 10 — Poisson Counting Processes</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- MathJax -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<header class="navbar">
+  <nav>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="homework_1.html">HMWK 1</a></li>
+      <li><a href="homework_2.html">HMWK 2</a></li>
+      <li><a href="homework_3.html">HMWK 3</a></li>
+      <li><a href="homework_4.html">HMWK 4</a></li>
+      <li><a href="homework_5.html">HMWK 5</a></li>
+      <li><a href="homework_6.html">HMWK 6</a></li>
+      <li><a href="homework_7.html">HMWK 7</a></li>
+      <li><a href="homework_8.html">HMWK 8</a></li>
+      <li><a href="homework_9.html">HMWK 9</a></li>
+      <li><a href="homework_10.html" class="active">HMWK 10</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <div class="main-content">
+
+    <h1>Homework 10</h1>
+    <hr class="section-separator">
+
+    <h2>Simulating a Counting Process with Rate λ</h2>
+
+    <p>
+      In this assignment, we simulate a process where events occur independently,
+      uniformly in time, at an average rate $\lambda$ per unit time.
+      This type of model is fundamental in probability theory and lies at the heart of
+      <strong>Poisson processes</strong>, queueing theory, and stochastic modeling.
+    </p>
+
+    <p>
+      To approximate such a continuous-time random process, we divide a time interval
+      (e.g., $T = 1$) into $n$ very small subintervals (e.g., $n = 5000$).
+      During each subinterval, an event occurs with probability $\lambda / n$.
+      As $n \to \infty$, this discrete construction converges to the true
+      <strong>Poisson counting process</strong>.
+    </p>
+
+    <h3>1. Discretized Simulation Setup</h3>
+
+    <p>
+      We approximate the continuous-time model using:
+    </p>
+
+    <ul>
+      <li>Time interval: $T = 1$</li>
+      <li>Number of subintervals: $n = 5000$</li>
+      <li>Event probability per subinterval: $p = \lambda / n$</li>
+      <li>Indicator variable per subinterval: $X_i \sim \text{Bernoulli}(p)$</li>
+    </ul>
+
+    <p>
+      The number of events in $[0,1]$ is then:
+    </p>
+
+    <p style="text-align:center;font-size:1.2em;">
+      $N(1) = \displaystyle\sum_{i=1}^{n} X_i$
+    </p>
+
+    <p>
+      As $n$ grows larger, $N(1)$ converges in distribution to a
+      <strong>Poisson($\lambda$)</strong> random variable.
+    </p>
+
+    <h3>2. What Process Are We Approximating?</h3>
+
+    <p>
+      The limiting process is the <strong>Poisson Counting Process</strong>, $\{N(t), t \ge 0\}$, which satisfies:
+    </p>
+
+    <ul>
+      <li>Independent increments</li>
+      <li>Stationary increments (distribution depends only on time difference)</li>
+      <li>$N(t) - N(s) \sim \text{Poisson}(\lambda(t-s))$</li>
+      <li>$N(0)=0$ with probability 1</li>
+    </ul>
+
+    <p>
+      In other words, it models the number of “arrivals” or “successes” happening
+      over time — often used in network traffic, radioactive decay, arrivals in queues,
+      failures of components, and more.
+    </p>
+
+    <h3>3. The Meaning of the Rate Parameter λ</h3>
+
+    <p>
+      The constant $\lambda$ determines the expected number of events per unit time:
+    </p>
+
+    <p style="text-align:center;font-size:1.2em;">
+      $\mathbb{E}[N(1)] = \lambda$
+    </p>
+
+    <p>
+      Higher $\lambda$ means more frequent events.  
+      It also controls the variance:
+    </p>
+
+    <p style="text-align:center;font-size:1.2em;">
+      $\mathrm{Var}(N(1)) = \lambda$
+    </p>
+
+    <p>
+      The Poisson process is one of the rare stochastic processes where
+      <strong>mean = variance</strong> — a key fingerprint used in statistical detection and model validation.
+    </p>
+
+    <h3>4. Simulation Results & Interpretation</h3>
+
+    <p>
+      Below we simulate the discretized Bernoulli scheme 1000 times,
+      and compare the empirical histogram of $N(1)$ to the theoretical
+      Poisson($\lambda$) probability mass function.
+    </p>
+
+    <p>
+      When the approximation works well, the empirical bar heights should closely
+      follow the theoretical curve. For larger $n$, the match becomes almost perfect.
+    </p>
+
+    <!-- GRAPH -->
+    <div class="graph-container">
+      <canvas id="poissonHist"></canvas>
+    </div>
+
+    <div class="rsa-row">
+      <label for="lambdaInput"><strong>λ:</strong></label>
+      <input id="lambdaInput" type="number" min="0.1" step="0.1" value="4">
+      <button type="button" onclick="simulatePoisson()">Simulate</button>
+    </div>
+
+    <p id="simStatus" class="status"></p>
+
+    <h3>5. Interpretation</h3>
+
+    <p>
+      This discrete-time construction illustrates how a Poisson process arises not as a “mysterious”
+      continuous object, but as the natural limit of many tiny Bernoulli trials.
+      This mirrors the same convergence ideas explored in <strong>Homework 4</strong>
+      (Law of Large Numbers): small random pieces combining to reproduce deterministic behavior
+      (the average rate λ), while still retaining inherent randomness (the Poisson distribution).
+    </p>
+
+    <p>
+      The Poisson process stands as a fundamental stochastic model: combining simplicity,
+      interpretability, and strong mathematical structure — and appearing everywhere from
+      physics to cybersecurity.
+    </p>
+
+    <hr>
+    <a href="index.html" class="back-button">← Back to Home</a>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  © 2025 Alexandru Silivas — ID 2252622 — 
+  <a href="mailto:silivas.2252622@studenti.uniroma1.it">
+    silivas.2252622@studenti.uniroma1.it
+  </a>
+</footer>
+
+<script src="poisson_counting.js"></script>
+
+</body>
+</html>
