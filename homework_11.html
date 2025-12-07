@@ -1,49 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Homework 11 — Brownian Motion (Wiener Process)</title>
-
-  <!-- site CSS -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Homework 11 — Brownian Motion (Euler–Maruyama Simulation)</title>
   <link rel="stylesheet" href="style.css" />
 
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
   <!-- MathJax for formulas -->
-  <script>
-    window.MathJax = {
-      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
-      svg: { fontCache: 'global' }
-    };
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-
-  <style>
-    /* HW11-only sizing to prevent chart stretching */
-    .hw11-chart-container {
-      position: relative;
-      width: 100%;
-      height: 420px;
-      max-height: 520px;
-      margin: 1.3rem 0;
-    }
-    .hw11-chart-container canvas {
-      width: 100% !important;
-      height: 100% !important;
-    }
-    /* small control layout */
-    .hw11-controls { display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center; margin-top:0.8rem; }
-    .hw11-controls label { font-weight:600; color:var(--accent); }
-    .hw11-controls input[type="number"], .hw11-controls input[type="text"] { width:100px; padding:6px; border-radius:6px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); color:var(--text); }
-    .hw11-controls button { padding:8px 12px; border-radius:8px; background:var(--accent); color:#fff; border:none; cursor:pointer; font-weight:600; }
-    .hw11-status { margin-top:0.8rem; color:#bfc8d4; font-style:italic; }
-  </style>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
+
 <body>
 
-  <!-- NAVBAR -->
+  <!-- NAVBAR (same as all previous homeworks) -->
   <header class="navbar">
     <nav>
       <ul class="nav-links">
@@ -65,82 +34,131 @@
 
   <main>
     <div class="main-content">
-      <h1>Homework 11</h1>
-      <hr class="section-separator">
 
-      <h2>Brownian Motion (Wiener Process) — simulation via normal increments</h2>
+      <h1>Homework 11</h1>
+      <hr class="section-separator" />
+
+      <h2>Simulating Brownian Motion with the Euler–Maruyama Method</h2>
 
       <p>
-        We simulate a Brownian motion \(W_t\) on \([0,T]\) by partitioning time into \(n\) subintervals
-        and summing independent Gaussian increments:
-        \[
-          \Delta W_i \sim \mathcal{N}(0,\Delta t),\qquad \Delta t = \frac{T}{n}.
-        \]
-        Using the Box–Muller transform we convert uniform random numbers into standard normal samples,
-        then scale them by \(\sqrt{\Delta t}\) to obtain the increments. Summing the increments gives a discrete
-        path approximation of the continuous Wiener process.
+        In this assignment, we revisit the stochastic differential equation (SDE)
+        simulator introduced in previous work and adapt it to the fundamental
+        continuous-time random process in probability theory:
+        <strong>Wiener process</strong> (standard Brownian motion).
       </p>
 
-      <h3>1. Quick theory / reminders</h3>
+      <p>
+        The goal is to simulate Brownian motion over a time interval \( T \), using the
+        <strong>Euler–Maruyama numerical scheme</strong> for stochastic differential equations:
+      </p>
+
+      <p class="math-display">
+        \( dX_t = \mu(X_t,t)\,dt + \sigma(X_t,t)\,dW_t \)
+      </p>
+
+      <p>
+        For <strong>standard Brownian motion</strong>, the drift and diffusion functions simplify to:
+      </p>
+
+      <p class="math-display">
+        \[
+        dW_t = 0 \cdot dt + 1 \cdot dW_t
+        \quad\text{so the update rule becomes}\quad
+        W_{t+\Delta t} = W_t + \sqrt{\Delta t}\,Z,
+        \]
+      </p>
+
+      <p>
+        where \( Z \sim \mathcal{N}(0,1) \) is a standard normal random variable,
+        typically generated via <strong>Box–Muller transform</strong>.
+      </p>
+
+      <h3>1. Theoretical Background</h3>
+
+      <p>
+        A Wiener process \( (W_t)_{t \ge 0} \) is characterized by:
+      </p>
+
       <ul>
-        <li>\(W_0 = 0\).</li>
-        <li>Independent increments: \(W_{t+s}-W_t\) independent of past for \(s>0\).</li>
-        <li>Gaussian increments: \(W_{t+\Delta t}-W_t \sim \mathcal{N}(0,\Delta t)\).</li>
-        <li>Variance grows linearly: \(\mathrm{Var}(W_t)=t\) (for standard Brownian motion).</li>
+        <li>\( W_0 = 0 \)</li>
+        <li>Independent increments</li>
+        <li>Gaussian increments: \( W_{t+h} - W_t \sim \mathcal{N}(0,h) \)</li>
+        <li>Almost surely continuous paths</li>
       </ul>
 
-      <h3>2. From Uniform to Normal — Box–Muller</h3>
       <p>
-        Box–Muller: if \(U_1, U_2\sim\mathrm{Uniform}(0,1)\), then
-        \[
-          Z_1 = \sqrt{-2\ln U_1}\cos(2\pi U_2),\qquad Z_2=\sqrt{-2\ln U_1}\sin(2\pi U_2)
-        \]
-        are independent \(\mathcal{N}(0,1)\) variables.
-        Scale by \(\sqrt{\Delta t}\) to obtain \(\Delta W\).
+        Brownian motion is the continuous-time limit of a symmetric random walk
+        and is foundational for:
       </p>
 
-      <hr>
+      <ul>
+        <li>stochastic calculus (Itô integrals)</li>
+        <li>financial modelling (Black–Scholes)</li>
+        <li>diffusion processes and physics</li>
+        <li>simulation of general SDEs</li>
+      </ul>
 
-      <h3>3. Simulation setup</h3>
-      <div class="hw11-controls">
-        <label for="bm_T">T</label>
-        <input id="bm_T" type="number" step="0.1" value="1" min="0.1">
+      <h3>2. Euler–Maruyama for Brownian Motion</h3>
 
-        <label for="bm_n">n (steps)</label>
-        <input id="bm_n" type="number" value="2000" min="50" max="20000">
+      <p>
+        Using \( n \) uniform subintervals of size \( \Delta t = T/n \), we approximate:
+      </p>
 
-        <label for="bm_paths">paths</label>
-        <input id="bm_paths" type="number" value="3" min="1" max="12">
+      <p class="math-display">
+        \( W_{t_{k+1}} = W_{t_k} + \sqrt{\Delta t}\,Z_k \), \quad \( Z_k \sim \mathcal{N}(0,1). \)
+      </p>
 
-        <label for="bm_seed">seed (optional)</label>
-        <input id="bm_seed" type="text" placeholder="leave blank">
+      <p>
+        This gives a discrete sampling of Brownian motion whose distribution
+        converges to true Wiener process behaviour as \( n \to \infty \).
+      </p>
 
-        <button id="bmSimBtn" onclick="simulateBrownian()">Simulate</button>
-        <button onclick="resetBrownian()">Reset</button>
+      <h3>3. Interactive Simulation</h3>
+
+      <p>Parameters:</p>
+
+      <div class="rsa-row">
+        <label>Time horizon T: <input id="bm_T" type="number" value="1" step="0.1"></label>
+        <label>Steps n: <input id="bm_n" type="number" value="1000"></label>
+        <button onclick="simulateBrownian()">Simulate Brownian Motion</button>
       </div>
 
-      <p class="hw11-status" id="bmStatus">Status: ready.</p>
+      <canvas id="brownianCanvas" width="900" height="380"></canvas>
 
-      <h3>4. Sample paths</h3>
-      <div class="hw11-chart-container">
-        <canvas id="bmPathsChart"></canvas>
-      </div>
+      <h3>4. Optional Extension: General SDE Simulator</h3>
 
-      <h3>5. Increments histogram (should approximate Normal(0,Δt))</h3>
-      <div class="hw11-chart-container" style="height:300px">
-        <canvas id="bmIncrementsHist"></canvas>
-      </div>
+      <p>
+        Because the Euler–Maruyama scheme already supports generic drift and diffusion terms,
+        extending this tool to a full SDE simulator only requires the user to specify
+        functions \( \mu(x,t) \) and \( \sigma(x,t) \). The JavaScript code is written so this
+        generalization can be enabled with minimal extra work.
+      </p>
 
-      <hr>
+      <pre class="code-block">
+X_{t+Δt} = X_t + μ(X_t,t) Δt + σ(X_t,t) √Δt Z
+      </pre>
+
+      <p>
+        Setting \( \mu = 0 \) and \( \sigma = 1 \) reproduces Brownian motion.
+      </p>
+
+      <p>
+        This makes the simulator flexible enough to handle Ornstein–Uhlenbeck processes,
+        geometric Brownian motion, or any sufficiently regular SDE.
+      </p>
+
+      <hr />
       <a href="index.html" class="back-button">← Back to Home</a>
+
     </div>
   </main>
 
   <footer class="site-footer">
-    © 2025 Alexandru Silivas — ID 2252622 — <a href="mailto:silivas.2252622@studenti.uniroma1.it">silivas.2252622@studenti.uniroma1.it</a>
+    © 2025 Alexandru Silivas — ID 2252622 —
+    <a href="mailto:silivas.2252622@studenti.uniroma1.it">silivas.2252622@studenti.uniroma1.it</a>
   </footer>
 
-  <!-- Homework-specific JS -->
+  <!-- Brownian simulation script -->
   <script src="brownian_motion.js"></script>
 </body>
 </html>
