@@ -1,88 +1,102 @@
-// ---------- Normal generator (Box–Muller) ----------
-function normalBM() {
-    let u1 = Math.random();
-    let u2 = Math.random();
-    return Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
-}
+// ===========================================================
+// Horizontal dotted line plugin (y = 0)
+// ===========================================================
+const horizontalLinePlugin = {
+    id: "horizontalLine",
+    afterDraw(chart, args, opts) {
+        if (opts.y === undefined) return;
+        const yScale = chart.scales.y;
+        const yValue = yScale.getPixelForValue(opts.y);
 
-// ---------- Euler–Maruyama Brownian Simulation ----------
+        const ctx = chart.ctx;
+        ctx.save();
+        ctx.beginPath();
+        ctx.setLineDash([6, 4]);
+        ctx.strokeStyle = opts.color || "#888";
+        ctx.lineWidth = 1.5;
+        ctx.moveTo(chart.chartArea.left, yValue);
+        ctx.lineTo(chart.chartArea.right, yValue);
+        ctx.stroke();
+        ctx.restore();
+    }
+};
+
+Chart.register(horizontalLinePlugin);
+
+let bmChart = null;
+
+// ===========================================================
+// Brownian Motion Simulator (Euler–Maruyama)
+// ===========================================================
 function simulateBM() {
-    const T = parseFloat(document.getElementById("bmT").value);
-    const n = parseInt(document.getElementById("bmN").value);
-
+    const T = parseFloat(document.getElementById("Tfinal").value);
+    const n = parseInt(document.getElementById("Nsteps").value);
     const dt = T / n;
-    const sqrt_dt = Math.sqrt(dt);
 
-    const x = new Array(n + 1).fill(0);
-    const t = new Array(n + 1);
+    // Time grid
+    const times = new Array(n + 1).fill(0).map((_, i) => i * dt);
 
-    for (let i = 0; i <= n; i++) t[i] = (i * T) / n;
-
+    // Simulate path
+    const X = [0];
     for (let i = 1; i <= n; i++) {
-        x[i] = x[i-1] + sqrt_dt * normalBM();
+        const Z = Math.sqrt(2 * Math.log(1 / Math.random())) *
+                  Math.cos(2 * Math.PI * Math.random()); // Box-Muller
+        X.push(X[i - 1] + Math.sqrt(dt) * Z);
     }
 
-    drawBM(t, x);
+    drawBM(times, X);
 }
 
-// ---------- Chart.js handling ----------
-let bmChartInstance = null;
-
+// ===========================================================
+// Draw the path on Chart.js
+// ===========================================================
 function drawBM(t, x) {
-    const ctx = document.getElementById("bmChart").getContext("2d");
 
-    if (bmChartInstance) bmChartInstance.destroy();
+    if (bmChart !== null) bmChart.destroy();
 
-    bmChartInstance = new Chart(ctx, {
+    const canvas = document.getElementById("bmChart");
+    bmChart = new Chart(canvas, {
         type: "line",
         data: {
             labels: t,
             datasets: [{
-                label: "Brownian Motion Path",
+                label: "Brownian Motion",
                 data: x,
-                borderColor: "#4ea3ff",
+                borderColor: "#3b82f6",
                 borderWidth: 2,
-                fill: false,
                 pointRadius: 0,
-                tension: 0   // straight segments (original style)
+                tension: 0.15
             }]
         },
         options: {
-            responsive: false,   // *** THIS restores the original size behaviour ***
-            animation: false,
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { labels: { color: "#c9d1d9" }},
+                horizontalLine: { y: 0, color: "#cbd5e1" }
+            },
             scales: {
                 x: {
-                    title: {
-                        display: true,
-                        text: "Time t",
-                        color: "#c9d1d9"
-                    },
-                    ticks: { color: "#c9d1d9" },
-                    grid: { color: "#1f2937" }
+                    title: { display: true, text: "Time t", color: "#cbd5e1" },
+                    ticks: { color: "#cbd5e1" },
+                    grid: { color: "#1e293b" }
                 },
                 y: {
-                    title: {
-                        display: true,
-                        text: "X(t)",
-                        color: "#c9d1d9"
-                    },
-                    ticks: { color: "#c9d1d9" },
-                    grid: { color: "#1f2937" }
-                }
-            },
-            plugins: {
-                legend: {
-                    labels: { color: "#c9d1d9" }
+                    title: { display: true, text: "X(t)", color: "#cbd5e1" },
+                    ticks: { color: "#cbd5e1" },
+                    grid: { color: "#1e293b" }
                 }
             }
         }
     });
 }
 
-// ---------- Reset ----------
+// ===========================================================
+// Reset the graph
+// ===========================================================
 function resetBM() {
-    if (bmChartInstance) {
-        bmChartInstance.destroy();
-        bmChartInstance = null;
+    if (bmChart !== null) {
+        bmChart.destroy();
+        bmChart = null;
     }
 }
