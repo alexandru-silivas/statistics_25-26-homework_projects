@@ -1,164 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Homework 11 — Brownian Motion (Euler–Maruyama Simulation)</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homework 11 — Brownian Motion Simulation</title>
+    <link rel="stylesheet" href="style.css">
 
-  <!-- MathJax for formulas -->
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <!-- MathJax for proper math rendering -->
+    <script>
+        MathJax = {
+            tex: { inlineMath: [["$", "$"], ["\\(", "\\)"]] }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 </head>
 
 <body>
 
-  <!-- NAVBAR (same as all previous homeworks) -->
-  <header class="navbar">
+<header class="navbar">
     <nav>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="homework_1.html">HMWK 1</a></li>
-        <li><a href="homework_2.html">HMWK 2</a></li>
-        <li><a href="homework_3.html">HMWK 3</a></li>
-        <li><a href="homework_4.html">HMWK 4</a></li>
-        <li><a href="homework_5.html">HMWK 5</a></li>
-        <li><a href="homework_6.html">HMWK 6</a></li>
-        <li><a href="homework_7.html">HMWK 7</a></li>
-        <li><a href="homework_8.html">HMWK 8</a></li>
-        <li><a href="homework_9.html">HMWK 9</a></li>
-        <li><a href="homework_10.html">HMWK 10</a></li>
-        <li><a href="homework_11.html" class="active">HMWK 11</a></li>
-      </ul>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="homework_1.html">HMWK 1</a></li>
+            <li><a href="homework_2.html">HMWK 2</a></li>
+            <li><a href="homework_3.html">HMWK 3</a></li>
+            <li><a href="homework_4.html">HMWK 4</a></li>
+            <li><a href="homework_5.html">HMWK 5</a></li>
+            <li><a href="homework_6.html">HMWK 6</a></li>
+            <li><a href="homework_7.html">HMWK 7</a></li>
+            <li><a href="homework_8.html">HMWK 8</a></li>
+            <li><a href="homework_9.html">HMWK 9</a></li>
+            <li><a href="homework_10.html">HMWK 10</a></li>
+            <li><a href="homework_11.html" class="active">HMWK 11</a></li>
+        </ul>
     </nav>
-  </header>
+</header>
 
-  <main>
-    <div class="main-content">
+<main>
+<div class="main-content">
 
-      <h1>Homework 11</h1>
-      <hr class="section-separator" />
+    <h1>Homework 11 — Simulating Brownian Motion</h1>
+    <hr class="section-separator">
 
-      <h2>Simulating Brownian Motion with the Euler–Maruyama Method</h2>
+    <p>
+        In this assignment we use the Euler–Maruyama method to simulate a **Wiener process** 
+        (Brownian motion), defined mathematically as a stochastic process 
+        \( W_t \) satisfying:
+    </p>
 
-      <p>
-        In this assignment, we revisit the stochastic differential equation (SDE)
-        simulator introduced in previous work and adapt it to the fundamental
-        continuous-time random process in probability theory:
-        <strong>Wiener process</strong> (standard Brownian motion).
-      </p>
+    <p style="text-align:center;">
+        \( W_0 = 0,\quad W_t - W_s \sim \mathcal{N}(0,\, t-s),\quad \text{independent increments}. \)
+    </p>
 
-      <p>
-        The goal is to simulate Brownian motion over a time interval \( T \), using the
-        <strong>Euler–Maruyama numerical scheme</strong> for stochastic differential equations:
-      </p>
+    <p>
+        To simulate Brownian motion numerically, we discretize the interval \([0,T]\) into \(n\) pieces
+        and approximate:
+    </p>
 
-      <p class="math-display">
-        \( dX_t = \mu(X_t,t)\,dt + \sigma(X_t,t)\,dW_t \)
-      </p>
+    <p style="text-align:center;">
+        \( W_{t_{k+1}} = W_{t_k} + \sqrt{\Delta t}\, Z_k,\qquad Z_k \sim \mathcal{N}(0,1). \)
+    </p>
 
-      <p>
-        For <strong>standard Brownian motion</strong>, the drift and diffusion functions simplify to:
-      </p>
+    <p>
+        This is precisely the Euler–Maruyama scheme applied to the stochastic differential equation:
+    </p>
 
-      <p class="math-display">
-        \[
-        dW_t = 0 \cdot dt + 1 \cdot dW_t
-        \quad\text{so the update rule becomes}\quad
-        W_{t+\Delta t} = W_t + \sqrt{\Delta t}\,Z,
-        \]
-      </p>
+    <p style="text-align:center;">
+        \( dW_t = dB_t \)
+    </p>
 
-      <p>
-        where \( Z \sim \mathcal{N}(0,1) \) is a standard normal random variable,
-        typically generated via <strong>Box–Muller transform</strong>.
-      </p>
+    <h2>Interactive Simulation</h2>
 
-      <h3>1. Theoretical Background</h3>
+    <div class="rsa-row">
+        <label>Final time \(T\):</label>
+        <input id="bm_T" type="number" step="0.1" value="1">
 
-      <p>
-        A Wiener process \( (W_t)_{t \ge 0} \) is characterized by:
-      </p>
+        <label>Number of steps \(n\):</label>
+        <input id="bm_n" type="number" value="500">
 
-      <ul>
-        <li>\( W_0 = 0 \)</li>
-        <li>Independent increments</li>
-        <li>Gaussian increments: \( W_{t+h} - W_t \sim \mathcal{N}(0,h) \)</li>
-        <li>Almost surely continuous paths</li>
-      </ul>
-
-      <p>
-        Brownian motion is the continuous-time limit of a symmetric random walk
-        and is foundational for:
-      </p>
-
-      <ul>
-        <li>stochastic calculus (Itô integrals)</li>
-        <li>financial modelling (Black–Scholes)</li>
-        <li>diffusion processes and physics</li>
-        <li>simulation of general SDEs</li>
-      </ul>
-
-      <h3>2. Euler–Maruyama for Brownian Motion</h3>
-
-      <p>
-        Using \( n \) uniform subintervals of size \( \Delta t = T/n \), we approximate:
-      </p>
-
-      <p class="math-display">
-        \( W_{t_{k+1}} = W_{t_k} + \sqrt{\Delta t}\,Z_k \), \quad \( Z_k \sim \mathcal{N}(0,1). \)
-      </p>
-
-      <p>
-        This gives a discrete sampling of Brownian motion whose distribution
-        converges to true Wiener process behaviour as \( n \to \infty \).
-      </p>
-
-      <h3>3. Interactive Simulation</h3>
-
-      <p>Parameters:</p>
-
-      <div class="rsa-row">
-        <label>Time horizon T: <input id="bm_T" type="number" value="1" step="0.1"></label>
-        <label>Steps n: <input id="bm_n" type="number" value="1000"></label>
-        <button onclick="simulateBrownian()">Simulate Brownian Motion</button>
-      </div>
-
-      <canvas id="brownianCanvas" width="900" height="380"></canvas>
-
-      <h3>4. Optional Extension: General SDE Simulator</h3>
-
-      <p>
-        Because the Euler–Maruyama scheme already supports generic drift and diffusion terms,
-        extending this tool to a full SDE simulator only requires the user to specify
-        functions \( \mu(x,t) \) and \( \sigma(x,t) \). The JavaScript code is written so this
-        generalization can be enabled with minimal extra work.
-      </p>
-
-      <pre class="code-block">
-X_{t+Δt} = X_t + μ(X_t,t) Δt + σ(X_t,t) √Δt Z
-      </pre>
-
-      <p>
-        Setting \( \mu = 0 \) and \( \sigma = 1 \) reproduces Brownian motion.
-      </p>
-
-      <p>
-        This makes the simulator flexible enough to handle Ornstein–Uhlenbeck processes,
-        geometric Brownian motion, or any sufficiently regular SDE.
-      </p>
-
-      <hr />
-      <a href="index.html" class="back-button">← Back to Home</a>
-
+        <button type="button" onclick="simulateBrownian()">Simulate</button>
+        <button type="button" onclick="resetBrownian()">Reset</button>
     </div>
-  </main>
 
-  <footer class="site-footer">
+    <p class="rsa-note">
+        The graph below will display a new Brownian trajectory each time you click <strong>Simulate</strong>.
+        Reset simply clears the visualization.
+    </p>
+
+    <canvas id="brownianCanvas" width="900" height="400"
+            style="background:#0f1826;border:1px solid #345;">
+    </canvas>
+
+</div>
+</main>
+
+<footer class="site-footer">
     © 2025 Alexandru Silivas — ID 2252622 —
     <a href="mailto:silivas.2252622@studenti.uniroma1.it">silivas.2252622@studenti.uniroma1.it</a>
-  </footer>
+</footer>
 
-  <!-- Brownian simulation script -->
-  <script src="brownian_motion.js"></script>
+<script src="brownian_motion.js"></script>
 </body>
 </html>
