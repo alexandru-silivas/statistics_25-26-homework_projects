@@ -19,15 +19,16 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        /* Prevent graph overflow */
+        /* Restore original HW7/HW10 chart look */
         #bmCanvasBox {
-            width: 100%;
-            max-width: 1000px;
-            margin: 20px auto;
+            max-width: 900px;
+            margin: 25px auto;
         }
-        canvas {
+        
+        #bmChart {
             background-color: #0d1117;
-            border-radius: 10px;
+            border: 1px solid #1f2937;
+            border-radius: 12px;
         }
     </style>
 </head>
@@ -151,8 +152,8 @@
     Each click of <strong>Simulate</strong> creates a new independent trajectory.
 </p>
 
-<div id="bmCanvasBox">
-    <canvas id="bmChart"></canvas>
+<div id="bmCanvasBox" style="max-width:900px; margin:20px auto;">
+    <canvas id="bmChart" width="900" height="350"></canvas>
 </div>
 
 <!-- ---------------------------------------------------------------------- -->
