@@ -3,102 +3,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homework 11 — Brownian Motion Simulation</title>
+    <title>Homework 11 — Brownian Motion (Wiener Process)</title>
     <link rel="stylesheet" href="style.css">
 
-    <!-- MathJax for proper math rendering -->
+    <!-- MathJax for formulas -->
     <script>
-        MathJax = {
-            tex: { inlineMath: [["$", "$"], ["\\(", "\\)"]] }
-        };
+      MathJax = {
+        tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+        svg: { fontCache: 'global' }
+      };
     </script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* Prevent graph overflow */
+        #bmCanvasBox {
+            width: 100%;
+            max-width: 1000px;
+            margin: 20px auto;
+        }
+        canvas {
+            background-color: #0d1117;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 
 <body>
 
 <header class="navbar">
-    <nav>
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="homework_1.html">HMWK 1</a></li>
-            <li><a href="homework_2.html">HMWK 2</a></li>
-            <li><a href="homework_3.html">HMWK 3</a></li>
-            <li><a href="homework_4.html">HMWK 4</a></li>
-            <li><a href="homework_5.html">HMWK 5</a></li>
-            <li><a href="homework_6.html">HMWK 6</a></li>
-            <li><a href="homework_7.html">HMWK 7</a></li>
-            <li><a href="homework_8.html">HMWK 8</a></li>
-            <li><a href="homework_9.html">HMWK 9</a></li>
-            <li><a href="homework_10.html">HMWK 10</a></li>
-            <li><a href="homework_11.html" class="active">HMWK 11</a></li>
-        </ul>
-    </nav>
+  <nav>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="homework_1.html">HMWK 1</a></li>
+      <li><a href="homework_2.html">HMWK 2</a></li>
+      <li><a href="homework_3.html">HMWK 3</a></li>
+      <li><a href="homework_4.html">HMWK 4</a></li>
+      <li><a href="homework_5.html">HMWK 5</a></li>
+      <li><a href="homework_6.html">HMWK 6</a></li>
+      <li><a href="homework_7.html">HMWK 7</a></li>
+      <li><a href="homework_8.html">HMWK 8</a></li>
+      <li><a href="homework_9.html">HMWK 9</a></li>
+      <li><a href="homework_10.html">HMWK 10</a></li>
+      <li><a href="homework_11.html" class="active">HMWK 11</a></li>
+    </ul>
+  </nav>
 </header>
 
 <main>
 <div class="main-content">
 
-    <h1>Homework 11 — Simulating Brownian Motion</h1>
-    <hr class="section-separator">
+<h1>Homework 11 — Simulating Brownian Motion (Wiener Process)</h1>
+<hr class="section-separator"/>
 
-    <p>
-        In this assignment we use the Euler–Maruyama method to simulate a **Wiener process** 
-        (Brownian motion), defined mathematically as a stochastic process 
-        \( W_t \) satisfying:
-    </p>
+<p>
+    In this assignment we revisit the numerical simulation framework of Homework 10 
+    (Euler–Maruyama method) and apply it to the simplest stochastic differential equation:
+</p>
 
-    <p style="text-align:center;">
-        \( W_0 = 0,\quad W_t - W_s \sim \mathcal{N}(0,\, t-s),\quad \text{independent increments}. \)
-    </p>
+<p style="text-align:center; font-size:1.2rem;">
+    $$ dX_t = dW_t, \quad X_0 = 0 $$
+</p>
 
-    <p>
-        To simulate Brownian motion numerically, we discretize the interval \([0,T]\) into \(n\) pieces
-        and approximate:
-    </p>
+<p>
+    This SDE defines standard Brownian Motion (or a <em>Wiener process</em>).  
+    Since the drift is zero and the diffusion coefficient is constant \(1\), the Euler–Maruyama update reduces to:
+</p>
 
-    <p style="text-align:center;">
-        \( W_{t_{k+1}} = W_{t_k} + \sqrt{\Delta t}\, Z_k,\qquad Z_k \sim \mathcal{N}(0,1). \)
-    </p>
+<p style="text-align:center; font-size:1.2rem;">
+    $$ X_{t+\Delta t} = X_t + \sqrt{\Delta t}\, Z, \quad Z \sim N(0,1). $$
+</p>
 
-    <p>
-        This is precisely the Euler–Maruyama scheme applied to the stochastic differential equation:
-    </p>
+<p>
+    This gives us a straightforward way to simulate Brownian motion numerically, provided we can 
+    generate normal random variables. Here we use the <strong>Box–Muller transform</strong> to generate \(N(0,1)\) samples from uniform random inputs.
+</p>
 
-    <p style="text-align:center;">
-        \( dW_t = dB_t \)
-    </p>
+<!-- ---------------------------------------------------------------------- -->
+<h2>1. From SDE to Numerics: Euler–Maruyama for Brownian Motion</h2>
+<p>
+    Euler–Maruyama for a general SDE  
+    $$ dX_t = a(X_t,t) dt + b(X_t,t) dW_t $$
+    is:
+</p>
 
-    <h2>Interactive Simulation</h2>
+<p style="text-align:center;">
+    $$ X_{t+\Delta t} = X_t + a(X_t,t)\Delta t + b(X_t,t)\sqrt{\Delta t}\, Z, $$
+</p>
 
-    <div class="rsa-row">
-        <label>Final time \(T\):</label>
-        <input id="bm_T" type="number" step="0.1" value="1">
+<p>
+    For Brownian motion we have \(a=0\) and \(b=1\), so the update is purely stochastic:
+</p>
 
-        <label>Number of steps \(n\):</label>
-        <input id="bm_n" type="number" value="500">
+<p style="text-align:center;">
+    $$ X_{t+\Delta t} = X_t + \sqrt{\Delta t}\, Z. $$
+</p>
 
-        <button type="button" onclick="simulateBrownian()">Simulate</button>
-        <button type="button" onclick="resetBrownian()">Reset</button>
-    </div>
+<p>
+    The resulting approximations converge in distribution to the true Wiener process as \( n \to \infty \).
+    This recreates key properties of Brownian motion:
+</p>
 
-    <p class="rsa-note">
-        The graph below will display a new Brownian trajectory each time you click <strong>Simulate</strong>.
-        Reset simply clears the visualization.
-    </p>
+<ul>
+    <li>Continuous paths (but nowhere differentiable)</li>
+    <li>Independent increments</li>
+    <li>Gaussian increments \( X_{t+\Delta t} - X_t \sim N(0, \Delta t) \)</li>
+</ul>
 
-    <canvas id="brownianCanvas" width="900" height="400"
-            style="background:#0f1826;border:1px solid #345;">
-    </canvas>
+<!-- ---------------------------------------------------------------------- -->
+<h2>2. Box–Muller Normal Generator</h2>
+<p>
+    To simulate increments we need normally distributed random variables.  
+    Box–Muller is ideal for teaching purposes because it is explicit and exact:
+</p>
+
+<p style="text-align:center;">
+    $$ Z = \sqrt{-2 \ln U_1}\, \cos (2\pi U_2), \qquad U_1, U_2 \sim U(0,1). $$
+</p>
+
+<p>
+    Our Brownian increment is then:
+</p>
+
+<p style="text-align:center;">
+    $$ \Delta X = \sqrt{\Delta t}\, Z. $$
+</p>
+
+<!-- ---------------------------------------------------------------------- -->
+<h2>3. Interactive Simulation</h2>
+
+<p><strong>Choose the simulation parameters:</strong></p>
+
+<label>Final time \(T\): </label>
+<input id="bmT" type="number" value="1" min="0.1" step="0.1" style="width:80px;">
+
+<label style="margin-left:20px;">Number of steps \(n\): </label>
+<input id="bmN" type="number" value="500" min="10" max="5000" style="width:100px;">
+
+<button onclick="simulateBM()">Simulate</button>
+<button onclick="resetBM()">Reset</button>
+
+<p>
+    The plot below shows a numerically generated Brownian path.  
+    Each click of <strong>Simulate</strong> creates a new independent trajectory.
+</p>
+
+<div id="bmCanvasBox">
+    <canvas id="bmChart"></canvas>
+</div>
+
+<!-- ---------------------------------------------------------------------- -->
+<h2>4. Interpretation and Theoretical Connections</h2>
+
+<p>
+    Brownian motion is the continuous-time limit of discrete random walks, much like the Poisson process is 
+    the limit of Bernoulli counting processes. These are the two most fundamental building blocks of 
+    stochastic processes:
+</p>
+
+<ul>
+    <li><strong>Poisson process</strong> — models counts of events</li>
+    <li><strong>Brownian motion</strong> — models accumulated noise</li>
+</ul>
+
+<p>
+    Whereas the Poisson process jumps by integer amounts, Brownian motion evolves continuously with 
+    Gaussian increments. Both emerge from repeated independent randomness:
+</p>
+
+<ul>
+    <li>Bernoulli \( \to \) Poisson process</li>
+    <li>Random walk with small steps \( \to \) Brownian motion</li>
+</ul>
+
+<p>
+    The parameter \( \lambda \) in the Poisson process controls the <em>rate</em> of events,  
+    while the diffusion constant in Brownian motion (here equal to 1) controls the <em>spread</em> of fluctuations.
+</p>
+
+<hr>
+<a href="index.html" class="back-button">← Back to Home</a>
 
 </div>
 </main>
 
 <footer class="site-footer">
-    © 2025 Alexandru Silivas — ID 2252622 —
-    <a href="mailto:silivas.2252622@studenti.uniroma1.it">silivas.2252622@studenti.uniroma1.it</a>
+  © 2025 Alexandru Silivas — ID 2252622 —
+  <a href="mailto:silivas.2252622@studenti.uniroma1.it">silivas.2252622@studenti.uniroma1.it</a>
 </footer>
 
 <script src="brownian_motion.js"></script>
+
 </body>
 </html>
